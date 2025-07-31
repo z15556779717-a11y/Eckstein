@@ -1,0 +1,260 @@
+/* 
+  Workout.strings
+  Eckstein
+  
+  Hebrew Localization - Workout Module
+*/
+
+// MARK: - Workout List View
+"quick_stats" = "סטטיסטיקה מהירה";
+"current_streak" = "רצף נוכחי";
+"total" = "סה״כ";
+"active_workout" = "אימון פעיל";
+"history" = "היסטוריה";
+"no_active_workout" = "אין אימון פעיל";
+"select_workout_or_create" = "בחר אימון מההיסטוריה או צור חדש";
+"workouts" = "אימונים";
+"exercises" = "תרגילים";
+"analytics" = "ניתוחים";
+"workout_complete" = "אימון הושלם! 🎉";
+"days" = "ימים";
+
+// MARK: - Workout Detail View
+"complete_workout" = "סיים אימון";
+"cancel_workout" = "בטל אימון";
+"add_exercise" = "הוסף תרגיל";
+"rest_timer" = "טיימר מנוחה";
+"set" = "סט";
+"reps" = "חזרות";
+"weight" = "משקל";
+"notes" = "הערות";
+"add_set" = "הוסף סט";
+"remove_set" = "הסר סט";
+"exercise_notes" = "הערות לתרגיל";
+"previous_performance" = "ביצוע קודם";
+"no_previous_data" = "אין נתונים קודמים";
+
+// MARK: - Workout History
+"workout_history" = "היסטוריית אימונים";
+"all_workouts" = "כל האימונים";
+"filter_workouts" = "סנן אימונים";
+"duration" = "משך";
+"exercises_count" = "%d תרגילים";
+"exercise_count_singular" = "תרגיל אחד";
+"total_volume" = "נפח כולל";
+"swipe_to_delete" = "החלק למחיקה";
+"delete_workout" = "מחק אימון";
+"delete_workout_confirm" = "האם אתה בטוח שברצונך למחוק אימון זה?";
+"no_workouts_found" = "לא נמצאו אימונים";
+"start_new_workout" = "התחל אימון חדש כדי לראות אותו כאן";
+"total_workouts" = "סה״כ אימונים";
+"swipe_left_delete_workouts" = "החלק שמאלה למחיקת אימונים";
+"workout_complete" = "אימון הושלם! 🎉";
+"calendar_implementation" = "יישום לוח שנה";
+"workout" = "אימון";
+"min" = "דק׳";
+"sets_count" = "%d סטים";
+"unknown" = "לא ידוע";
+
+// MARK: - Create/Edit Workout
+"create_workout" = "צור אימון";
+"edit_workout" = "ערוך אימון";
+"workout_name" = "שם האימון";
+"enter_workout_name" = "הכנס שם אימון";
+"select_exercises" = "בחר תרגילים";
+"save_workout" = "שמור אימון";
+"workout_saved" = "האימון נשמר";
+"name_required" = "שם האימון הוא שדה חובה";
+"select_at_least_one" = "בחר לפחות תרגיל אחד";
+"no_workout_types" = "אין סוגי אימון";
+"create_workout_types_first" = "צור סוגי אימון תחילה כדי להתחיל לעקוב אחר האימונים שלך";
+"create_workout_type" = "צור סוג אימון";
+"select_todays_workout" = "בחר את אימון היום";
+"start_workout" = "התחל אימון";
+"never" = "אף פעם";
+"unnamed_workout" = "אימון ללא שם";
+"last" = "אחרון";
+
+// MARK: - Exercise List
+"select_exercise" = "בחר תרגיל";
+"all_exercises" = "כל התרגילים";
+"chest" = "חזה";
+"back" = "גב";
+"legs" = "רגליים";
+"shoulders" = "כתפיים";
+"arms" = "זרועות";
+"core" = "בטן";
+"cardio" = "אירובי";
+"search_exercises" = "חפש תרגילים...";
+"no_exercises_yet" = "אין תרגילים עדיין";
+"no_exercises_found" = "לא נמצאו תרגילים";
+"create_first_custom_exercise" = "צור את התרגיל המותאם הראשון שלך כדי להתחיל";
+"create_custom_exercise" = "צור תרגיל מותאם";
+"custom_exercise" = "תרגיל מותאם אישית";
+"add_custom_exercise" = "הוסף תרגיל מותאם";
+"recent" = "אחרונים";
+"search_results" = "תוצאות חיפוש";
+"edit_exercise" = "ערוך תרגיל";
+"view_details" = "צפה בפרטים";
+"muscle" = "שריר";
+"category" = "קטגוריה";
+"equipment" = "ציוד";
+"all" = "הכל";
+"other" = "אחר";
+
+// MARK: - Exercise Detail
+"exercise_details" = "פרטי תרגיל";
+"primary_muscle" = "שריר ראשי";
+"secondary_muscles" = "שרירים משניים";
+"equipment" = "ציוד";
+"instructions" = "הוראות";
+"tips" = "טיפים";
+"recent_performance" = "ביצועים אחרונים";
+"personal_record" = "שיא אישי";
+"average_weight" = "משקל ממוצע";
+"average_reps" = "חזרות ממוצעות";
+"last_performed" = "בוצע לאחרונה";
+
+// MARK: - Rest Timer
+"rest_timer" = "טיימר מנוחה";
+"start_timer" = "התחל";
+"pause" = "השהה";
+"resume" = "המשך";
+"skip_rest" = "דלג";
+"reset_timer" = "אפס";
+"rest_complete" = "המנוחה הסתיימה!";
+"time_remaining" = "זמן שנותר";
+
+// MARK: - Analytics
+"analytics" = "ניתוחים";
+"workout_analytics" = "ניתוחי אימונים";
+"weekly_progress" = "התקדמות שבועית";
+"monthly_progress" = "התקדמות חודשית";
+"yearly_progress" = "התקדמות שנתית";
+"personal_records" = "שיאים אישיים";
+"most_trained" = "המאומן ביותר";
+"total_volume" = "נפח כולל";
+"workout_frequency" = "תדירות אימונים";
+"muscle_distribution" = "התפלגות שרירים";
+"strength_progress" = "התקדמות כוח";
+"consistency_score" = "ציון עקביות";
+"select_exercise" = "בחר תרגיל";
+"time_frame" = "טווח זמן";
+"week" = "שבוע";
+"month" = "חודש";
+"3_months" = "3 חודשים";
+"year" = "שנה";
+"weight_progress" = "התקדמות משקל";
+"weight_kg" = "משקל (ק״ג)";
+"reps_achievement" = "השגת חזרות";
+"achievement_percent" = "אחוז השגה";
+"training_volume" = "נפח אימון";
+"volume_kg" = "נפח (ק״ג)";
+"unknown_exercise" = "תרגיל לא ידוע";
+"max_weight" = "משקל מקסימלי";
+"avg_volume" = "נפח ממוצע";
+"select_exercise_view_analytics" = "בחר תרגיל כדי לצפות בניתוחים";
+
+// MARK: - Exercise Categories
+"compound_exercises" = "תרגילים מורכבים";
+"isolation_exercises" = "תרגילי בידוד";
+"bodyweight_exercises" = "תרגילי משקל גוף";
+"free_weights" = "משקולות חופשיות";
+"machines" = "מכונות";
+"cables" = "כבלים";
+
+// MARK: - Tooltips
+"tip_swipe_delete_workout" = "החלק שמאלה למחיקת אימונים";
+"tip_long_press_edit" = "לחץ לחיצה ארוכה לעריכה";
+"tip_complete_all_sets" = "השלם את כל הסטים כדי לסיים תרגיל";
+"tip_add_notes" = "הוסף הערות לתיעוד טוב יותר";
+
+// MARK: - Workout Types
+"push_workout" = "אימון דחיפה";
+"pull_workout" = "אימון משיכה";
+"legs_workout" = "אימון רגליים";
+"upper_body" = "פלג גוף עליון";
+"lower_body" = "פלג גוף תחתון";
+"full_body" = "כל הגוף";
+"custom_workout" = "אימון מותאם";
+
+// MARK: - Status Messages
+"loading_exercises" = "טוען תרגילים...";
+"saving_workout" = "שומר אימון...";
+"workout_in_progress" = "אימון בתהליך";
+"tap_to_continue" = "הקש להמשך";
+
+// MARK: - Workout Detail View
+"workout_timer" = "טיימר אימון";
+"break_timer" = "טיימר מנוחה";
+"workout_details" = "פרטי אימון";
+"finish_workout" = "סיים אימון";
+"complete_more_to_finish" = "השלם עוד %d%% כדי לסיים";
+"delete_workout" = "מחק אימון";
+"delete_workout_message" = "האם אתה בטוח שברצונך למחוק אימון זה? פעולה זו אינה ניתנת לביטול.";
+"pause" = "השהה";
+"start" = "התחל";
+"reset" = "אפס";
+"add_exercise" = "הוסף תרגיל";
+
+// MARK: - Common Units
+"kg" = "ק״ג";
+"lbs" = "ליברות";
+"min" = "דק׳";
+"sec" = "שנ׳";
+"cal" = "קל׳";
+"kcal" = "קק״ל";
+
+// MARK: - Common Time
+"today" = "היום";
+"yesterday" = "אתמול";
+"this_week" = "השבוע";
+"this_month" = "החודש";
+"all_workouts" = "כל האימונים";
+"streak" = "רצף";
+
+// MARK: - Rest Timer
+"rest_time" = "זמן מנוחה";
+"skip" = "דלג";
+"quick_select" = "בחירה מהירה";
+"rest_time_complete" = "זמן המנוחה הסתיים!";
+"time_to_get_back" = "זמן לחזור לאימון 💪";
+
+// MARK: - Common Actions
+"done" = "סיום";
+"cancel" = "ביטול";
+"save" = "שמור";
+"delete" = "מחק";
+"edit" = "ערוך";
+"add" = "הוסף";
+"close" = "סגור";
+
+// MARK: - Common Status
+"completed" = "הושלם";
+"total_sets" = "סה״כ סטים";
+
+// MARK: - Workout Types
+"no_workouts" = "אין אימונים";
+"create_workout_types_description" = "צור סוגי אימון שונים כדי לעקוב אחר שגרות האימון שלך";
+"never_used" = "לא נעשה שימוש";
+"no_exercises_added" = "לא נוספו תרגילים";
+"last_used" = "שימוש אחרון";
+"reps_target" = "יעד חזרות";
+"update_targets" = "עדכן יעדים";
+"delete_exercise" = "מחק תרגיל";
+"target_settings" = "הגדרות יעד";
+"sets" = "סטים";
+"target_reps" = "יעד חזרות";
+"target_settings_description" = "הגדר את יעד החזרות שלך לתרגיל זה. תוכל לעקוב אחר הביצועים בפועל מול היעדים הללו.";
+"update_exercise" = "עדכן תרגיל";
+"workout_name_description" = "תן לאימון שלך שם תיאורי כמו 'חזה וטריצפס' או 'יום רגליים'";
+"create" = "צור";
+"exit" = "יציאה";
+
+// MARK: - Exercise Set Card
+"no_sets_added" = "לא נוספו סטים";
+"target" = "יעד";
+"actual" = "בפועל";
+"tap_checkmark_complete_set" = "הקש על הסימון כדי להשלים סט";
+"select_weight" = "בחר משקל";
+"select_reps" = "בחר חזרות";

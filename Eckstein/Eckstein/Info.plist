@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>bluetooth-central</string>
+	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Eckstein uses Bluetooth to connect to your Xiaomi scale and automatically track your weight measurements.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Eckstein uses Bluetooth to connect to your Xiaomi scale and automatically track your weight measurements.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Eckstein can read your health data to provide comprehensive fitness tracking and insights.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Eckstein can save your workout and weight data to Apple Health to keep all your fitness data in sync.</string>
+</dict>
+</plist>

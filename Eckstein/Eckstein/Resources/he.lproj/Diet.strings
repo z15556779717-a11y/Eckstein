@@ -1,0 +1,407 @@
+/* 
+  Diet.strings
+  Eckstein
+  
+  Hebrew Localization - Diet Module
+*/
+
+// MARK: - Diet Dashboard
+"diet_tracker" = "מעקב תזונה";
+"todays_meals" = "ארוחות היום";
+"daily_progress" = "התקדמות יומית";
+"nutrition_insights" = "תובנות תזונתיות";
+"search_food" = "חפש מזון";
+"scan" = "סרוק";
+"bank" = "בנק";
+"no_meals_logged_today" = "לא נרשמו ארוחות היום";
+"add_your_first_meal" = "הוסף את הארוחה הראשונה";
+"calories" = "קלוריות";
+"protein" = "חלבון";
+"carbs" = "פחמימות";
+"fat" = "שומן";
+"goal" = "יעד";
+"consumed" = "נצרך";
+"remaining" = "נותר";
+"over_limit" = "מעל המגבלה";
+
+// MARK: - Eckstein Diet
+"meal_1" = "ארוחה 1";
+"meal_2" = "ארוחה 2";
+"snacks" = "ארוחת ביניים";
+"daily_summary" = "סיכום יומי";
+"weekly_view" = "תצוגה שבועית";
+"calorie_bank" = "בנק קלוריות";
+"add_food" = "הוסף מזון";
+"complete" = "הושלם";
+"complete_meal" = "השלם ארוחה";
+"meal_completed" = "הארוחה הושלמה";
+"tap_to_add_food" = "הקש להוספת מזון";
+"add_food_to_meal" = "הוסף מזון לארוחה זו";
+"complete_meal_to_save" = "השלם ארוחה כדי לחסוך קלוריות";
+
+// MARK: - Food Search
+"search_by_name_or_barcode" = "חפש לפי שם או ברקוד...";
+"recent" = "אחרונים";
+"favorites" = "מועדפים";
+"custom_foods" = "מזונות מותאמים";
+"database" = "מאגר";
+"scan_barcode" = "סרוק ברקוד";
+"no_results_found" = "לא נמצאו תוצאות";
+"try_different_search" = "נסה חיפוש אחר";
+"searching" = "מחפש...";
+"per_100g" = "ל-100 גרם";
+"per_serving" = "למנה";
+
+// MARK: - Add Food
+"serving_size" = "גודל מנה";
+"number_of_servings" = "מספר מנות";
+"when" = "מתי";
+"nutrition_facts" = "ערכים תזונתיים";
+"add_to_meal" = "הוסף לארוחה";
+"select_meal" = "בחר ארוחה";
+"quantity" = "כמות";
+"unit" = "יחידה";
+"grams" = "גרם";
+"pieces" = "יחידות";
+"cups" = "כוסות";
+"tablespoons" = "כפות";
+"teaspoons" = "כפיות";
+
+// MARK: - Calorie Bank
+"current_balance" = "יתרה נוכחית";
+"weekly_summary" = "סיכום שבועי";
+"deposits" = "הפקדות";
+"withdrawals" = "משיכות";
+"saved_calories" = "קלוריות שנחסכו";
+"used_from_bank" = "נוצלו מהבנק";
+"deposit_to_bank" = "הפקד לבנק";
+"withdraw_from_bank" = "משוך מהבנק";
+"bank_history" = "היסטוריית בנק";
+"calories_saved_today" = "קלוריות שנחסכו היום";
+"available_balance" = "יתרה זמינה";
+
+// MARK: - Meal Detail
+"meal_details" = "פרטי ארוחה";
+"edit_meal" = "ערוך ארוחה";
+"delete_meal" = "מחק ארוחה";
+"food_items" = "פריטי מזון";
+"total_nutrition" = "סה״כ ערכים תזונתיים";
+"add_more_food" = "הוסף עוד מזון";
+"swipe_to_delete_items" = "החלק למחיקת פריטים";
+"meal_time" = "זמן ארוחה";
+"notes" = "הערות";
+"add_notes" = "הוסף הערות";
+
+// MARK: - Custom Food
+"add_custom_food" = "הוסף מזון מותאם";
+"food_name" = "שם המזון";
+"brand_optional" = "מותג (אופציונלי)";
+"nutrition_per_serving" = "ערכים תזונתיים למנה";
+"save_food" = "שמור מזון";
+"custom_food_saved" = "המזון המותאם נשמר";
+"edit_custom_food" = "ערוך מזון מותאם";
+"delete_custom_food" = "מחק מזון מותאם";
+
+// MARK: - Daily Goals
+"daily_goals" = "יעדים יומיים";
+"calorie_goal" = "יעד קלוריות";
+"protein_goal" = "יעד חלבון";
+"carbs_goal" = "יעד פחמימות";
+"fat_goal" = "יעד שומן";
+"save_goals" = "שמור יעדים";
+"reset_to_defaults" = "אפס לברירת מחדל";
+"recommended_intake" = "צריכה מומלצת";
+"based_on_profile" = "מבוסס על הפרופיל שלך";
+
+// MARK: - Weekly Analytics
+"weekly_analytics" = "ניתוח שבועי";
+"average_daily_intake" = "צריכה יומית ממוצעת";
+"goal_adherence" = "עמידה ביעדים";
+"macro_distribution" = "התפלגות מאקרו";
+"best_day" = "היום הטוב ביותר";
+"needs_improvement" = "דורש שיפור";
+"weekly_trends" = "מגמות שבועיות";
+"daily_average" = "ממוצע יומי";
+"weekly_total" = "סה״כ שבועי";
+
+// MARK: - Macro Breakdown
+"macro_breakdown" = "פירוט מאקרו";
+"recommended" = "מומלץ";
+"actual" = "בפועל";
+"protein_percentage" = "אחוז חלבון";
+"carbs_percentage" = "אחוז פחמימות";
+"fat_percentage" = "אחוז שומן";
+"within_range" = "בטווח המומלץ";
+"above_range" = "מעל הטווח";
+"below_range" = "מתחת לטווח";
+
+// MARK: - Food Categories
+"fruits" = "פירות";
+"vegetables" = "ירקות";
+"grains" = "דגנים";
+"protein_foods" = "מזונות חלבון";
+"dairy" = "מוצרי חלב";
+"oils" = "שמנים";
+"beverages" = "משקאות";
+"snacks_sweets" = "ארוחות ביניים וממתקים";
+"prepared_foods" = "מזונות מוכנים";
+
+// MARK: - Tooltips
+"tip_swipe_delete_meal" = "החלק שמאלה למחיקת ארוחות";
+"tip_complete_meal_save" = "השלם ארוחה כדי לחסוך קלוריות לבנק";
+"tip_use_barcode_scanner" = "השתמש בסורק ברקוד למציאת מזונות מהירה";
+"tip_calorie_bank_info" = "חסוך קלוריות עודפות לשימוש עתידי";
+
+// MARK: - Status Messages
+"loading_foods" = "טוען מזונות...";
+"saving_meal" = "שומר ארוחה...";
+"scanning_barcode" = "סורק ברקוד...";
+"barcode_not_found" = "הברקוד לא נמצא במאגר";
+"meal_saved" = "הארוחה נשמרה";
+"food_added" = "המזון נוסף";
+"goals_updated" = "היעדים עודכנו";
+
+// MARK: - Validation
+"food_name_required" = "שם המזון הוא שדה חובה";
+"invalid_serving_size" = "גודל מנה לא תקין";
+"select_meal_type" = "בחר סוג ארוחה";
+"calories_must_be_positive" = "הקלוריות חייבות להיות חיוביות";
+
+// MARK: - Eckstein Diet View Additions
+"todays_progress" = "התקדמות היום";
+"meal_number" = "ארוחה %d";
+"carb_load_meal" = "ארוחת טעינת פחמימות";
+"carb_load" = "טעינת פחמימות";
+
+// MARK: - Meal Status
+"borrowing_from_meal_2" = "לווה מארוחה 2";
+"borrowing_to_meal_1" = "מלווה לארוחה 1";
+"has_carry_over" = "יש העברה";
+"meal_2_budget" = "תקציב ארוחה 2:";
+"available_for_meal_2" = "זמין לארוחה 2:";
+
+// MARK: - Food Categories Additions
+"carb_load_foods" = "מזונות טעינת פחמימות";
+
+// MARK: - Progress and Tracking
+"borrowed" = "לווה";
+"carry_over" = "העברה";
+"of_daily" = "מהיומי";
+"total_progress" = "התקדמות כוללת";
+"incl_carry_over" = "כולל העברה";
+"incl_borrowing" = "כולל הלוואה";
+
+// MARK: - Actions
+"add_more" = "הוסף";
+"add" = "הוסף";
+"add_snack" = "הוסף ארוחת ביניים";
+"no_quantity_limits_carb_load" = "אין הגבלת כמות לטעינת פחמימות!";
+
+// MARK: - Snacks Section
+"no_snacks_logged_today" = "לא נרשמו ארוחות ביניים היום";
+
+// MARK: - Daily Summary Section Additions
+"total_protein" = "סה״כ חלבון";
+"total_carbs" = "סה״כ פחמימות";
+"start_logging_meals_summary" = "התחל לרשום ארוחות כדי לראות סיכום";
+
+// MARK: - Fat Meals
+"weekly_fat_meals" = "ארוחות חלבון שמן שבועי";
+"fat_meal_remaining_singular" = "נותרה ארוחת חלבון שמן אחת";
+"fat_meals_remaining" = "שנותרו %d ארוחות חלבון שמן";
+"fat_meal_limit_reached" = "הגעת למגבלת ארוחות החלבון השמן השבועית";
+"resets_sunday" = "מתאפס ביום ראשון";
+
+// MARK: - Carb Load
+"weekly_carb_load" = "העמסת פחמימות שבועית";
+"active" = "פעיל";
+"used" = "נוצל";
+"available" = "זמין";
+"one_per_week" = "1 / שבוע";
+"combining_meals_carb_load" = "משלב ארוחות להעמסת פחמימות אחת";
+"carb_load_replacing_meal" = "טעינת פחמימות מחליפה ארוחה %d";
+"separate_meals" = "הפרד ארוחות";
+"combine_meals" = "שלב ארוחות";
+"cancel" = "ביטול";
+"activate_carb_load_day" = "לחץ אם יום העמסת פחמימות";
+"used_on" = "נוצל ב";
+
+// MARK: - Food Picker
+"carb_load_day_no_limits" = "יום העמסת פחמימות - ללא הגבלות!";
+"weekly_treat" = "פינוק שבועי";
+"enjoy_carb_load_no_restrictions" = "יום העמסת פחמימות , בתיאבון!";
+"fat_meals_this_week" = "ארוחות חלבון שמן השבוע";
+"limit_reached" = "הגעת למגבלה";
+"add_to_carb_load" = "הוסף לטעינת פחמימות";
+"add_to_meal" = "הוסף לארוחה %d";
+"select" = "בחר";
+"invalid_amount" = "כמות לא תקינה";
+"ok" = "אישור";
+"please_enter_valid_grams" = "אנא הזן כמות תקינה בגרמים";
+"protein_fat" = "חלבון (שומני)";
+"protein_non_fat" = "חלבון (לא שומני)";
+"snack" = "ארוחת ביניים";
+
+// MARK: - Calorie Bank  
+"save_unused_calories_tooltip" = "חסוך קלוריות לא מנוצלות לפינוקים ואירועים מיוחדים";
+"todays_calories" = "קלוריות היום";
+"used_today" = "נוצל היום";
+"saved_balance" = "יתרה שמורה";
+
+// MARK: - Milk Bank
+"milk_bank" = "בנק חלב";
+"ml_left" = "מ״ל נותרו";
+"consumed" = "נצרך";
+"daily_limit" = "מגבלה יומית";
+"add_milk" = "הוסף חלב";
+"add_milk_consumption" = " הוסף כמות חלב";
+"amount_ml" = "כמות (מ״ל)";
+"available" = "זמין";
+
+// MARK: - Analytics View
+"your_progress" = "ההתקדמות שלך";
+"this_weeks_performance" = "הביצועים השבוע";
+"score" = "ציון";
+"days_complete" = "ימים שהושלמו";
+"avg_protein" = "חלבון ממוצע";
+"avg_carbs" = "פחמימות ממוצע";
+"outstanding_keep_it_up" = "מצוין! המשך כך! 🌟";
+"great_job_doing_well" = "עבודה נהדרת! אתה מסתדר מצוין!";
+"good_progress_room_improve" = "התקדמות טובה! יש מקום לשיפור.";
+"on_track_stay_focused" = "אתה על המסלול. המשך להיות ממוקד!";
+"lets_get_back_on_track" = "בוא נחזור למסלול!";
+"insights_and_tips" = "תובנות וטיפים";
+"excellent_protein_intake" = "צריכת חלבון מצוינת! אתה עומד ביעדים היומיים שלך באופן עקבי.";
+"protein_intake_good_add_more" = "צריכת החלבון טובה. הוסף עוד %d גרם ביום כדי להגיע ליעד שלך.";
+"great_calorie_savings" = "חיסכון קלוריות נהדר! יש לך %d קלוריות שמורות לאירועים מיוחדים.";
+"build_up_calorie_bank" = "בנה את בנק הקלוריות שלך על ידי חיסכון קלוריות יומיות לא מנוצלות. כרגע ב-%d.";
+"try_complete_meal_2_more" = "נסה להשלים את ארוחה 2 לעתים קרובות יותר. זה חשוב לתזונה מאוזנת לאורך היום.";
+"vary_protein_sources" = "שקול לגוון את מקורות החלבון שלך למגוון רב יותר של רכיבים תזונתיים.";
+"weekly_trends" = "מגמות שבועיות";
+"start_tracking_see_progress" = "התחל לעקוב כדי לראות את ההתקדמות שלך!";
+"calorie_bank_summary" = "סיכום בנק קלוריות";
+"saved" = "נחסך";
+"today" = "היום";
+"could_save_more_calories" = "אתה יכול לחסוך עד %d קלוריות נוספות השבוע!";
+"consistency_score" = "ציון עקביות";
+"current_streak" = "רצף נוכחי";
+"best_streak" = "הרצף הטוב ביותר";
+"compliance" = "ציות";
+"great_start_keep_going" = "התחלה נהדרת! המשך כך!";
+"building_momentum" = "בונה מומנטום!";
+"excellent_consistency" = "עקביות מצוינת!";
+"one_week_strong" = "שבוע אחד חזק! 💪";
+"two_weeks_unstoppable" = "שבועיים! אתה בלתי ניתן לעצירה!";
+"three_weeks_habit_formed" = "שלושה שבועות - ההרגל נוצר!";
+"incredible_dedication_days" = "מסירות מדהימה! %d ימים!";
+"achievements" = "הישגים";
+"view_all" = "הצג הכל";
+
+// MARK: - Calendar View
+"sun_short" = "א";
+"mon_short" = "ב";
+"tue_short" = "ג";
+"wed_short" = "ד";
+"thu_short" = "ה";
+"fri_short" = "ו";
+"sat_short" = "ש";
+"legend" = "מקרא";
+"complete" = "הושלם";
+"partial" = "חלקי";
+"no_data" = "אין נתונים";
+"diet_history" = "היסטוריית תזונה";
+"done" = "סיום";
+
+// MARK: - Achievements
+"achievement_first_day_title" = "היום הראשון";
+"achievement_first_day_desc" = "השלם את היום הראשון שלך";
+"achievement_first_day_req" = "השלם את שתי הארוחות או 200% בארוחה אחת ליום אחד";
+
+"achievement_week_warrior_title" = "לוחם השבוע";
+"achievement_week_warrior_desc" = "רצף של 7 ימים";
+"achievement_week_warrior_req" = "השלם את תוכנית התזונה שלך במשך 7 ימים רצופים";
+
+"achievement_two_week_champion_title" = "אלוף השבועיים";
+"achievement_two_week_champion_desc" = "רצף של 14 ימים";
+"achievement_two_week_champion_req" = "השלם את תוכנית התזונה שלך במשך 14 ימים רצופים";
+
+"achievement_month_master_title" = "אמן החודש";
+"achievement_month_master_desc" = "רצף של 30 ימים";
+"achievement_month_master_req" = "השלם את תוכנית התזונה שלך במשך 30 ימים רצופים";
+
+"achievement_protein_power_title" = "כוח החלבון";
+"achievement_protein_power_desc" = "השג יעדי חלבון למשך שבוע";
+"achievement_protein_power_req" = "הגע ל-100% מיעד החלבון במשך 7 ימים רצופים";
+
+"achievement_carb_master_title" = "אמן הפחמימות";
+"achievement_carb_master_desc" = "השג יעדי פחמימות למשך שבוע";
+"achievement_carb_master_req" = "הגע ל-100% מיעד הפחמימות במשך 7 ימים רצופים";
+
+"achievement_macro_balance_title" = "איזון המאקרו";
+"achievement_macro_balance_desc" = "השג יעדי חלבון ופחמימות למשך 7 ימים";
+"achievement_macro_balance_req" = "הגע ל-100% מיעדי החלבון והפחמימות במשך 7 ימים רצופים";
+
+"achievement_bank_saver_title" = "חוסך הבנק";
+"achievement_bank_saver_desc" = "חסוך 1000+ קלוריות";
+"achievement_bank_saver_req" = "צבור 1000 קלוריות או יותר בבנק הקלוריות שלך";
+
+"achievement_bank_master_title" = "אמן הבנק";
+"achievement_bank_master_desc" = "מקסם את בנק הקלוריות";
+"achievement_bank_master_req" = "הגע למגבלת ה-1500 קלוריות המקסימלית בבנק";
+
+"achievement_early_bird_title" = "ציפור מוקדמת";
+"achievement_early_bird_desc" = "השלם ארוחה 1 לפני הצהריים למשך 7 ימים";
+"achievement_early_bird_req" = "רשום ארוחה 1 לפני 12:00 בצהריים במשך 7 ימים רצופים";
+
+"achievement_full_day_hero_title" = "גיבור היום המלא";
+"achievement_full_day_desc" = "השלם את שתי הארוחות למשך 14 ימים";
+"achievement_full_day_req" = "השלם ארוחה 1 וארוחה 2 במשך 14 ימים רצופים";
+
+"achievement_variety_chef_title" = "שף המגוון";
+"achievement_variety_chef_desc" = "השתמש ב-5+ מקורות חלבון שונים בשבוע";
+"achievement_variety_chef_req" = "רשום לפחות 5 מזונות חלבון שונים בתוך 7 ימים";
+
+"achievement_carb_cyclist_title" = "רוכב הפחמימות";
+"achievement_carb_cyclist_desc" = "השתמש ב-3+ מקורות פחמימות שונים בשבוע";
+"achievement_carb_cyclist_req" = "רשום לפחות 3 מזונות פחמימות שונים בתוך 7 ימים";
+
+"achievement_no_waste_week_title" = "שבוע ללא בזבוז";
+"achievement_no_waste_week_desc" = "השתמש בבנק הקלוריות פחות מ-3 פעמים בשבוע";
+"achievement_no_waste_week_req" = "השלם שבוע עם שימוש בבנק הקלוריות פעמיים או פחות";
+
+"achievement_perfect_week_title" = "השבוע המושלם";
+"achievement_perfect_week_desc" = "השלם את כל הארוחות בצורה מושלמת למשך שבוע";
+"achievement_perfect_week_req" = "השלם כל ארוחה עם 100% ציות במשך 7 ימים";
+
+"achievement_consistency_king_title" = "מלך העקביות";
+"achievement_consistency_king_desc" = "שיעור ציות של 80%";
+"achievement_consistency_king_req" = "שמור על שיעור ציות של 80% או יותר במשך 30 ימים";
+
+// MARK: - Calorie Bank Additional
+"daily_allowance_calories" = "קצבה יומית: 150 קלוריות";
+"maximum_balance_calories" = "יתרה מקסימלית: 1,500 קלוריות (10 ימים)";
+"todays_usage" = "שימוש היום";
+"manual_entry" = "הזנה ידנית";
+"log_calorie_consumption" = "רישום צריכת קלוריות";
+"total" = "סה״כ";
+"food_item" = "פריט מזון";
+"food_item_placeholder" = "לדוגמה: רוטב סויה, שמן, רוטב";
+"enter_calories" = "הזן קלוריות";
+"common_items" = "פריטים נפוצים";
+"log_consumption" = "רשום צריכה";
+"insufficient_balance_calories" = "יתרה לא מספיקה. יש לך %d קלוריות זמינות.";
+
+// MARK: - Milk Bank Additional
+"add_consumption" = "הוסף צריכה";
+"todays_consumption" = "צריכה היום";
+"no_milk_consumed_today" = "לא נצרך חלב היום";
+"total_consumed" = "סה״כ נצרך";
+"remaining" = "נותר";
+"milk_history" = "היסטוריית חלב";
+
+// MARK: - Achievement Unlock
+"achievement_unlocked" = "הישג נפתח!";
+
+// MARK: - Diet Day Edit View
+"editing_diet_data" = "עריכת נתוני תזונה";
+"days_progress" = "התקדמות היום";

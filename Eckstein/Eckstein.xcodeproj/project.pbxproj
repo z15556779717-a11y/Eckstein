@@ -1,0 +1,662 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D33A59EC2E244BA700777FA9 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A59EB2E244BA700777FA9 /* CoreBluetooth.framework */; };
+		D33A59F62E2465B900777FA9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = D33A59F52E2465B900777FA9 /* Supabase */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D33A582F2E23AB5100777FA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D33A58122E23AB5000777FA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D33A58192E23AB5000777FA9;
+			remoteInfo = Eckstein;
+		};
+		D33A58392E23AB5100777FA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D33A58122E23AB5000777FA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D33A58192E23AB5000777FA9;
+			remoteInfo = Eckstein;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D33A581A2E23AB5000777FA9 /* Eckstein.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eckstein.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D33A582E2E23AB5100777FA9 /* EcksteinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcksteinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D33A58382E23AB5100777FA9 /* EcksteinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcksteinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D33A59EB2E244BA700777FA9 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.4.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D33A58402E23AB5100777FA9 /* Exceptions for "Eckstein" folder in "Eckstein" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D33A58192E23AB5000777FA9 /* Eckstein */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D33A581C2E23AB5000777FA9 /* Eckstein */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D33A58402E23AB5100777FA9 /* Exceptions for "Eckstein" folder in "Eckstein" target */,
+			);
+			path = Eckstein;
+			sourceTree = "<group>";
+		};
+		D33A58312E23AB5100777FA9 /* EcksteinTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EcksteinTests;
+			sourceTree = "<group>";
+		};
+		D33A583B2E23AB5100777FA9 /* EcksteinUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EcksteinUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D33A58172E23AB5000777FA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D33A59F62E2465B900777FA9 /* Supabase in Frameworks */,
+				D33A59EC2E244BA700777FA9 /* CoreBluetooth.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D33A582B2E23AB5100777FA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D33A58352E23AB5100777FA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D33A58112E23AB5000777FA9 = {
+			isa = PBXGroup;
+			children = (
+				D33A581C2E23AB5000777FA9 /* Eckstein */,
+				D33A58312E23AB5100777FA9 /* EcksteinTests */,
+				D33A583B2E23AB5100777FA9 /* EcksteinUITests */,
+				D33A59EA2E244BA700777FA9 /* Frameworks */,
+				D33A581B2E23AB5000777FA9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D33A581B2E23AB5000777FA9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D33A581A2E23AB5000777FA9 /* Eckstein.app */,
+				D33A582E2E23AB5100777FA9 /* EcksteinTests.xctest */,
+				D33A58382E23AB5100777FA9 /* EcksteinUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D33A59EA2E244BA700777FA9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D33A59EB2E244BA700777FA9 /* CoreBluetooth.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D33A58192E23AB5000777FA9 /* Eckstein */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D33A58412E23AB5100777FA9 /* Build configuration list for PBXNativeTarget "Eckstein" */;
+			buildPhases = (
+				D33A58162E23AB5000777FA9 /* Sources */,
+				D33A58172E23AB5000777FA9 /* Frameworks */,
+				D33A58182E23AB5000777FA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D33A581C2E23AB5000777FA9 /* Eckstein */,
+			);
+			name = Eckstein;
+			packageProductDependencies = (
+				D33A59F52E2465B900777FA9 /* Supabase */,
+			);
+			productName = Eckstein;
+			productReference = D33A581A2E23AB5000777FA9 /* Eckstein.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D33A582D2E23AB5100777FA9 /* EcksteinTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D33A58462E23AB5100777FA9 /* Build configuration list for PBXNativeTarget "EcksteinTests" */;
+			buildPhases = (
+				D33A582A2E23AB5100777FA9 /* Sources */,
+				D33A582B2E23AB5100777FA9 /* Frameworks */,
+				D33A582C2E23AB5100777FA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D33A58302E23AB5100777FA9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D33A58312E23AB5100777FA9 /* EcksteinTests */,
+			);
+			name = EcksteinTests;
+			packageProductDependencies = (
+			);
+			productName = EcksteinTests;
+			productReference = D33A582E2E23AB5100777FA9 /* EcksteinTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D33A58372E23AB5100777FA9 /* EcksteinUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D33A58492E23AB5100777FA9 /* Build configuration list for PBXNativeTarget "EcksteinUITests" */;
+			buildPhases = (
+				D33A58342E23AB5100777FA9 /* Sources */,
+				D33A58352E23AB5100777FA9 /* Frameworks */,
+				D33A58362E23AB5100777FA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D33A583A2E23AB5100777FA9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D33A583B2E23AB5100777FA9 /* EcksteinUITests */,
+			);
+			name = EcksteinUITests;
+			packageProductDependencies = (
+			);
+			productName = EcksteinUITests;
+			productReference = D33A58382E23AB5100777FA9 /* EcksteinUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D33A58122E23AB5000777FA9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					D33A58192E23AB5000777FA9 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					D33A582D2E23AB5100777FA9 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = D33A58192E23AB5000777FA9;
+					};
+					D33A58372E23AB5100777FA9 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = D33A58192E23AB5000777FA9;
+					};
+				};
+			};
+			buildConfigurationList = D33A58152E23AB5000777FA9 /* Build configuration list for PBXProject "Eckstein" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				he,
+			);
+			mainGroup = D33A58112E23AB5000777FA9;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D33A59F42E2465B900777FA9 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D33A581B2E23AB5000777FA9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D33A58192E23AB5000777FA9 /* Eckstein */,
+				D33A582D2E23AB5100777FA9 /* EcksteinTests */,
+				D33A58372E23AB5100777FA9 /* EcksteinUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D33A58182E23AB5000777FA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D33A582C2E23AB5100777FA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D33A58362E23AB5100777FA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D33A58162E23AB5000777FA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D33A582A2E23AB5100777FA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D33A58342E23AB5100777FA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D33A58302E23AB5100777FA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D33A58192E23AB5000777FA9 /* Eckstein */;
+			targetProxy = D33A582F2E23AB5100777FA9 /* PBXContainerItemProxy */;
+		};
+		D33A583A2E23AB5100777FA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D33A58192E23AB5000777FA9 /* Eckstein */;
+			targetProxy = D33A58392E23AB5100777FA9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D33A58422E23AB5100777FA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Eckstein/Eckstein.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Eckstein/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Eckstein needs Bluetooth to connect to your Xiaomi scale.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs camera access to scan food barcodes";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Eckstein needs access to read your weight data from Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Eckstein needs access to save your weight data to Health.";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eliosdigital.Eckstein;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Debug;
+		};
+		D33A58432E23AB5100777FA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Eckstein/Eckstein.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Eckstein/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Eckstein needs Bluetooth to connect to your Xiaomi scale.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs camera access to scan food barcodes";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Eckstein needs access to read your weight data from Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Eckstein needs access to save your weight data to Health.";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eliosdigital.Eckstein;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Release;
+		};
+		D33A58442E23AB5100777FA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D33A58452E23AB5100777FA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		D33A58472E23AB5100777FA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eliosdigital.EcksteinTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Eckstein.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Eckstein";
+				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Debug;
+		};
+		D33A58482E23AB5100777FA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eliosdigital.EcksteinTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Eckstein.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Eckstein";
+				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Release;
+		};
+		D33A584A2E23AB5100777FA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eliosdigital.EcksteinUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = Eckstein;
+				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Debug;
+		};
+		D33A584B2E23AB5100777FA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z24WA5CL56;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eliosdigital.EcksteinUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = Eckstein;
+				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D33A58152E23AB5000777FA9 /* Build configuration list for PBXProject "Eckstein" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D33A58442E23AB5100777FA9 /* Debug */,
+				D33A58452E23AB5100777FA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D33A58412E23AB5100777FA9 /* Build configuration list for PBXNativeTarget "Eckstein" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D33A58422E23AB5100777FA9 /* Debug */,
+				D33A58432E23AB5100777FA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D33A58462E23AB5100777FA9 /* Build configuration list for PBXNativeTarget "EcksteinTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D33A58472E23AB5100777FA9 /* Debug */,
+				D33A58482E23AB5100777FA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D33A58492E23AB5100777FA9 /* Build configuration list for PBXNativeTarget "EcksteinUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D33A584A2E23AB5100777FA9 /* Debug */,
+				D33A584B2E23AB5100777FA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D33A59F42E2465B900777FA9 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D33A59F52E2465B900777FA9 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D33A59F42E2465B900777FA9 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D33A58122E23AB5000777FA9 /* Project object */;
+}

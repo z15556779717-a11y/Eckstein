@@ -1,0 +1,50 @@
+/* 
+  Common.strings
+  Eckstein
+
+  Created by Eliad Shahar on 23/07/2025.
+  
+  Common UI Elements - English
+*/
+
+// MARK: - Navigation
+"back_button" = "Back";
+"continue_button" = "Continue";
+"finish_button" = "Finish";
+"start_button" = "Start";
+"stop_button" = "Stop";
+"pause_button" = "Pause";
+"resume_button" = "Resume";
+
+// MARK: - Alerts
+"alert_title_error" = "Error";
+"alert_title_success" = "Success";
+"alert_title_warning" = "Warning";
+"alert_title_confirm" = "Confirm";
+"alert_button_ok" = "OK";
+"alert_button_cancel" = "Cancel";
+"alert_button_delete" = "Delete";
+"alert_button_save" = "Save";
+
+// MARK: - Empty States
+"empty_list" = "No items yet";
+"empty_search" = "No results found";
+"empty_history" = "No history available";
+
+// MARK: - Loading States
+"loading_data" = "Loading data...";
+"loading_please_wait" = "Please wait...";
+"syncing_data" = "Syncing...";
+
+// MARK: - Errors
+"error_generic" = "Something went wrong";
+"error_network" = "Network error";
+"error_no_internet" = "No internet connection";
+"error_server" = "Server error";
+"error_unauthorized" = "Unauthorized";
+
+// MARK: - Success Messages
+"success_saved" = "Saved successfully";
+"success_deleted" = "Deleted successfully";
+"success_updated" = "Updated successfully";
+"success_created" = "Created successfully";

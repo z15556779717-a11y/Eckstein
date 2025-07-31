@@ -1,0 +1,105 @@
+/* 
+  Localizable.strings
+  Eckstein
+
+  Created by Eliad Shahar on 23/07/2025.
+  
+  Hebrew Localization
+*/
+
+// MARK: - Tab Bar
+"tab_workout" = "אימונים";
+"tab_diet" = "תזונה";
+"tab_weight" = "משקל";
+"tab_ai_coach" = "מאמן AI";
+"tab_profile" = "פרופיל";
+
+// MARK: - Common Actions
+"save" = "שמור";
+"cancel" = "ביטול";
+"delete" = "מחק";
+"edit" = "ערוך";
+"done" = "סיום";
+"add" = "הוסף";
+"close" = "סגור";
+"back" = "חזור";
+"next" = "הבא";
+"previous" = "הקודם";
+"submit" = "שלח";
+"confirm" = "אשר";
+"ok" = "אישור";
+"yes" = "כן";
+"no" = "לא";
+"search" = "חיפוש";
+"filter" = "סינון";
+"sort" = "מיון";
+"refresh" = "רענן";
+"share" = "שתף";
+"copy" = "העתק";
+"paste" = "הדבק";
+"select" = "בחר";
+"select_all" = "בחר הכל";
+"skip" = "דלג";
+"get_started" = "בואו נתחיל";
+
+// MARK: - Status Messages
+"loading" = "טוען...";
+"saving" = "שומר...";
+"deleting" = "מוחק...";
+"updating" = "מעדכן...";
+"syncing" = "מסנכרן...";
+"processing" = "מעבד...";
+"please_wait" = "אנא המתן...";
+"success" = "הצלחה";
+"error" = "שגיאה";
+"warning" = "אזהרה";
+"info" = "מידע";
+"no_data" = "אין נתונים";
+"no_results" = "לא נמצאו תוצאות";
+"empty_state" = "אין כאן כלום עדיין";
+"pull_to_refresh" = "משוך לרענון";
+
+// MARK: - Time & Date
+"today" = "היום";
+"yesterday" = "אתמול";
+"tomorrow" = "מחר";
+"this_week" = "השבוע";
+"last_week" = "שבוע שעבר";
+"this_month" = "החודש";
+"last_month" = "חודש שעבר";
+"days_ago" = "לפני %d ימים";
+"hours_ago" = "לפני %d שעות";
+"minutes_ago" = "לפני %d דקות";
+"just_now" = "עכשיו";
+
+// MARK: - Units
+"kg" = "ק״ג";
+"lbs" = "ליברות";
+"g" = "גרם";
+"mg" = "מ״ג";
+"cal" = "קלוריות";
+"kcal" = "קק״ל";
+"ml" = "מ״ל";
+"l" = "ליטר";
+"oz" = "אונקיות";
+"cm" = "ס״מ";
+"m" = "מטר";
+"km" = "ק״מ";
+"mi" = "מייל";
+"min" = "דק׳";
+"sec" = "שנ׳";
+"hr" = "שעה";
+"reps" = "חזרות";
+"sets" = "סטים";
+"calories" = "קלוריות";
+
+// MARK: - Validation
+"field_required" = "שדה חובה";
+"invalid_email" = "כתובת אימייל לא תקינה";
+"password_too_short" = "הסיסמה חייבת להכיל לפחות 6 תווים";
+"passwords_dont_match" = "הסיסמאות אינן תואמות";
+"invalid_value" = "ערך לא תקין";
+"value_too_low" = "הערך נמוך מדי";
+"value_too_high" = "הערך גבוה מדי";
+"please_try_again" = "אנא נסה שנית";
+"something_went_wrong" = "משהו השתבש";

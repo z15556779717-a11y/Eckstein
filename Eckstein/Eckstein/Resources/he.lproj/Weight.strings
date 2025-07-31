@@ -1,0 +1,433 @@
+/* 
+  Weight.strings
+  Eckstein
+  
+  Hebrew Localization - Weight Module
+*/
+
+// MARK: - Weight Dashboard
+"weight_tracker" = "מעקב משקל";
+"current_weight" = "משקל נוכחי";
+"goal_weight" = "משקל יעד";
+"goal_progress" = "התקדמות ליעד";
+"weekly_avg" = "ממוצע שבועי";
+"monthly_avg" = "ממוצע חודשי";
+"total_entries" = "סה״כ רישומים";
+"last_entry" = "רישום אחרון";
+"recent_entries" = "רישומים אחרונים";
+"insights" = "תובנות";
+"add_weight" = "הוסף משקל";
+"view_history" = "צפה בהיסטוריה";
+"healthy_pace" = "אתה יורד במשקל בקצב בריא";
+"great_progress" = "התקדמות מצוינת! המשך כך!";
+"kg" = "ק״ג";
+"lbs" = "פאונד";
+"to_go" = "נותרו";
+"no_entries_yet" = "אין רישומים עדיין";
+"add_first_weight" = "הוסף את רישום המשקל הראשון";
+
+// MARK: - Weight Entry
+"new_entry" = "רישום חדש";
+"edit_entry" = "ערוך רישום";
+"weight" = "משקל";
+"body_fat_percentage" = "אחוז שומן";
+"muscle_mass" = "מסת שריר";
+"body_water" = "נוזלי גוף";
+"bone_mass" = "מסת עצם";
+"visceral_fat" = "שומן ויסצרלי";
+"metabolic_age" = "גיל מטבולי";
+"bmi" = "BMI";
+"notes" = "הערות";
+"date" = "תאריך";
+"time" = "שעה";
+"save" = "שמור";
+"cancel" = "ביטול";
+"delete_entry" = "מחק רישום";
+"optional" = "אופציונלי";
+"entry_saved" = "הרישום נשמר";
+"entry_deleted" = "הרישום נמחק";
+
+// MARK: - Weight History
+"weight_history" = "היסטוריית משקל";
+"all_entries" = "כל הרישומים";
+"this_month" = "החודש";
+"last_3_months" = "3 חודשים אחרונים";
+"last_6_months" = "6 חודשים אחרונים";
+"this_year" = "השנה";
+"edit" = "ערוך";
+"delete" = "מחק";
+"swipe_to_delete" = "החלק למחיקה";
+"delete_weight_confirm" = "האם אתה בטוח שברצונך למחוק רישום זה?";
+
+// MARK: - Weight Goal
+"weight_goal" = "יעד משקל";
+"target_weight" = "משקל יעד";
+"target_date" = "תאריך יעד";
+"weekly_goal" = "יעד שבועי";
+"lose" = "לרדת";
+"gain" = "לעלות";
+"maintain" = "לשמור";
+"per_week" = "בשבוע";
+"recommended_rate" = "מומלץ: 0.5-1 ק״ג בשבוע";
+"save_goal" = "שמור יעד";
+"goal_saved" = "היעד נשמר";
+"aggressive_goal" = "יעד אגרסיבי מדי";
+"healthy_rate_warning" = "קצב בריא הוא 0.5-1 ק״ג בשבוע";
+
+// MARK: - Scale Connection
+"connect_scale" = "חבר משקל";
+"bluetooth_scales" = "משקלים חכמים";
+"searching" = "מחפש...";
+"available_devices" = "מכשירים זמינים";
+"paired_devices" = "מכשירים מחוברים";
+"connect" = "התחבר";
+"disconnect" = "התנתק";
+"no_devices_found" = "לא נמצאו מכשירים";
+"make_sure_scale_on" = "ודא שהמשקל דולק";
+"connected" = "מחובר";
+"disconnected" = "מנותק";
+"connecting" = "מתחבר...";
+"connection_failed" = "החיבור נכשל";
+"step_on_scale" = "עמוד על המשקל";
+"reading_data" = "קורא נתונים...";
+
+// MARK: - Weight Settings
+"weight_settings" = "הגדרות משקל";
+"units" = "יחידות";
+"kilograms" = "קילוגרמים";
+"pounds" = "פאונד";
+"reminders" = "תזכורות";
+"daily_reminder" = "תזכורת יומית";
+"reminder_time" = "שעת תזכורת";
+"enable_reminders" = "הפעל תזכורות";
+"reminder_message" = "זמן לשקילה יומית";
+"notification_settings" = "הגדרות התראות";
+
+// MARK: - Charts
+"1w" = "שבוע";
+"1m" = "חודש";
+"3m" = "3 חודשים";
+"6m" = "6 חודשים";
+"1y" = "שנה";
+"all" = "הכל";
+"weight_chart" = "גרף משקל";
+"body_composition" = "הרכב גוף";
+"trends" = "מגמות";
+
+// MARK: - Statistics
+"current" = "נוכחי";
+"change" = "שינוי";
+"since_last_entry" = "מהרישום האחרון";
+"today" = "היום";
+"yesterday" = "אתמול";
+"days_ago" = "לפני %d ימים";
+"weekly_summary" = "סיכום שבועי";
+"average" = "ממוצע";
+"lowest" = "הנמוך ביותר";
+"highest" = "הגבוה ביותר";
+"trend" = "מגמה";
+"losing" = "ירידה";
+"gaining" = "עלייה";
+"stable" = "יציב";
+
+// MARK: - Insights
+"weight_insights" = "תובנות משקל";
+"on_track" = "על המסלול הנכון";
+"ahead_of_schedule" = "מקדים את היעד";
+"behind_schedule" = "מאחורי היעד";
+"plateau_detected" = "זוהתה עצירה";
+"consistent_progress" = "התקדמות עקבית";
+"irregular_tracking" = "מעקב לא סדיר";
+"recommendation" = "המלצה";
+"keep_current_pace" = "המשך בקצב הנוכחי";
+"increase_activity" = "הגבר פעילות גופנית";
+"review_diet" = "בדוק את התזונה";
+"track_more_often" = "בצע מעקב תכוף יותר";
+
+// MARK: - Tooltips
+"tip_tap_to_edit" = "הקש לעריכת רישום";
+"tip_swipe_delete_entry" = "החלק למחיקת רישום";
+"tip_connect_scale" = "חבר משקל חכם למעקב אוטומטי";
+"tip_set_goal" = "הגדר יעד משקל למוטיבציה";
+
+// MARK: - Validation
+"weight_required" = "משקל הוא שדה חובה";
+"invalid_weight" = "משקל לא תקין";
+"future_date_error" = "לא ניתן להוסיף רישום לתאריך עתידי";
+"duplicate_entry" = "כבר קיים רישום לתאריך זה";
+
+// MARK: - Additional Translations
+"weight_tracking" = "מעקב משקל";
+"dashboard" = "לוח בקרה";
+"history" = "היסטוריה";
+"progress" = "התקדמות";
+"analytics" = "ניתוח נתונים";
+"smart_scale" = "משקל חכם";
+"last_weigh_in" = "שקילה אחרונה";
+"battery" = "סוללה";
+"manual_entry" = "הזנה ידנית";
+"key_metrics" = "מדדים עיקריים";
+"weight_distribution" = "התפלגות משקל";
+"no_data_available" = "אין נתונים זמינים";
+"export" = "ייצוא";
+"sort_by" = "מיין לפי";
+"source" = "מקור";
+"units_measurements" = "יחידות ומדידות";
+"height" = "גובה";
+"searching_for_scales" = "מחפש משקלים...";
+"no_scales_found" = "לא נמצאו משקלים";
+"available_scales" = "משקלים זמינים";
+"connection" = "חיבור";
+"saved_scale" = "משקל שמור";
+"measurement" = "מדידה";
+"kilograms_kg" = "קילוגרמים (ק״ג)";
+"pounds_lbs" = "פאונד (lbs)";
+"remove_goal" = "הסר יעד";
+"xiaomi_scale" = "משקל Xiaomi";
+"apple_health" = "Apple Health";
+"sync_with_health" = "סנכרן עם Health";
+"health_permissions" = "הרשאות Health";
+"last_synced" = "סונכרן לאחרונה";
+"enable_sync" = "הפעל סנכרון";
+"sync_now" = "סנכרן עכשיו";
+"health_data_access" = "גישה לנתוני Health";
+"grant_access" = "אשר גישה";
+"syncing" = "מסנכרן...";
+"sync_complete" = "הסנכרון הושלם";
+"sync_failed" = "הסנכרון נכשל";
+"no_new_data" = "אין נתונים חדשים";
+"entries_synced" = "%d רישומים סונכרנו";
+"last_updated" = "עודכן לאחרונה";
+"never_synced" = "לא סונכרן מעולם";
+
+// MARK: - Scale Connection Additional
+"scanning" = "סורק";
+"scan_for_scales" = "סרוק משקלים";
+"connect_to_last_scale" = "התחבר למשקל האחרון";
+"scale_connection" = "חיבור משקל";
+"done" = "סיום";
+"connection_error" = "שגיאת חיבור";
+"ok" = "אישור";
+"please_turn_on_bluetooth" = "אנא הפעל בלוטוס";
+"failed_to_connect_scale" = "החיבור למשקל נכשל";
+"auto_connect_scale" = "חיבור אוטומטי למשקל";
+"forget" = "שכח";
+"weight_unit" = "יחידת משקל";
+"jin" = "ג׳ין";
+"auto_save_measurements" = "שמירה אוטומטית של מדידות";
+"notify_on_weight_capture" = "התרע על קליטת משקל";
+"user_profiles" = "פרופילי משתמש";
+"manage_profiles" = "ניהול פרופילים";
+"troubleshooting" = "פתרון בעיות";
+"connection_help" = "עזרה בחיבור";
+"supported_models" = "דגמים נתמכים";
+"scale_settings" = "הגדרות משקל";
+"forget_scale" = "שכח משקל";
+"forget_scale_message" = "האם אתה בטוח שברצונך לשכוח משקל זה?";
+"week" = "שבוע";
+"percentage_symbol" = "%";
+"days" = "ימים";
+
+// MARK: - Missing Keys from English
+"no_weight_entries" = "אין רישומי משקל";
+"start_tracking_weight" = "התחל לעקוב אחר המשקל שלך כדי לראות את ההתקדמות";
+"todays_weight" = "משקל היום";
+"enter_weight" = "הזן משקל";
+"save_weight" = "שמור משקל";
+"starting_weight" = "משקל התחלתי";
+"total_lost" = "סה״כ ירדת";
+"total_gained" = "סה״כ עלית";
+"weekly_average" = "ממוצע שבועי";
+"monthly_average" = "ממוצע חודשי";
+"healthy_range" = "טווח בריא";
+"last_7_days" = "7 ימים אחרונים";
+"last_30_days" = "30 ימים אחרונים";
+"last_90_days" = "90 ימים אחרונים";
+"last_year" = "שנה אחרונה";
+"all_time" = "כל הזמן";
+"set_goal" = "הגדר יעד";
+"update_goal" = "עדכן יעד";
+"goal_reached" = "הגעת ליעד!";
+"pounds_to_go" = "%@ פאונד נותרו";
+"kilos_to_go" = "%@ ק״ג נותרו";
+"progress_chart" = "תרשים התקדמות";
+"trend_line" = "קו מגמה";
+"weight_saved" = "המשקל נשמר בהצלחה";
+"goal_updated" = "יעד המשקל עודכן";
+"body_fat" = "שומן גוף";
+"date_time" = "תאריך ושעה";
+"goal" = "יעד";
+"most_often_weigh_on" = "לרוב שוקל ב%@";
+"body_fat_placeholder" = "15.5";
+"muscle_mass_placeholder" = "30.5";
+"weight_placeholder_kg" = "65.0";
+"weight_placeholder_lbs" = "143.0";
+"stable" = "יציב";
+"3_months" = "3 חודשים";
+"6_months" = "6 חודשים";
+"statistics" = "סטטיסטיקה";
+"avg" = "ממוצע";
+"max" = "מקס'";
+"min" = "מינ'";
+"entry_details" = "פרטי רישום";
+"manual" = "ידני";
+"body_composition_trends" = "מגמות הרכב גוף";
+"typical_weigh_in_time" = "זמן שקילה אופייני";
+"weight_settings" = "הגדרות משקל";
+"done" = "סיום";
+"units_measurements" = "יחידות ומדידות";
+"kilograms_kg" = "קילוגרמים (ק״ג)";
+"height_description" = "הגובה משמש לחישובי BMI";
+"reminders_description" = "קבל התראות למעקב משקל סדיר";
+
+// MARK: - Sorting and Filtering
+"sort_by_label" = "מיין לפי:";
+"newest_first" = "החדש ביותר קודם";
+"oldest_first" = "הישן ביותר קודם";
+"heaviest_first" = "הכבד ביותר קודם";
+"lightest_first" = "הקל ביותר קודם";
+
+// MARK: - Deletion Confirmations
+"delete_entry_title" = "מחק רישום";
+"delete_entry_message" = "האם אתה בטוח שברצונך למחוק רישום משקל זה? לא ניתן לבטל פעולה זו.";
+"delete_all_weight_data" = "מחק את כל נתוני המשקל";
+"delete_all_data_message" = "פעולה זו תמחק לצמיתות את כל רישומי המשקל, היעדים ונתוני הניתוח שלך. לא ניתן לבטל פעולה זו.";
+
+// MARK: - Measurements
+"bmi_format" = "BMI: %@";
+"cm" = "ס״מ";
+"height_description" = "הגובה משמש לחישובי BMI";
+
+// MARK: - Reminders
+"daily_reminders" = "תזכורות יומיות";
+"frequency" = "תדירות";
+"daily" = "יומי";
+"every_3_days" = "כל 3 ימים";
+"weekly" = "שבועי";
+"reminders_description" = "קבל התראות למעקב משקל סדיר";
+
+// MARK: - Privacy
+"privacy_mode" = "מצב פרטיות";
+"show_body_composition" = "הצג הרכב גוף";
+"privacy_display" = "פרטיות ותצוגה";
+"privacy_mode_description" = "מצב פרטיות מסתיר ערכי משקל במסך הראשי";
+
+// MARK: - Health Integration
+"auto_sync_healthkit" = "סנכרון אוטומטי עם HealthKit";
+"health_integration" = "אינטגרציית Health";
+
+// MARK: - Data Management
+"export_data" = "ייצא נתונים";
+"import_data" = "ייבא נתונים";
+"delete_all_data" = "מחק את כל הנתונים";
+"data_management" = "ניהול נתונים";
+
+// MARK: - Export Options
+"export_format" = "פורמט ייצוא";
+"date_range" = "טווח תאריכים";
+"include_body_composition" = "כלול הרכב גוף";
+"options" = "אפשרויות";
+"body_composition_description" = "נתוני אחוז שומן ומסת שריר";
+"export_options" = "אפשרויות ייצוא";
+"all_time_option" = "כל הזמן";
+"last_month" = "חודש אחרון";
+"last_3_months" = "3 חודשים אחרונים";
+"last_6_months" = "6 חודשים אחרונים";
+
+// MARK: - About
+"version" = "גרסה";
+"help_support" = "עזרה ותמיכה";
+"about" = "אודות";
+
+// MARK: - Notifications
+"weight_reminder_title" = "זמן שקילה";
+"weight_reminder_body" = "עקוב אחר המשקל שלך כדי להישאר ממוקד במטרות הכושר שלך";
+"test_notification_title" = "התראת בדיקה";
+"test_notification_body" = "תזכורות המשקל עובדות כראוי!";
+"send_test_notification" = "שלח התראת בדיקה";
+"dismiss" = "סגור";
+
+// MARK: - Widget
+"current_weight_widget" = "משקל נוכחי";
+"weight_goal_widget" = "יעד משקל";
+"days_remaining" = "%d ימים נותרו";
+
+// MARK: - Achievements
+"achievements" = "הישגים";
+"no_achievements_yet" = "אין הישגים עדיין";
+"first_weigh_in" = "שקילה ראשונה";
+"started_journey" = "התחלת מסע מעקב המשקל שלך";
+"1kg_milestone" = "ירידה של 1 ק״ג";
+"lost_1kg" = "ירדת קילוגרם ראשון";
+"5kg_milestone" = "אלוף 5 ק״ג";
+"lost_5kg" = "השגת ירידה של 5 ק״ג";
+"10kg_milestone" = "מאסטר 10 ק״ג";
+"lost_10kg" = "שינוי מדהים של 10 ק״ג";
+"week_streak" = "לוחם שבועי";
+"7_days_tracking" = "7 ימים רצופים של מעקב";
+"month_streak" = "מאסטר חודשי";
+"30_days_tracking" = "30 ימים של מעקב עקבי";
+"goal_reached" = "היעד הושג!";
+"reached_target_weight" = "הגעת למשקל היעד שלך";
+"next_milestone" = "ההישג הבא";
+"keep_going" = "המשך לעקוב כדי לפתוח";
+
+// MARK: - Analytics View
+"progress_timeline" = "ציר הזמן";
+"patterns_insights" = "דפוסים ותובנות";
+"stable_weight_insight" = "משקל יציב";
+"detailed_statistics" = "סטטיסטיקה מפורטת";
+"longest_tracking_streak" = "%@ ימים רצופים של מעקב";
+"high_variability_insight" = "זוהתה תנודתיות גבוהה במשקל";
+"std_dev" = "סטיית תקן";
+"median" = "חציון";
+"percentile_75" = "אחוזון 75";
+"percentile_25" = "אחוזון 25";
+"avg_daily_change" = "שינוי יומי ממוצע";
+"range" = "טווח";
+"total_change" = "שינוי כולל";
+"entries" = "רישומים";
+"consistency" = "עקביות";
+"see_all" = "הצג הכל";
+"add_weight_entries_chart" = "הוסף רישומי משקל לצפייה בגרף";
+"body_composition_optional" = "הרכב גוף (אופציונלי)";
+"notes_optional" = "הערות (אופציונלי)";
+"current_goal" = "יעד נוכחי";
+"goal_line" = "קו יעד";
+"trend" = "מגמה";
+
+// MARK: - Insights
+"losing_weight_insight" = "אתה יורד במשקל בקצב בריא";
+"gaining_weight_insight" = "אתה עולה במשקל";
+"goal_75_percent_insight" = "הגעת ל-75% מהדרך ליעד!";
+"goal_50_percent_insight" = "אתה באמצע הדרך ליעד!";
+"days_since_last_entry_insight" = "עברו %@ ימים מהשקילה האחרונה";
+"est_completion" = "השלמה משוערת";
+"no_body_composition_data" = "אין נתוני הרכב גוף זמינים";
+"morning" = "בוקר";
+"midday" = "צהריים";
+"afternoon" = "אחר הצהריים";
+"evening" = "ערב";
+"typical_weigh_in_time" = "זמן שקילה אופייני: %@";
+"longest_tracking_streak" = "%@ ימים רצופים של מעקב";
+"csv_format" = "CSV";
+"json_format" = "JSON";
+"bmi_prefix" = "BMI";
+"fat_suffix" = "שומן";
+"muscle_suffix" = "שריר";
+
+// MARK: - Steps Counter
+"steps_counter" = "מונה צעדים";
+"steps" = "צעדים";
+"steps_goal_progress" = "%@ מתוך %@ צעדים";
+"today" = "היום";
+"weekly_avg" = "ממוצע שבועי";
+"monthly_avg" = "ממוצע חודשי";
+
+// MARK: - Weight Trends
+"losing" = "יורד";
+"gaining" = "עולה";
+
+// MARK: - Time References
+"yesterday" = "אתמול";
+"days_ago" = "לפני %@ ימים";

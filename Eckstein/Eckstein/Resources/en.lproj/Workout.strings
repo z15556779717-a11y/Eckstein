@@ -1,0 +1,259 @@
+/* 
+  Workout.strings
+  Eckstein
+  
+  English Localization - Workout Module
+*/
+
+// MARK: - Workout List View
+"quick_stats" = "Quick Stats";
+"current_streak" = "Current Streak";
+"total" = "Total";
+"active_workout" = "Active Workout";
+"history" = "History";
+"no_active_workout" = "No Active Workout";
+"select_workout_or_create" = "Select a workout from history or create new";
+"workouts" = "Workouts";
+"exercises" = "Exercises";
+"analytics" = "Analytics";
+"workout_complete" = "Workout Complete! 🎉";
+"days" = "days";
+
+// MARK: - Workout Detail View
+"complete_workout" = "Complete Workout";
+"cancel_workout" = "Cancel Workout";
+"add_exercise" = "Add Exercise";
+"rest_timer" = "Rest Timer";
+"set" = "Set";
+"reps" = "Reps";
+"weight" = "Weight";
+"notes" = "Notes";
+"add_set" = "Add Set";
+"remove_set" = "Remove Set";
+"exercise_notes" = "Exercise Notes";
+"previous_performance" = "Previous Performance";
+"no_previous_data" = "No previous data";
+
+// MARK: - Workout History
+"workout_history" = "Workout History";
+"all_workouts" = "All Workouts";
+"filter_workouts" = "Filter Workouts";
+"duration" = "Duration";
+"exercises_count" = "%d exercises";
+"exercise_count_singular" = "1 exercise";
+"total_volume" = "Total Volume";
+"swipe_to_delete" = "Swipe to delete";
+"delete_workout" = "Delete Workout";
+"delete_workout_confirm" = "Are you sure you want to delete this workout?";
+"no_workouts_found" = "No workouts found";
+"start_new_workout" = "Start a new workout to see it here";
+"total_workouts" = "Total Workouts";
+"swipe_left_delete_workouts" = "Swipe left to delete workouts";
+"calendar_implementation" = "Calendar implementation";
+"workout" = "Workout";
+"min" = "min";
+"sets_count" = "%d sets";
+"unknown" = "Unknown";
+
+// MARK: - Create/Edit Workout
+"create_workout" = "Create Workout";
+"edit_workout" = "Edit Workout";
+"workout_name" = "Workout Name";
+"enter_workout_name" = "Enter workout name";
+"select_exercises" = "Select Exercises";
+"save_workout" = "Save Workout";
+"workout_saved" = "Workout saved";
+"name_required" = "Workout name is required";
+"select_at_least_one" = "Select at least one exercise";
+"no_workout_types" = "No Workout Types";
+"create_workout_types_first" = "Create workout types first to start tracking your workouts";
+"create_workout_type" = "Create Workout Type";
+"select_todays_workout" = "Select Today's Workout";
+"start_workout" = "Start Workout";
+"never" = "Never";
+"unnamed_workout" = "Unnamed Workout";
+"last" = "Last";
+
+// MARK: - Exercise List
+"select_exercise" = "Select Exercise";
+"all_exercises" = "All Exercises";
+"chest" = "Chest";
+"back" = "Back";
+"legs" = "Legs";
+"shoulders" = "Shoulders";
+"arms" = "Arms";
+"core" = "Core";
+"cardio" = "Cardio";
+"search_exercises" = "Search exercises...";
+"no_exercises_yet" = "No exercises yet";
+"no_exercises_found" = "No exercises found";
+"create_first_custom_exercise" = "Create your first custom exercise to get started";
+"create_custom_exercise" = "Create Custom Exercise";
+"custom_exercise" = "Custom Exercise";
+"add_custom_exercise" = "Add Custom Exercise";
+"recent" = "Recent";
+"search_results" = "Search Results";
+"edit_exercise" = "Edit Exercise";
+"view_details" = "View Details";
+"muscle" = "Muscle";
+"category" = "Category";
+"equipment" = "Equipment";
+"all" = "All";
+"other" = "Other";
+
+// MARK: - Exercise Detail
+"exercise_details" = "Exercise Details";
+"primary_muscle" = "Primary Muscle";
+"secondary_muscles" = "Secondary Muscles";
+"equipment" = "Equipment";
+"instructions" = "Instructions";
+"tips" = "Tips";
+"recent_performance" = "Recent Performance";
+"personal_record" = "Personal Record";
+"average_weight" = "Average Weight";
+"average_reps" = "Average Reps";
+"last_performed" = "Last Performed";
+
+// MARK: - Rest Timer
+"rest_timer" = "Rest Timer";
+"start_timer" = "Start";
+"pause" = "Pause";
+"resume" = "Resume";
+"skip_rest" = "Skip";
+"reset_timer" = "Reset";
+"rest_complete" = "Rest Complete!";
+"time_remaining" = "Time Remaining";
+
+// MARK: - Analytics
+"analytics" = "Analytics";
+"workout_analytics" = "Workout Analytics";
+"weekly_progress" = "Weekly Progress";
+"monthly_progress" = "Monthly Progress";
+"yearly_progress" = "Yearly Progress";
+"personal_records" = "Personal Records";
+"most_trained" = "Most Trained";
+"total_volume" = "Total Volume";
+"workout_frequency" = "Workout Frequency";
+"muscle_distribution" = "Muscle Distribution";
+"strength_progress" = "Strength Progress";
+"consistency_score" = "Consistency Score";
+"select_exercise" = "Select Exercise";
+"time_frame" = "Time Frame";
+"week" = "Week";
+"month" = "Month";
+"3_months" = "3 Months";
+"year" = "Year";
+"weight_progress" = "Weight Progress";
+"weight_kg" = "Weight (kg)";
+"reps_achievement" = "Reps Achievement";
+"achievement_percent" = "Achievement %";
+"training_volume" = "Training Volume";
+"volume_kg" = "Volume (kg)";
+"unknown_exercise" = "Unknown Exercise";
+"max_weight" = "Max Weight";
+"avg_volume" = "Avg Volume";
+"select_exercise_view_analytics" = "Select an exercise to view analytics";
+
+// MARK: - Exercise Categories
+"compound_exercises" = "Compound Exercises";
+"isolation_exercises" = "Isolation Exercises";
+"bodyweight_exercises" = "Bodyweight Exercises";
+"free_weights" = "Free Weights";
+"machines" = "Machines";
+"cables" = "Cables";
+
+// MARK: - Tooltips
+"tip_swipe_delete_workout" = "Swipe left to delete workouts";
+"tip_long_press_edit" = "Long press to edit";
+"tip_complete_all_sets" = "Complete all sets to finish exercise";
+"tip_add_notes" = "Add notes for better documentation";
+
+// MARK: - Workout Types
+"push_workout" = "Push Workout";
+"pull_workout" = "Pull Workout";
+"legs_workout" = "Legs Workout";
+"upper_body" = "Upper Body";
+"lower_body" = "Lower Body";
+"full_body" = "Full Body";
+"custom_workout" = "Custom Workout";
+
+// MARK: - Status Messages
+"loading_exercises" = "Loading exercises...";
+"saving_workout" = "Saving workout...";
+"workout_in_progress" = "Workout in Progress";
+"tap_to_continue" = "Tap to continue";
+
+// MARK: - Workout Detail View
+"workout_timer" = "Workout Timer";
+"break_timer" = "Break Timer";
+"workout_details" = "Workout Details";
+"finish_workout" = "Finish Workout";
+"complete_more_to_finish" = "Complete %d%% more to finish";
+"delete_workout" = "Delete Workout";
+"delete_workout_message" = "Are you sure you want to delete this workout? This cannot be undone.";
+"pause" = "Pause";
+"start" = "Start";
+"reset" = "Reset";
+"add_exercise" = "Add Exercise";
+
+// MARK: - Common Units
+"kg" = "kg";
+"lbs" = "lbs";
+"min" = "min";
+"sec" = "s";
+"cal" = "cal";
+"kcal" = "kcal";
+
+// MARK: - Common Time
+"today" = "Today";
+"yesterday" = "Yesterday";
+"this_week" = "This Week";
+"this_month" = "This Month";
+"all_workouts" = "All Workouts";
+"streak" = "Streak";
+
+// MARK: - Rest Timer
+"rest_time" = "Rest Time";
+"skip" = "Skip";
+"quick_select" = "Quick Select";
+"rest_time_complete" = "Rest Time Complete!";
+"time_to_get_back" = "Time to get back to your workout 💪";
+
+// MARK: - Common Actions
+"done" = "Done";
+"cancel" = "Cancel";
+"save" = "Save";
+"delete" = "Delete";
+"edit" = "Edit";
+"add" = "Add";
+"close" = "Close";
+
+// MARK: - Common Status
+"completed" = "Completed";
+"total_sets" = "Total Sets";
+
+// MARK: - Workout Types
+"no_workouts" = "No Workouts";
+"create_workout_types_description" = "Create different workout types to track your training routines";
+"never_used" = "Never used";
+"no_exercises_added" = "No exercises added";
+"last_used" = "Last used";
+"reps_target" = "reps target";
+"update_targets" = "Update Targets";
+"delete_exercise" = "Delete Exercise";
+"target_settings" = "Target Settings";
+"sets" = "Sets";
+"target_reps" = "Target Reps";
+"target_settings_description" = "Set your target reps for this exercise. You'll track actual performance against these targets.";
+"update_exercise" = "Update Exercise";
+"workout_name_description" = "Give your workout a descriptive name like 'Chest & Triceps' or 'Leg Day'";
+"create" = "Create";
+"exit" = "Exit";
+
+// MARK: - Exercise Set Card
+"no_sets_added" = "No sets added";
+"target" = "Target";
+"actual" = "Actual";
+"tap_checkmark_complete_set" = "Tap the checkmark to complete a set";
+"select_weight" = "Select Weight";
+"select_reps" = "Select Reps";

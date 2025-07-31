@@ -1,0 +1,171 @@
+/* 
+  Profile.strings
+  Eckstein
+  
+  Hebrew Localization - Profile & Auth Modules
+*/
+
+// MARK: - Profile View
+"profile" = "פרופיל";
+"settings" = "הגדרות";
+"sign_out" = "התנתק";
+"sign_out_confirm" = "האם אתה בטוח שברצונך להתנתק?";
+"member_since" = "חבר מאז";
+"user" = "משתמש";
+"no_email" = "אין אימייל";
+"edit_profile" = "ערוך פרופיל";
+"profile_photo" = "תמונת פרופיל";
+"change_photo" = "שנה תמונה";
+
+// MARK: - Diet Progress Section
+"diet_progress" = "התקדמות דיאטה";
+"days_on_diet" = "ימים בדיאטה";
+"starting_weight" = "משקל התחלתי";
+"current_weight" = "משקל נוכחי";
+"progress" = "התקדמות";
+"set_diet_start_info" = "הגדר מידע התחלת דיאטה";
+"edit_diet_info" = "ערוך מידע דיאטה";
+"weight_lost" = "ירדת במשקל";
+"weight_gained" = "עלית במשקל";
+"fat_lost" = "% שומן";
+"diet_start_information" = "מידע התחלת דיאטה";
+"start_date" = "תאריך התחלה";
+"current_progress" = "התקדמות נוכחית";
+"weight_change" = "שינוי במשקל";
+"reset_diet_info" = "אפס מידע דיאטה";
+"diet_settings" = "הגדרות דיאטה";
+"cancel" = "ביטול";
+"save" = "שמור";
+
+// MARK: - Meeting Section
+"set_a_meeting" = "קבע פגישה";
+"schedule_consultation" = "תאם ייעוץ";
+"book_appointment" = "הזמן תור";
+
+// MARK: - Settings Section
+"weight_and_health" = "משקל ובריאות";
+"diet_and_nutrition" = "דיאטה ותזונה";
+"app_usage_guide" = "מדריך שימוש באפליקציה";
+"show_tips" = "הצג טיפים";
+"reset_all_tips" = "אפס את כל הטיפים";
+"tips_reset" = "כל הטיפים אופסו";
+"notifications" = "התראות";
+"privacy" = "פרטיות";
+"about" = "אודות";
+
+// MARK: - Language Section
+"language" = "שפה";
+"app_language" = "שפת האפליקציה";
+"english" = "English";
+"hebrew" = "עברית";
+"change_language" = "שנה שפה";
+"language_changed" = "השפה שונתה";
+
+// MARK: - Appearance Section
+"appearance" = "מראה";
+"theme" = "ערכת נושא";
+"light" = "בהיר";
+"dark" = "כהה";
+"system" = "מערכת";
+"accent_color" = "צבע הדגשה";
+"blue" = "כחול";
+"green" = "ירוק";
+"purple" = "סגול";
+"orange" = "כתום";
+"red" = "אדום";
+"default_mix" = "ברירת מחדל";
+
+// MARK: - Account Section
+"account" = "חשבון";
+"email" = "אימייל";
+"password" = "סיסמה";
+"change_password" = "שנה סיסמה";
+"delete_account" = "מחק חשבון";
+"delete_account_warning" = "פעולה זו תמחק את כל הנתונים שלך ולא ניתנת לביטול";
+
+// MARK: - Auth - Login View
+"welcome_back" = "ברוך שובך";
+"sign_in" = "התחבר";
+"sign_up" = "הרשם";
+"forgot_password" = "שכחת סיסמה?";
+"dont_have_account" = "אין לך חשבון?";
+"already_have_account" = "יש לך כבר חשבון?";
+"invalid_credentials" = "אימייל או סיסמה לא תקינים";
+"enter_valid_email" = "אנא הכנס אימייל תקין";
+"password_min_length" = "הסיסמה חייבת להכיל לפחות 6 תווים";
+"passwords_must_match" = "הסיסמאות חייבות להיות זהות";
+"email_placeholder" = "your@email.com";
+"password_placeholder" = "הכנס סיסמה";
+"confirm_password" = "אשר סיסמה";
+
+// MARK: - Auth - Authentication View
+"eckstein" = "אקשטיין";
+"loading" = "טוען...";
+"fitness_nutrition_tracking" = "מעקב כושר ותזונה";
+"personalizing_experience" = "מכין את החוויה האישית שלך...";
+"signing_in" = "מתחבר...";
+"creating_account" = "יוצר חשבון...";
+
+// MARK: - Introduction View
+"welcome_to_eckstein" = "ברוך הבא לאקשטיין";
+"journey_starts_here" = "מסע הכושר האישי שלך מתחיל כאן";
+"track_workouts" = "עקוב אחר אימונים";
+"log_exercises_progress" = "רשום את התרגילים שלך ועקוב אחר ההתקדמות";
+"monitor_nutrition" = "נטר תזונה";
+"track_meals_diet" = "עקוב אחר ארוחות ונהל את הדיאטה שלך";
+"ai_coach" = "מאמן AI";
+"personalized_guidance" = "קבל הדרכה וטיפים מותאמים אישית";
+"get_started" = "בוא נתחיל";
+"skip" = "דלג";
+"next" = "הבא";
+"back" = "חזור";
+
+// MARK: - App Usage Guide
+"how_to_use" = "איך להשתמש באקשטיין";
+"swipe_actions" = "פעולות החלקה";
+"swipe_left_delete" = "החלק שמאלה על פריטים כדי למחוק";
+"long_press" = "לחיצה ארוכה";
+"long_press_edit" = "לחץ לחיצה ארוכה על אימונים כדי לערוך";
+"quick_actions" = "פעולות מהירות";
+"use_plus_button" = "השתמש בכפתור + כדי להוסיף פריטים חדשים";
+"navigation" = "ניווט";
+"swipe_tabs" = "החלק בין לשוניות או השתמש בסרגל הלשוניות";
+"dont_show_again" = "אל תראה זאת שוב";
+"got_it" = "הבנתי!";
+"guide_completed" = "המדריך הושלם";
+
+// MARK: - Password Recovery
+"reset_password" = "איפוס סיסמה";
+"enter_your_email" = "הכנס את האימייל שלך";
+"send_reset_link" = "שלח קישור איפוס";
+"back_to_login" = "חזרה להתחברות";
+"check_your_email" = "בדוק את האימייל שלך";
+"reset_link_sent" = "קישור האיפוס נשלח";
+"follow_instructions" = "עקוב אחר ההוראות באימייל";
+
+// MARK: - AI Coach
+"ai_coach" = "מאמן ממוחשב";
+"ask_ai_coach" = "שאל את המאמן הממוחשב שלך...";
+"clear_chat" = "נקה צ'אט";
+"personalized_workout" = "תוכנית אימון מותאמת אישית";
+"meal_planning" = "תכנון ארוחות";
+"form_check" = "בדיקת טכניקה";
+"motivation" = "מוטיבציה";
+"chat_history" = "היסטוריית צ'אט";
+"ai_settings" = "הגדרות AI";
+"disclaimer" = "הצהרה";
+
+// MARK: - Safety Disclaimer
+"ai_disclaimer" = "הצהרת מאמן ממוחשב";
+"important_notice" = "הודעה חשובה";
+"general_guidance_only" = "המאמן הממוחשב מספק הדרכה כללית בלבד";
+"consult_professionals" = "תמיד התייעץ עם אנשי מקצוע בתחום הבריאות";
+"i_understand" = "אני מבין";
+"accept_terms" = "אני מקבל את התנאים";
+"medical_disclaimer" = "אין להסתמך על המידע כתחליף לייעוץ רפואי";
+
+// MARK: - Validation Messages
+"name_required" = "שם הוא שדה חובה";
+"email_required" = "אימייל הוא שדה חובה";
+"password_required" = "סיסמה היא שדה חובה";
+"agree_to_terms" = "עליך להסכים לתנאי השימוש";

@@ -1,0 +1,138 @@
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+*.xcscmblueprint
+*.xcworkspace
+!default.xcworkspace
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods (if used later)
+Pods/
+*.xcworkspace
+!default.xcworkspace
+
+# Sensitive data
+Secrets.swift
+*.env
+.env.*
+
+# OS files
+.DS_Store
+.Trashes
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Build artifacts
+*.dSYM.zip
+*.dSYM
+
+# Provisioning profiles
+*.mobileprovision
+
+# Fastlane (if used later)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# MCP logs
+logs/
+
+# Logs
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+.env
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/
+
+# Documentation files (except README)
+*.md
+!README.md
+
+# SQL files (except FINAL_VERSION_APP_DB.sql)
+*.sql
+!FINAL_VERSION_APP_DB.sql
+
+# xfunnel-prod directory (unrelated project)
+xfunnel-prod/
+
+# Build and temporary directories
+build/
+tmp/
+temp/
+
+# Claude-specific files
+.claude/
+
+# Scripts directory (contains SQL files)
+scripts/
+
+# Environment and secrets
+.env*
+*.env
+Secrets.swift
+secrets.plist
+*.key
+*.pem
+*.p12
+
+# Supabase local files
+supabase/.temp/
+supabase/.branches/
+
+# Archive and backup files
+*.zip
+*.tar
+*.gz
+*.backup
+*.bak
+
+# IDE specific
+.swiftpm/
+.build/ 

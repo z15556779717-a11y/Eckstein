@@ -1,0 +1,87 @@
+/* 
+  Auth.strings
+  Eckstein
+  
+  Hebrew Localization - Auth Module
+*/
+
+// MARK: - Sign In
+"sign_in" = "התחברות";
+"email" = "אימייל";
+"password" = "סיסמה";
+"forgot_password" = "שכחת סיסמה?";
+"dont_have_account" = "אין לך חשבון?";
+"sign_up" = "הרשמה";
+"sign_in_with_apple" = "התחבר עם Apple";
+"sign_in_with_google" = "התחבר עם Google";
+"or" = "או";
+
+// MARK: - Sign Up
+"create_account" = "צור חשבון";
+"full_name" = "שם מלא";
+"confirm_password" = "אמת סיסמה";
+"already_have_account" = "יש לך כבר חשבון?";
+"agree_to_terms" = "אני מסכים לתנאי השימוש ומדיניות הפרטיות";
+"create_account_button" = "צור חשבון";
+
+// MARK: - Forgot Password
+"reset_password" = "איפוס סיסמה";
+"enter_email_reset" = "הזן את כתובת האימייל שלך ונשלח לך הוראות לאיפוס הסיסמה.";
+"send_reset_link" = "שלח קישור איפוס";
+"back_to_login" = "חזרה להתחברות";
+"check_email" = "בדוק את האימייל שלך";
+"reset_link_sent" = "שלחנו קישור לאיפוס סיסמה לכתובת האימייל שלך.";
+
+// MARK: - Validation
+"email_required" = "אימייל נדרש";
+"invalid_email" = "אנא הזן כתובת אימייל תקינה";
+"password_required" = "סיסמה נדרשת";
+"password_too_short" = "הסיסמה חייבת להכיל לפחות 8 תווים";
+"passwords_not_match" = "הסיסמאות אינן תואמות";
+"name_required" = "שם נדרש";
+"agree_terms_required" = "עליך להסכים לתנאים";
+
+// MARK: - Error Messages
+"invalid_credentials" = "אימייל או סיסמה לא תקינים";
+"account_exists" = "חשבון עם אימייל זה כבר קיים";
+"network_error" = "שגיאת רשת. אנא נסה שוב.";
+"something_went_wrong" = "משהו השתבש. אנא נסה שוב.";
+"weak_password" = "הסיסמה חלשה מדי. השתמש בשילוב של אותיות, מספרים וסמלים.";
+
+// MARK: - Success Messages
+"account_created" = "החשבון נוצר בהצלחה!";
+"password_reset_sent" = "הוראות לאיפוס סיסמה נשלחו לאימייל שלך";
+"password_updated" = "הסיסמה עודכנה בהצלחה";
+"signed_in" = "התחברת בהצלחה";
+"signed_out" = "התנתקת בהצלחה";
+
+// MARK: - App Usage Guide
+"track_your_workouts" = "עקוב אחר האימונים שלך";
+"track_workouts_description" = "תעד את התרגילים, הסטים והחזרות שלך. עקוב אחר ההתקדמות שלך לאורך זמן עם ניתוחים מפורטים.";
+"track_workouts_tip1" = "הקש על + כדי להוסיף אימון חדש";
+"track_workouts_tip2" = "החלק כדי למחוק תרגילים";
+"track_workouts_tip3" = "צפה בהיסטוריית האימונים שלך";
+
+"monitor_your_diet" = "נטר את התזונה שלך";
+"monitor_diet_description" = "עקוב אחר קלוריות, מאקרו ושמור על בנק הקלוריות שלך לתזונה גמישה.";
+"monitor_diet_tip1" = "חפש מזונות או סרוק ברקודים";
+"monitor_diet_tip2" = "שמור את הארוחות המועדפות עליך";
+"monitor_diet_tip3" = "השתמש בבנק הקלוריות לפינוקים";
+
+"track_your_weight" = "עקוב אחר המשקל שלך";
+"track_weight_description" = "נטר שינויים במשקל וצפה במגמות. חבר את משקל Xiaomi שלך למעקב אוטומטי.";
+"track_weight_tip1" = "תעד משקל יומי לתוצאות הטובות ביותר";
+"track_weight_tip2" = "הגדר יעדים ריאליים";
+"track_weight_tip3" = "צפה בגרפי ההתקדמות";
+
+"ai_fitness_coach" = "מאמן כושר AI";
+"ai_coach_description" = "קבל עצות מותאמות אישית, תוכניות אימון ותשובות לשאלות הכושר שלך.";
+"ai_coach_tip1" = "שאל על טכניקה וצורה";
+"ai_coach_tip2" = "קבל הצעות לארוחות";
+"ai_coach_tip3" = "בקש תוכניות אימון מותאמות אישית";
+
+"dont_show_guide_again" = "אל תציג מדריך זה שוב";
+"previous" = "הקודם";
+"next" = "הבא";
+"get_started" = "בוא נתחיל";
+"skip" = "דלג";

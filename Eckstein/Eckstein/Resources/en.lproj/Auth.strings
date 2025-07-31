@@ -1,0 +1,87 @@
+/* 
+  Auth.strings
+  Eckstein
+  
+  English Localization - Auth Module
+*/
+
+// MARK: - Sign In
+"sign_in" = "Sign In";
+"email" = "Email";
+"password" = "Password";
+"forgot_password" = "Forgot Password?";
+"dont_have_account" = "Don't have an account?";
+"sign_up" = "Sign Up";
+"sign_in_with_apple" = "Sign in with Apple";
+"sign_in_with_google" = "Sign in with Google";
+"or" = "or";
+
+// MARK: - Sign Up
+"create_account" = "Create Account";
+"full_name" = "Full Name";
+"confirm_password" = "Confirm Password";
+"already_have_account" = "Already have an account?";
+"agree_to_terms" = "I agree to the Terms of Service and Privacy Policy";
+"create_account_button" = "Create Account";
+
+// MARK: - Forgot Password
+"reset_password" = "Reset Password";
+"enter_email_reset" = "Enter your email address and we'll send you instructions to reset your password.";
+"send_reset_link" = "Send Reset Link";
+"back_to_login" = "Back to Login";
+"check_email" = "Check Your Email";
+"reset_link_sent" = "We've sent a password reset link to your email address.";
+
+// MARK: - Validation
+"email_required" = "Email is required";
+"invalid_email" = "Please enter a valid email address";
+"password_required" = "Password is required";
+"password_too_short" = "Password must be at least 8 characters";
+"passwords_not_match" = "Passwords do not match";
+"name_required" = "Name is required";
+"agree_terms_required" = "You must agree to the terms";
+
+// MARK: - Error Messages
+"invalid_credentials" = "Invalid email or password";
+"account_exists" = "An account with this email already exists";
+"network_error" = "Network error. Please try again.";
+"something_went_wrong" = "Something went wrong. Please try again.";
+"weak_password" = "Password is too weak. Use a mix of letters, numbers, and symbols.";
+
+// MARK: - Success Messages
+"account_created" = "Account created successfully!";
+"password_reset_sent" = "Password reset instructions sent to your email";
+"password_updated" = "Password updated successfully";
+"signed_in" = "Signed in successfully";
+"signed_out" = "Signed out successfully";
+
+// MARK: - App Usage Guide
+"track_your_workouts" = "Track Your Workouts";
+"track_workouts_description" = "Log your exercises, sets, and reps. Track your progress over time with detailed analytics.";
+"track_workouts_tip1" = "Tap + to add a new workout";
+"track_workouts_tip2" = "Swipe to delete exercises";
+"track_workouts_tip3" = "View your workout history";
+
+"monitor_your_diet" = "Monitor Your Diet";
+"monitor_diet_description" = "Track calories, macros, and maintain your calorie bank for flexible dieting.";
+"monitor_diet_tip1" = "Search for foods or scan barcodes";
+"monitor_diet_tip2" = "Save your favorite meals";
+"monitor_diet_tip3" = "Use the calorie bank for treats";
+
+"track_your_weight" = "Track Your Weight";
+"track_weight_description" = "Monitor weight changes and see trends. Connect your Xiaomi scale for automatic tracking.";
+"track_weight_tip1" = "Log weight daily for best results";
+"track_weight_tip2" = "Set realistic goals";
+"track_weight_tip3" = "View progress charts";
+
+"ai_fitness_coach" = "AI Fitness Coach";
+"ai_coach_description" = "Get personalized advice, workout plans, and answers to your fitness questions.";
+"ai_coach_tip1" = "Ask about form and technique";
+"ai_coach_tip2" = "Get meal suggestions";
+"ai_coach_tip3" = "Request custom workout plans";
+
+"dont_show_guide_again" = "Don't show this guide again";
+"previous" = "Previous";
+"next" = "Next";
+"get_started" = "Get Started";
+"skip" = "Skip";

@@ -1,0 +1,105 @@
+/* 
+  Localizable.strings
+  Eckstein
+
+  Created by Eliad Shahar on 23/07/2025.
+  
+  English Localization
+*/
+
+// MARK: - Tab Bar
+"tab_workout" = "Workout";
+"tab_diet" = "Diet";
+"tab_weight" = "Weight";
+"tab_ai_coach" = "AI Coach";
+"tab_profile" = "Profile";
+
+// MARK: - Common Actions
+"save" = "Save";
+"cancel" = "Cancel";
+"delete" = "Delete";
+"edit" = "Edit";
+"done" = "Done";
+"add" = "Add";
+"close" = "Close";
+"back" = "Back";
+"next" = "Next";
+"previous" = "Previous";
+"submit" = "Submit";
+"confirm" = "Confirm";
+"ok" = "OK";
+"yes" = "Yes";
+"no" = "No";
+"search" = "Search";
+"filter" = "Filter";
+"sort" = "Sort";
+"refresh" = "Refresh";
+"share" = "Share";
+"copy" = "Copy";
+"paste" = "Paste";
+"select" = "Select";
+"select_all" = "Select All";
+"skip" = "Skip";
+"get_started" = "Get Started";
+
+// MARK: - Status Messages
+"loading" = "Loading...";
+"saving" = "Saving...";
+"deleting" = "Deleting...";
+"updating" = "Updating...";
+"syncing" = "Syncing...";
+"processing" = "Processing...";
+"please_wait" = "Please wait...";
+"success" = "Success";
+"error" = "Error";
+"warning" = "Warning";
+"info" = "Info";
+"no_data" = "No data";
+"no_results" = "No results found";
+"empty_state" = "Nothing here yet";
+"pull_to_refresh" = "Pull to refresh";
+
+// MARK: - Time & Date
+"today" = "Today";
+"yesterday" = "Yesterday";
+"tomorrow" = "Tomorrow";
+"this_week" = "This Week";
+"last_week" = "Last Week";
+"this_month" = "This Month";
+"last_month" = "Last Month";
+"days_ago" = "%d days ago";
+"hours_ago" = "%d hours ago";
+"minutes_ago" = "%d minutes ago";
+"just_now" = "Just now";
+
+// MARK: - Units
+"kg" = "kg";
+"lbs" = "lbs";
+"g" = "g";
+"mg" = "mg";
+"cal" = "cal";
+"kcal" = "kcal";
+"ml" = "ml";
+"l" = "L";
+"oz" = "oz";
+"cm" = "cm";
+"m" = "m";
+"km" = "km";
+"mi" = "mi";
+"min" = "min";
+"sec" = "sec";
+"hr" = "hr";
+"reps" = "reps";
+"sets" = "sets";
+"calories" = "calories";
+
+// MARK: - Validation
+"field_required" = "This field is required";
+"invalid_email" = "Invalid email address";
+"password_too_short" = "Password must be at least 6 characters";
+"passwords_dont_match" = "Passwords don't match";
+"invalid_value" = "Invalid value";
+"value_too_low" = "Value is too low";
+"value_too_high" = "Value is too high";
+"please_try_again" = "Please try again";
+"something_went_wrong" = "Something went wrong";

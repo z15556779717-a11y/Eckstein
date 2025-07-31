@@ -1,0 +1,50 @@
+/* 
+  Common.strings
+  Eckstein
+
+  Created by Eliad Shahar on 23/07/2025.
+  
+  Common UI Elements - Hebrew
+*/
+
+// MARK: - Navigation
+"back_button" = "חזור";
+"continue_button" = "המשך";
+"finish_button" = "סיום";
+"start_button" = "התחל";
+"stop_button" = "עצור";
+"pause_button" = "השהה";
+"resume_button" = "חדש";
+
+// MARK: - Alerts
+"alert_title_error" = "שגיאה";
+"alert_title_success" = "הצלחה";
+"alert_title_warning" = "אזהרה";
+"alert_title_confirm" = "אישור";
+"alert_button_ok" = "אישור";
+"alert_button_cancel" = "ביטול";
+"alert_button_delete" = "מחק";
+"alert_button_save" = "שמור";
+
+// MARK: - Empty States
+"empty_list" = "אין פריטים עדיין";
+"empty_search" = "לא נמצאו תוצאות";
+"empty_history" = "אין היסטוריה זמינה";
+
+// MARK: - Loading States
+"loading_data" = "טוען נתונים...";
+"loading_please_wait" = "אנא המתן...";
+"syncing_data" = "מסנכרן...";
+
+// MARK: - Errors
+"error_generic" = "משהו השתבש";
+"error_network" = "שגיאת רשת";
+"error_no_internet" = "אין חיבור לאינטרנט";
+"error_server" = "שגיאת שרת";
+"error_unauthorized" = "אין הרשאה";
+
+// MARK: - Success Messages
+"success_saved" = "נשמר בהצלחה";
+"success_deleted" = "נמחק בהצלחה";
+"success_updated" = "עודכן בהצלחה";
+"success_created" = "נוצר בהצלחה";

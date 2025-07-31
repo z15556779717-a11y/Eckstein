@@ -1,0 +1,115 @@
+/* 
+  Profile.strings
+  Eckstein
+  
+  English Localization - Profile Module
+*/
+
+// MARK: - Profile View
+"profile" = "Profile";
+"personal_info" = "Personal Information";
+"settings" = "Settings";
+"preferences" = "Preferences";
+"account" = "Account";
+"sign_out" = "Sign Out";
+"sign_out_confirm" = "Are you sure you want to sign out?";
+
+// MARK: - Personal Info
+"name" = "Name";
+"email" = "Email";
+"phone" = "Phone";
+"date_of_birth" = "Date of Birth";
+"gender" = "Gender";
+"male" = "Male";
+"female" = "Female";
+"other" = "Other";
+"height" = "Height";
+"activity_level" = "Activity Level";
+"sedentary" = "Sedentary";
+"lightly_active" = "Lightly Active";
+"moderately_active" = "Moderately Active";
+"very_active" = "Very Active";
+"extremely_active" = "Extremely Active";
+
+// MARK: - Settings
+"notifications" = "Notifications";
+"workout_reminders" = "Workout Reminders";
+"meal_reminders" = "Meal Reminders";
+"weigh_in_reminders" = "Weigh-in Reminders";
+"app_theme" = "App Theme";
+"light_theme" = "Light";
+"dark_theme" = "Dark";
+"system_theme" = "System";
+"language" = "Language";
+"units" = "Units";
+"metric_units" = "Metric (kg, cm)";
+"imperial_units" = "Imperial (lbs, in)";
+
+// MARK: - Privacy & Security
+"privacy_security" = "Privacy & Security";
+"change_password" = "Change Password";
+"two_factor_auth" = "Two-Factor Authentication";
+"privacy_policy" = "Privacy Policy";
+"terms_of_service" = "Terms of Service";
+
+// MARK: - Data Management
+"data_management" = "Data Management";
+"export_data" = "Export Data";
+"import_data" = "Import Data";
+"delete_account" = "Delete Account";
+"delete_account_warning" = "This action cannot be undone. All your data will be permanently deleted.";
+
+// MARK: - Diet Progress Section
+"diet_progress" = "Diet Progress";
+"days_on_diet" = "Days on Diet";
+"starting_weight" = "Starting Weight";
+"current_weight" = "Current Weight";
+"progress" = "Progress";
+"set_diet_start_info" = "Set Diet Start Info";
+"edit_diet_info" = "Edit Diet Info";
+"diet_start_information" = "Diet Start Information";
+"start_date" = "Start Date";
+"current_progress" = "Current Progress";
+"weight_change" = "Weight Change";
+"reset_diet_info" = "Reset Diet Info";
+"diet_settings" = "Diet Settings";
+"cancel" = "Cancel";
+"save" = "Save";
+
+// MARK: - Meeting Section
+"set_a_meeting" = "Set a Meeting";
+
+// MARK: - Settings Section
+"weight_and_health" = "Weight & Health";
+"diet_and_nutrition" = "Diet & Nutrition";
+"app_usage_guide" = "App Usage Guide";
+"show_tips" = "Show Tips";
+"reset_all_tips" = "Reset All Tips";
+
+// MARK: - Appearance
+"appearance" = "Appearance";
+"theme" = "Theme";
+"system" = "System";
+"light" = "Light";
+"dark" = "Dark";
+"accent_color" = "Accent Color";
+
+// MARK: - Language
+"app_language" = "App Language";
+"english" = "English";
+"hebrew" = "עברית";
+
+// MARK: - Support
+"support" = "Support";
+"help_center" = "Help Center";
+"contact_support" = "Contact Support";
+"report_bug" = "Report a Bug";
+"suggest_feature" = "Suggest a Feature";
+"rate_app" = "Rate App";
+"version" = "Version";
+
+// MARK: - Messages
+"profile_updated" = "Profile updated successfully";
+"settings_saved" = "Settings saved";
+"password_changed" = "Password changed successfully";
+"data_exported" = "Data exported successfully";
