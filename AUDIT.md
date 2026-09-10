@@ -43,7 +43,9 @@ reaches into `Core` and into the shared Core Data context directly.
 
 ```
 Eckstein/
-├── .github/workflows/ios.yml          # added in phase 1
+├── .github/
+│   ├── scripts/select-ios-simulator.py # picks the newest installed iOS runtime
+│   └── workflows/ios.yml              # added in phase 1
 ├── .gitignore
 ├── .mcp.json                          # MCP config (see Security Findings)
 ├── FINAL_VERSION_APP_DB.sql           # Supabase schema, 593 lines
