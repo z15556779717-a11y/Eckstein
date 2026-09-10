@@ -280,16 +280,10 @@ struct SyncDebugView: View {
     private func checkConfiguration() {
         debugOutput += "\n\n--- CONFIGURATION CHECK ---\n"
         
-        // Check environment
-        debugOutput += "Supabase URL: \(AppEnvironment.supabaseURL)\n"
-        debugOutput += "Supabase Key exists: \(!AppEnvironment.supabaseAnonKey.isEmpty)\n"
-        debugOutput += "Supabase Key prefix: \(String(AppEnvironment.supabaseAnonKey.prefix(20)))...\n"
-        debugOutput += "OpenAI Key exists: \(AppEnvironment.openAIKey != nil && !AppEnvironment.openAIKey!.isEmpty)\n"
-        
-        if let openAIKey = AppEnvironment.openAIKey {
-            debugOutput += "OpenAI Key prefix: \(String(openAIKey.prefix(10)))...\n"
-        }
-        
+        // Check environment. SECURITY: never print the URL or any key material
+        // (prefixes included) -- they leak into the device console and sysdiagnose.
+        debugOutput += "Supabase configured: \(AppEnvironment.isSupabaseConfigured)\n"
+        debugOutput += "OpenAI configured: \(AppEnvironment.isOpenAIConfigured)\n"
         debugOutput += "Environment configured: \(AppEnvironment.isConfigured)\n"
         
         // Check network

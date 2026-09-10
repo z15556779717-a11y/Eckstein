@@ -15,9 +15,10 @@ class SupabaseService {
     
     private init() {
         print("🚀 Initializing Supabase client")
-        print("URL: \(AppEnvironment.supabaseURL)")
-        print("Key prefix: \(String(AppEnvironment.supabaseAnonKey.prefix(20)))...")
-        
+        // SECURITY: do not log the URL or any part of the key here. This used to
+        // print the project URL and a key prefix to the device console.
+        print("Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
+
         client = SupabaseClient(
             supabaseURL: AppEnvironment.supabaseURL,
             supabaseKey: AppEnvironment.supabaseAnonKey

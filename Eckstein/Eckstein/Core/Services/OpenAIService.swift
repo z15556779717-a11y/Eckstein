@@ -83,12 +83,14 @@ class OpenAIService: ObservableObject {
     }
     
     private let apiURL = "https://api.openai.com/v1/chat/completions"
-    private let model = "gpt-4o-mini"
+    // Internal (not private) so the unit-test target can assert on the model and
+    // rate-limit configuration via `@testable import`. See AICoachTests.
+    let model = "gpt-4o-mini"
     private let session = URLSession.shared
     
     // Rate limiting
     private var lastRequestTime: Date?
-    private let minRequestInterval: TimeInterval = 1.0 // 1 second between requests
+    let minRequestInterval: TimeInterval = 1.0 // 1 second between requests
     
     // Cost tracking
     @Published var totalTokensUsed: Int = 0

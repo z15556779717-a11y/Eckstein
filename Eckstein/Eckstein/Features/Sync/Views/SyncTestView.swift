@@ -64,8 +64,7 @@ struct SyncTestView: View {
             }
             // Test 1: Check basic configuration
             testResult += "=== Configuration Test ===\n"
-            testResult += "Supabase URL: \(AppEnvironment.supabaseURL)\n"
-            testResult += "API Key exists: \(!AppEnvironment.supabaseAnonKey.isEmpty)\n\n"
+            testResult += "Supabase configured: \(AppEnvironment.isSupabaseConfigured)\n"
             
             // Test 2: Try raw HTTP request
             testResult += "=== Raw HTTP Test ===\n"

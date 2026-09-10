@@ -57,8 +57,7 @@ struct SupabaseTestView: View {
         
         // Test 2: Check Supabase URL and Key
         addResult("\n2. Checking Supabase configuration...")
-        addResult("URL: \(AppEnvironment.supabaseURL)")
-        addResult("Key prefix: \(String(AppEnvironment.supabaseAnonKey.prefix(20)))...")
+        addResult("Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
         
         // Test 3: Test creating a test user
         addResult("\n3. Testing user registration...")

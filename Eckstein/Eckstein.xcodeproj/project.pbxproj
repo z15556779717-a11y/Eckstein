@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D33A59EC2E244BA700777FA9 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A59EB2E244BA700777FA9 /* CoreBluetooth.framework */; };
 		D33A59F62E2465B900777FA9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = D33A59F52E2465B900777FA9 /* Supabase */; };
 /* End PBXBuildFile section */
 
@@ -32,7 +31,6 @@
 		D33A581A2E23AB5000777FA9 /* Eckstein.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eckstein.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D33A582E2E23AB5100777FA9 /* EcksteinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcksteinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D33A58382E23AB5100777FA9 /* EcksteinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcksteinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D33A59EB2E244BA700777FA9 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.4.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -72,7 +70,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D33A59F62E2465B900777FA9 /* Supabase in Frameworks */,
-				D33A59EC2E244BA700777FA9 /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +96,6 @@
 				D33A581C2E23AB5000777FA9 /* Eckstein */,
 				D33A58312E23AB5100777FA9 /* EcksteinTests */,
 				D33A583B2E23AB5100777FA9 /* EcksteinUITests */,
-				D33A59EA2E244BA700777FA9 /* Frameworks */,
 				D33A581B2E23AB5000777FA9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,7 +113,6 @@
 		D33A59EA2E244BA700777FA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D33A59EB2E244BA700777FA9 /* CoreBluetooth.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

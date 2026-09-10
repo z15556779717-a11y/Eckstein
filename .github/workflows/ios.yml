@@ -1,0 +1,137 @@
+name: iOS CI
+
+# Builds and tests the Eckstein iOS app on a GitHub-hosted macOS runner.
+# There is no Xcode on the developer's Windows machine, so this workflow is the
+# authoritative build/test signal for the project.
+#
+# Decisions worth knowing about:
+#   * This repo has no .xcworkspace -- the project is
+#     Eckstein/Eckstein.xcodeproj. Do NOT switch to -workspace.
+#   * Scheme "Eckstein" is checked in as a shared scheme at
+#     Eckstein/Eckstein.xcodeproj/xcshareddata/xcschemes/Eckstein.xcscheme so
+#     the build does not depend on Xcode auto-generating one.
+#   * The simulator OS is deliberately NOT pinned to the deployment target
+#     (18.4). GitHub removed the iOS 18.4 runtime from its images; we build and
+#     test against the newest available runtime instead, while the deployment
+#     target stays enforced by IPHONEOS_DEPLOYMENT_TARGET in the project.
+#   * The project declares several platforms (iphoneos, iphonesimulator,
+#     macosx, xros, xrsimulator), so every xcodebuild invocation passes an
+#     explicit destination to avoid building the wrong platform.
+#   * Code signing is disabled throughout; the Simulator does not need it and
+#     there are no signing certificates in CI.
+
+on:
+  push:
+    branches:
+      - main
+      - 'develop/**'
+  pull_request:
+    branches:
+      - main
+      - 'develop/**'
+
+concurrency:
+  group: ios-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test (iOS Simulator)
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    env:
+      PROJECT: Eckstein/Eckstein.xcodeproj
+      SCHEME: Eckstein
+      UNIT_TEST_TARGET: EcksteinTests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain and runtimes
+        run: |
+          echo "--- Available Xcode installations ---"
+          ls -d /Applications/Xcode*.app 2>/dev/null || true
+          echo "--- Active developer directory ---"
+          xcode-select -p
+          echo "--- xcodebuild version ---"
+          xcodebuild -version
+          echo "--- Installed simulator runtimes ---"
+          xcrun simctl list runtimes
+
+      - name: Show project structure
+        run: |
+          echo "--- Repository layout ---"
+          ls -la
+          echo "--- Project directory ---"
+          ls -la Eckstein/
+
+      - name: List schemes and targets
+        run: xcodebuild -list -project "$PROJECT"
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$SCHEME"
+
+      - name: Build app for iOS Simulator (no code signing)
+        run: |
+          xcodebuild build \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Select an available iPhone simulator
+        id: sim
+        run: |
+          DEVICE_ID=$(xcrun simctl list devices available --json \
+            | python3 -c '
+import json, sys
+data = json.load(sys.stdin)["devices"]
+best = None
+for runtime, devices in data.items():
+    if "iOS" not in runtime:
+        continue
+    for d in devices:
+        if d.get("isAvailable") and d["name"].startswith("iPhone"):
+            best = d
+            break
+    if best:
+        break
+print(best["udid"] if best else "")
+')
+          if [ -z "$DEVICE_ID" ]; then
+            echo "::error::No available iPhone simulator found on this runner"
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Selected simulator UDID: $DEVICE_ID"
+          echo "device_id=$DEVICE_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit tests
+        run: |
+          xcodebuild test \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.device_id }}" \
+            -configuration Debug \
+            -only-testing:"$UNIT_TEST_TARGET" \
+            -resultBundlePath build/TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: build/TestResults.xcresult
+          if-no-files-found: warn
+          retention-days: 7

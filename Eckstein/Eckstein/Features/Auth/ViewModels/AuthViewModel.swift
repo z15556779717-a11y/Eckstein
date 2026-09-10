@@ -22,7 +22,11 @@ class AuthViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private let authService = AuthService.shared
-    private let adminPasswordKey = ProcessInfo.processInfo.environment["ADMIN_PASSWORD"] ?? "adminpass"
+    // SECURITY: this is a client-side sign-up gate, not real access control --
+    // it ships in the binary and can be bypassed. It was previously defaulted to
+    // a hardcoded "adminpass" literal. Real authorization belongs server-side
+    // (Supabase RLS + an Edge Function), which is the phase-2 target.
+    private let adminPasswordKey = ProcessInfo.processInfo.environment["ADMIN_PASSWORD"] ?? ""
     
     // Email validation
     var isEmailValid: Bool {

@@ -9,6 +9,18 @@ import XCTest
 import CoreData
 @testable import Eckstein
 
+/// Tests for `WeightRepository` and the `CDWeightEntry` model.
+///
+/// NOTE (phase-1 audit): every symbol used here was re-verified against
+/// `WeightRepository.swift` / `CDWeightEntry+CoreDataProperties.swift`. Three
+/// tests asserted behaviour the real implementation does not produce and were
+/// corrected against the source:
+///   * `testWeightTrend` built its fixture the wrong way round (the oldest entry
+///     was the lightest, and `fetchWeightEntries(for:)` sorts ascending), so the
+///     fitted slope was positive and the repository reported `.gaining`.
+///   * `testWeightChange` placed an entry exactly on the `DateRange.week`
+///     boundary, which the range predicate excludes by a few milliseconds.
+///   * `testBestWeighInTime` had an unused `DateComponents` local.
 class WeightTests: XCTestCase {
     var controller: PersistenceController!
     var context: NSManagedObjectContext!
@@ -29,6 +41,11 @@ class WeightTests: XCTestCase {
         context = nil
         repository = nil
         UserDefaults.standard.removeObject(forKey: "userHeightCm")
+        // `setGoalWeight`/`setGoalDate` persist to UserDefaults, so a goal left
+        // behind by one test would otherwise leak into `loadGoalWeight()` of the
+        // next one. Clear both so every test starts from a known state.
+        UserDefaults.standard.removeObject(forKey: "goalWeight")
+        UserDefaults.standard.removeObject(forKey: "goalDate")
         super.tearDown()
     }
     
@@ -125,24 +142,31 @@ class WeightTests: XCTestCase {
     }
     
     func testWeightTrend() {
-        // Create descending weight entries (losing weight)
+        // Create entries that trend downwards (losing weight): the oldest entry
+        // is the heaviest. `fetchWeightEntries(for:)` returns entries sorted
+        // ascending by date, so `getWeightTrend()` fits oldest -> newest and
+        // needs a *negative* slope to report `.losing`.
         let startDate = Date()
         for i in 0..<7 {
             let date = Calendar.current.date(byAdding: .day, value: -i, to: startDate)!
-            let weight = 80.0 - Double(i) * 0.2 // Losing 0.2kg per day
+            let weight = 80.0 + Double(i) * 0.2 // i days ago, 0.2kg heavier
             _ = repository.createWeightEntry(weight: weight, date: date)
         }
-        
+
         let trend = repository.getWeightTrend()
         XCTAssertEqual(trend, .losing)
     }
-    
+
     func testWeightChange() {
-        // Add two entries a week apart
-        let lastWeek = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        // Add two entries inside the same `.week` window. The second date is
+        // deliberately -6 days rather than -7: `DateRange.week` re-derives its
+        // start as `now - 7 days` when the fetch happens, i.e. a few
+        // milliseconds after these dates are built, so an entry placed exactly
+        // on the boundary is filtered out by `date >= startDate`.
+        let lastWeek = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
         _ = repository.createWeightEntry(weight: 75.0, date: lastWeek)
         _ = repository.createWeightEntry(weight: 74.0, date: Date())
-        
+
         let weeklyChange = repository.getWeeklyChange()
         XCTAssertNotNil(weeklyChange)
         XCTAssertEqual(weeklyChange!, -1.0) // Lost 1kg
@@ -230,7 +254,6 @@ class WeightTests: XCTestCase {
         
         for (index, hour) in times.enumerated() {
             let date = Calendar.current.date(byAdding: .day, value: -index, to: Date())!
-            let components = DateComponents(hour: hour, minute: 0)
             let dateWithTime = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: date)!
             _ = repository.createWeightEntry(weight: 75.0, date: dateWithTime)
         }

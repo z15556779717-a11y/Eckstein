@@ -19,13 +19,16 @@ class AICoachViewModel: ObservableObject {
     
     private let openAIService = OpenAIService.shared
     private let contextBuilder = AIContextBuilder()
-    private let persistenceController = PersistenceController.shared
-    
+    private let persistenceController: PersistenceController
+
     // Message history for context
     private var conversationHistory: [OpenAIMessage] = []
     private let maxHistoryMessages = 10
-    
-    init() {
+
+    /// - Parameter persistenceController: injected so tests can supply an
+    ///   in-memory store instead of the shared CloudKit-backed one.
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
         loadMessages()
         setupWelcomeMessage()
         setupSuggestedActions()

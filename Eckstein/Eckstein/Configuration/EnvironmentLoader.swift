@@ -18,11 +18,10 @@ class EnvironmentLoader {
     private func loadEnvironment() {
         print("EnvironmentLoader: Starting environment loading...")
         
-        // First, set default values for development
-        // These will be overridden if .env file is found
-        config["SUPABASE_URL"] = "https://zyuqxuuosmiiezjsrasb.supabase.co"
-        config["SUPABASE_ANON_KEY"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5dXF4dXVvc21paWV6anNyYXNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MzkwOTQsImV4cCI6MjA2ODAxNTA5NH0.ri-fONM9mLcJ79bu5lOFFLBCarK2IUZ552HNRoVrg1s"
-        // OpenAI API key must be provided via .env file
+        // SECURITY: hardcoded Supabase URL / anon-key defaults were removed in the
+        // phase-1 audit; they are now supplied only via .env or process env vars.
+        // A service_role key must never be placed in any of these sources.
+        // OpenAI API key must be provided via .env file.
         
         // Try to load from .env file
         if let envPath = Bundle.main.path(forResource: ".env", ofType: nil) {
@@ -36,7 +35,6 @@ class EnvironmentLoader {
             
             // Try multiple common locations for .env file
             let possiblePaths = [
-                "/Users/eliadshahar/Desktop/Eckstein/.env",
                 URL(fileURLWithPath: fileManager.currentDirectoryPath).appendingPathComponent(".env").path,
                 URL(fileURLWithPath: fileManager.currentDirectoryPath)
                     .deletingLastPathComponent()

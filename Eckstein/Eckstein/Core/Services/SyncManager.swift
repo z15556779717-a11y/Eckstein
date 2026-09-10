@@ -219,16 +219,14 @@ class SyncManager: ObservableObject {
         }
         
         print("Checking API configuration...")
-        print("Supabase URL: \(AppEnvironment.supabaseURL)")
-        print("Supabase key exists: \(AppEnvironment.supabaseAnonKey != nil)")
-        print("OpenAI key exists: \(AppEnvironment.openAIKey != nil)")
-        
-        // Check if API keys are configured
-        guard AppEnvironment.isConfigured else {
+        print("Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
+        print("OpenAI configured: \(AppEnvironment.isOpenAIConfigured)")
+
+        // Sync only needs Supabase. It previously required a configured OpenAI key
+        // too, which silently disabled sync whenever the AI coach was unset.
+        guard AppEnvironment.isSupabaseConfigured else {
             syncStatus = "Sync not configured"
-            print("Sync failed: API not configured")
-            print("- Supabase configured: \(!AppEnvironment.supabaseAnonKey.contains("YOUR_") && !AppEnvironment.supabaseURL.absoluteString.contains("YOUR_"))")
-            print("- OpenAI configured: \(AppEnvironment.openAIKey != nil && !AppEnvironment.openAIKey!.isEmpty && !AppEnvironment.openAIKey!.contains("YOUR_"))")
+            print("Sync skipped: Supabase not configured")
             return
         }
         
@@ -325,7 +323,7 @@ class SyncManager: ObservableObject {
             syncStatus = "Last sync: \(formatDate(lastSyncDate!))"
         } else if result.failed > 0 {
             syncStatus = "Sync failed (\(result.failed) errors)"
-        } else if !AppEnvironment.isConfigured {
+        } else if !AppEnvironment.isSupabaseConfigured {
             syncStatus = "Sync not configured"
         } else {
             syncStatus = "Ready to sync"
@@ -462,9 +460,8 @@ class SyncManager: ObservableObject {
         print("SyncManager: Running test sync...")
         
         // Check environment
-        print("Test - Environment configured: \(AppEnvironment.isConfigured)")
-        print("Test - Supabase URL: \(AppEnvironment.supabaseURL)")
-        print("Test - OpenAI key exists: \(AppEnvironment.openAIKey != nil)")
+        print("Test - Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
+        print("Test - OpenAI configured: \(AppEnvironment.isOpenAIConfigured)")
         
         // Check pending changes
         print("Test - Pending changes count: \(pendingChangesCount)")

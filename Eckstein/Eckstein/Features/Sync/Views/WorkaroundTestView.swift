@@ -70,7 +70,9 @@ struct WorkaroundTestView: View {
         testResult = "=== Test 1: Direct HTTP with Service Key ===\n"
         
         Task {
-            let serviceKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5dXF4dXVvc21paWV6anNyYXNiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjQzOTA5NCwiZXhwIjoyMDY4MDE1MDk0fQ.WPDFIsY--ZN0y4B5AUCY4NlFXLpFslZaHgerC2Ri3ZA"
+            // SECURITY: this previously embedded a Supabase service_role key in the
+            // client bundle (full RLS bypass). It was removed in the phase-1 audit.
+            let serviceKey = AppEnvironment.supabaseAnonKey
             
             // Try different request configurations
             let configurations = [
