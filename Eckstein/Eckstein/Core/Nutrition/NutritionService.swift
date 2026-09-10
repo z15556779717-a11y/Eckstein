@@ -234,7 +234,9 @@ final class NutritionService {
         //
         // `self.` is required: the `food` parameter shadows the same-named
         // lookup method inside this body.
-        let resolvedFood = food ?? (try self.food(named: foodName, category: category))
+        // `try` covers the whole `??`: the right-hand side is an autoclosure, so
+        // a `try` inside the parentheses does not satisfy the compiler.
+        let resolvedFood = try food ?? self.food(named: foodName, category: category)
 
         let existing = meal.entriesArray.first {
             $0.foodName == foodName && $0.category == category
