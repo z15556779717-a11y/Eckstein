@@ -104,25 +104,49 @@ class DietTests: XCTestCase {
         )
 
         // `createFood` calls `fetchFoods()`, so the new food is already in the
-        // published list alongside the seeded templates.
+        // published list. Phase 2 removed the template seeding from
+        // `DietRepository.init` (NUTRITION_MIGRATION_PLAN.md §3.3), so the list
+        // holds exactly what this test created and no longer a seeded baseline.
         XCTAssertTrue(repository.foods.contains { $0.objectID == food.objectID })
-        XCTAssertEqual(repository.foods.count, FoodData.foods.count + 1)
-        // `fetchFoods` sorts by name ascending.
-        XCTAssertEqual(repository.foods.first?.name, "Almond Milk (Unsweetened)")
+        XCTAssertEqual(repository.foods.count, 1)
+
+        // `fetchFoods` still sorts by name ascending.
+        repository.createFood(
+            name: "Aaa Sorted First",
+            caloriesPer100g: 100,
+            proteinPer100g: 1,
+            carbsPer100g: 1,
+            fatPer100g: 1
+        )
+        XCTAssertEqual(repository.foods.first?.name, "Aaa Sorted First")
     }
 
     // MARK: - Seeding / Food Database Tests
 
-    func testRepositorySeedsTemplateFoodsOnInit() {
-        // `DietRepository.init` calls `FoodData.seedFoodsIfNeeded`, which inserts
-        // the whole template table when the store is empty.
-        XCTAssertEqual(repository.foods.count, FoodData.foods.count)
-        XCTAssertEqual(repository.foods.count, 34)
-        XCTAssertTrue(repository.foods.allSatisfy { $0.isCustom == false })
-        XCTAssertTrue(repository.foods.allSatisfy { $0.isVerified })
+    func testTemplateFoodsAreSeededIntoTheOfficialCatalog() {
+        // Phase 2 moved template seeding off `DietRepository.init` — which wrote
+        // the legacy `CDFood` entity — and onto `NutritionCatalogSeed`, which
+        // writes the official `CDEcksteinFood`. See
+        // NUTRITION_MIGRATION_PLAN.md §3.3.
+        XCTAssertEqual(repository.foods.count, 0)
+
+        XCTAssertEqual(try? NutritionCatalogSeed.seedIfNeeded(context: context), FoodData.foods.count)
+        XCTAssertEqual(try? NutritionCatalogSeed.seedIfNeeded(context: context), 0) // idempotent
+
+        let request: NSFetchRequest<CDEcksteinFood> = CDEcksteinFood.fetchRequest()
+        let seeded = try? context.fetch(request)
+        XCTAssertEqual(seeded?.count, 34)
+        XCTAssertTrue(seeded?.allSatisfy { $0.source == NutritionCatalogSeed.source } ?? false)
     }
 
     func testSeedingIsIdempotent() {
+        // Phase 2 removed the call from `DietRepository.init`. The legacy
+        // `FoodData.seedFoodsIfNeeded` still exists and still works, which is
+        // what keeps this test valid and old stores readable.
+        XCTAssertEqual(repository.foods.count, 0)
+
+        FoodData.seedFoodsIfNeeded(context: context)
+        repository.fetchFoods()
         XCTAssertEqual(repository.foods.count, 34)
 
         // Seeding a second time must not duplicate anything.
@@ -158,6 +182,12 @@ class DietTests: XCTestCase {
     }
 
     func testFoodCategoriesArePresentOnSeededFoods() {
+        // Phase 2 removed the seeding from `DietRepository.init`, so the legacy
+        // catalog is seeded explicitly here. The legacy path still has to work:
+        // shipped stores hold rows it wrote, and phase 2 does not delete it.
+        FoodData.seedFoodsIfNeeded(context: context)
+        repository.fetchFoods()
+
         let seededCategories = Set(repository.foods.compactMap(\.category))
         XCTAssertTrue(seededCategories.contains("Protein"))
         XCTAssertTrue(seededCategories.contains("Fruit"))
@@ -182,10 +212,19 @@ class DietTests: XCTestCase {
     }
 
     func testMealTypeEnumMatchesStoredStrings() {
+        // The four slots a user can pick keep the strings this store has always
+        // held, so no stored `mealType` is invalidated.
+        //
+        // `MealType` also carries `.unspecified` — the bucket for entries
+        // written before a slot was recorded — which is deliberately not a
+        // choice and is never persisted (its `storedValue` is `nil`). See
+        // NUTRITION_MIGRATION_PLAN.md §6.
         XCTAssertEqual(
-            MealType.allCases.map(\.rawValue),
+            MealType.selectableCases.map(\.rawValue),
             ["breakfast", "lunch", "dinner", "snack"]
         )
+        XCTAssertEqual(MealType.unspecified.rawValue, "unspecified")
+        XCTAssertNil(MealType.unspecified.storedValue)
     }
 
     func testAddFoodToMealLinksItemWithQuantity() {
@@ -373,11 +412,13 @@ class DietTests: XCTestCase {
             carbsPer100g: 1,
             fatPer100g: 1
         )
-        XCTAssertEqual(repository.foods.count, FoodData.foods.count + 1)
+        // Phase 2 removed the seeded baseline from `DietRepository.init`, so the
+        // list holds only this test's food.
+        XCTAssertEqual(repository.foods.count, 1)
 
         repository.delete(food)
 
-        XCTAssertEqual(repository.foods.count, FoodData.foods.count)
+        XCTAssertEqual(repository.foods.count, 0)
         XCTAssertFalse(repository.foods.contains { $0.objectID == food.objectID })
     }
 
