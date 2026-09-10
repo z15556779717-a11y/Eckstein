@@ -429,7 +429,24 @@ referenced; the Supabase SDK uses its own session). `FoodAPIService` uses
 | `SyncTests.swift` | `NetworkMonitor`, `SyncQueue`, `ConflictResolver` | Fixed |
 | `WeightTests.swift` | `WeightRepository` | Fixed |
 | `EcksteinTests.swift` | Swift Testing placeholder | Unchanged (empty `@Test`) |
-| `EcksteinUITests*.swift` | Launch smoke tests | Unchanged (Xcode templates) |
+| `EcksteinUITests*.swift` | Launch smoke tests | Unchanged (Xcode templates), not run in CI |
+
+**Verified result.** On the GitHub macOS runner (Xcode 26.6, iOS 26.5 simulator):
+
+```
+** BUILD SUCCEEDED **
+Executed 93 tests, with 2 tests skipped and 0 failures (0 unexpected)
+** TEST SUCCEEDED **
+```
+
+The 2 skips are `AICoachTests.testWorkoutPlanGeneratorRequiresAPIKey` and
+`.testDietAdvisorRequiresAPIKey`, which are explicitly skipped via
+`XCTSkipUnless(openAIService.hasAPIKey, …)` because they make live OpenAI calls.
+No other test is skipped, commented out, or disabled.
+
+The workflow deliberately does **not** run `EcksteinUITests`: those are
+unmodified Xcode templates that would add flakiness without covering real
+behaviour. They are not deleted, and the target still builds.
 
 **Why they were broken.** The unit tests had been written against a *planned or
 older* API and had never been compiled — the app was developed in Xcode with the
