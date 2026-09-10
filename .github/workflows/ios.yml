@@ -11,7 +11,7 @@ name: iOS CI
 #     Eckstein/Eckstein.xcodeproj/xcshareddata/xcschemes/Eckstein.xcscheme, so
 #     the build does not depend on Xcode auto-generating one.
 #   * The simulator destination is discovered at run time by
-#     .github/scripts/select-ios-simulator.py. GitHub's images change which
+#     .github/select-ios-simulator.py. GitHub's images change which
 #     runtimes are installed without notice (the iOS 18.4 runtime was removed in
 #     Jan 2026), so no OS version is pinned here. IPHONEOS_DEPLOYMENT_TARGET in
 #     the project still pins the minimum supported OS at 18.4.
@@ -94,7 +94,7 @@ jobs:
       - name: Select an available iPhone simulator
         id: sim
         run: |
-          DEVICE_ID="$(python3 .github/scripts/select-ios-simulator.py)"
+          DEVICE_ID="$(python3 .github/select-ios-simulator.py)"
           if [ -z "$DEVICE_ID" ]; then
             echo "::error::No available iPhone simulator found on this runner"
             xcrun simctl list devices available
