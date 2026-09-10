@@ -20,6 +20,15 @@ extension CDUserPreferences {
     @NSManaged public var dailyCalorieGoal: Int32
     @NSManaged public var dailyProteinGoal: Int32
     @NSManaged public var dailyCarbGoal: Int32
+
+    // MARK: - Nutrition goals (added in "Eckstein 2")
+    //
+    // Optional, so "not set" is distinguishable from a deliberate zero and no
+    // value has to be invented for existing rows. See
+    // NUTRITION_MIGRATION_PLAN.md §8.
+    @NSManaged public var dailyFatGoal: Double?
+    @NSManaged public var dailyFiberGoal: Double?
+
     @NSManaged public var weightUnit: String?
     @NSManaged public var heightCm: Int32
     @NSManaged public var activityLevel: String?

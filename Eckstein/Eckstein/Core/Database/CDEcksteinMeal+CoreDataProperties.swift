@@ -11,8 +11,32 @@ import CoreData
 extension CDEcksteinMeal {
     @NSManaged public var id: UUID?
     @NSManaged public var date: Date?
+
+    /// The Eckstein method's two-meal partition (1 or 2). Unchanged; it is not
+    /// a relabelling of `mealType` and neither can be derived from the other.
     @NSManaged public var mealNumber: Int32
+
     @NSManaged public var isCarbLoad: Bool
+
+    // MARK: - Nutrition (added in "Eckstein 2")
+
+    /// `breakfast` / `lunch` / `dinner` / `snack`, or `nil` for rows written
+    /// before this field existed. Stored as an optional `String` rather than an
+    /// enum so persistence never depends on declaration order and an unknown
+    /// value from a newer client cannot trap. See NUTRITION_MIGRATION_PLAN.md §6.
+    @NSManaged public var mealType: String?
+
+    /// Denormalised roll-ups of `entries`, written by `NutritionService` so a
+    /// day list does not have to walk every entry. Never the source of truth —
+    /// `NutritionAggregator` recomputes from the entries themselves.
+    @NSManaged public var totalCalories: Double?
+    @NSManaged public var totalProtein: Double?
+    @NSManaged public var totalCarbs: Double?
+    @NSManaged public var totalFat: Double?
+    @NSManaged public var totalFiber: Double?
+
+    @NSManaged public var updatedAt: Date?
+
     @NSManaged public var user: CDUser?
     @NSManaged public var entries: NSSet?
 }
@@ -30,4 +54,12 @@ extension CDEcksteinMeal {
 
     @objc(removeEntries:)
     @NSManaged public func removeFromEntries(_ values: NSSet)
+}
+
+extension CDEcksteinMeal {
+    /// `entries` as a Swift array. `NSSet` has no ordering, so callers that need
+    /// a stable order sort explicitly.
+    var entriesArray: [CDEcksteinMealEntry] {
+        (entries?.allObjects as? [CDEcksteinMealEntry]) ?? []
+    }
 }

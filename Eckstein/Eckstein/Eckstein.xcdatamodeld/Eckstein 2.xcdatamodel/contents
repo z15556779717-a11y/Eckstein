@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CDCalorieBank" representedClassName=".CDCalorieBank" syncable="YES">
+        <attribute name="caloriesSaved" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="foodName" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="calorieBanks" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDChatMessage" representedClassName=".CDChatMessage" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isUser" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="CDExercise" representedClassName=".CDExercise" syncable="YES">
+        <attribute name="category" attributeType="String" defaultValueString="Other"/>
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="equipment" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="isCustom" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="muscleGroup" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String" defaultValueString="New Exercise"/>
+        <attribute name="youtubeLink" optional="YES" attributeType="String"/>
+        <relationship name="workoutSets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDWorkoutSet" inverseName="exercise" inverseEntity="CDWorkoutSet"/>
+        <relationship name="workoutTypeExercises" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWorkoutTypeExercise" inverseName="exercise" inverseEntity="CDWorkoutTypeExercise"/>
+    </entity>
+    <entity name="CDFood" representedClassName=".CDFood" syncable="YES">
+        <attribute name="barcode" optional="YES" attributeType="String"/>
+        <attribute name="brand" optional="YES" attributeType="String"/>
+        <attribute name="caloriesPer100g" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="carbsPer100g" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="fatPer100g" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="fiberPer100g" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="isCustom" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isVerified" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="lastUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString="New Food"/>
+        <attribute name="proteinPer100g" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="servingSize" attributeType="Double" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="servingUnit" optional="YES" attributeType="String" defaultValueString="g"/>
+        <relationship name="mealItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDMealItem" inverseName="food" inverseEntity="CDMealItem"/>
+    </entity>
+    <entity name="CDMeal" representedClassName=".CDMeal" syncable="YES">
+        <attribute name="date" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="mealType" attributeType="String" defaultValueString="snack"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMealItem" inverseName="meal" inverseEntity="CDMealItem"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="meals" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDMealItem" representedClassName=".CDMealItem" syncable="YES">
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="quantityGrams" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="food" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDFood" inverseName="mealItems" inverseEntity="CDFood"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMeal" inverseName="items" inverseEntity="CDMeal"/>
+    </entity>
+    <entity name="CDMilkConsumption" representedClassName=".CDMilkConsumption" syncable="YES">
+        <attribute name="amount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="milkConsumptions" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDUser" representedClassName=".CDUser" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="email" attributeType="String" defaultValueString="user@example.com"/>
+        <attribute name="fullName" optional="YES" attributeType="String"/>
+        <attribute name="gender" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="lastSyncedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <attribute name="updatedAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <relationship name="calorieBanks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDCalorieBank" inverseName="user" inverseEntity="CDCalorieBank"/>
+        <relationship name="ecksteinMeals" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEcksteinMeal" inverseName="user" inverseEntity="CDEcksteinMeal"/>
+        <relationship name="meals" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMeal" inverseName="user" inverseEntity="CDMeal"/>
+        <relationship name="milkConsumptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMilkConsumption" inverseName="user" inverseEntity="CDMilkConsumption"/>
+        <relationship name="preferences" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDUserPreferences" inverseName="user" inverseEntity="CDUserPreferences"/>
+        <relationship name="weightEntries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWeightEntry" inverseName="user" inverseEntity="CDWeightEntry"/>
+        <relationship name="workouts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWorkout" inverseName="user" inverseEntity="CDWorkout"/>
+        <relationship name="workoutTypes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWorkoutType" inverseName="user" inverseEntity="CDWorkoutType"/>
+        <relationship name="fatMealTrackers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDFatMealTracker" inverseName="user" inverseEntity="CDFatMealTracker"/>
+        <relationship name="carbLoadTrackers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDCarbLoadTracker" inverseName="user" inverseEntity="CDCarbLoadTracker"/>
+    </entity>
+    <entity name="CDUserPreferences" representedClassName=".CDUserPreferences" syncable="YES">
+        <attribute name="activityLevel" attributeType="String" defaultValueString="moderate"/>
+        <attribute name="dailyCalorieGoal" attributeType="Integer 32" defaultValueString="2000" usesScalarValueType="YES"/>
+        <attribute name="dailyCarbGoal" attributeType="Integer 32" defaultValueString="250" usesScalarValueType="YES"/>
+        <attribute name="dailyFatGoal" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="dailyFiberGoal" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="dailyProteinGoal" attributeType="Integer 32" defaultValueString="150" usesScalarValueType="YES"/>
+        <attribute name="dietStartDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="heightCm" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="preferredAccentColor" optional="YES" attributeType="String" defaultValueString="Blue"/>
+        <attribute name="preferredTheme" optional="YES" attributeType="String" defaultValueString="System"/>
+        <attribute name="startingWeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="weightUnit" attributeType="String" defaultValueString="kg"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="preferences" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDWeightEntry" representedClassName=".CDWeightEntry" syncable="YES">
+        <attribute name="bodyFatPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="muscleMass" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="photoPath" optional="YES" attributeType="String"/>
+        <attribute name="source" attributeType="String" defaultValueString="manual"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <attribute name="weightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="weightEntries" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDWorkout" representedClassName=".CDWorkout" syncable="YES">
+        <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="durationMinutes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString="New Workout"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWorkoutSet" inverseName="workout" inverseEntity="CDWorkoutSet"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="workouts" inverseEntity="CDUser"/>
+        <relationship name="workoutType" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDWorkoutType" inverseName="workouts" inverseEntity="CDWorkoutType"/>
+    </entity>
+    <entity name="CDWorkoutSet" representedClassName=".CDWorkoutSet" syncable="YES">
+        <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="reps" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="setNumber" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="targetReps" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDExercise" inverseName="workoutSets" inverseEntity="CDExercise"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDWorkout" inverseName="sets" inverseEntity="CDWorkout"/>
+    </entity>
+    <entity name="CDEcksteinFood" representedClassName=".CDEcksteinFood" syncable="YES">
+        <attribute name="barcode" optional="YES" attributeType="String"/>
+        <attribute name="brand" optional="YES" attributeType="String"/>
+        <attribute name="caloriesPer100g" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="carbsPer100g" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="category" attributeType="String" defaultValueString=""/>
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="dailyGrams" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fatPer100g" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="fiberPer100g" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="foodCategory" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="isCustom" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="isFat" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isVerified" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="proteinPer100g" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="servingSize" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="servingUnit" optional="YES" attributeType="String"/>
+        <attribute name="source" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDEcksteinMealEntry" inverseName="food" inverseEntity="CDEcksteinMealEntry"/>
+    </entity>
+    <entity name="CDEcksteinMeal" representedClassName=".CDEcksteinMeal" syncable="YES">
+        <attribute name="date" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="isCarbLoad" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="mealNumber" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="mealType" optional="YES" attributeType="String"/>
+        <attribute name="totalCalories" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="totalCarbs" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="totalFat" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="totalFiber" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="totalProtein" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEcksteinMealEntry" inverseName="meal" inverseEntity="CDEcksteinMealEntry"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="ecksteinMeals" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDEcksteinMealEntry" representedClassName=".CDEcksteinMealEntry" syncable="YES">
+        <attribute name="calories" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="carbs" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="category" attributeType="String" defaultValueString=""/>
+        <attribute name="fat" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="fiber" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="foodName" attributeType="String" defaultValueString=""/>
+        <attribute name="gramsConsumed" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="protein" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="food" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDEcksteinFood" inverseName="entries" inverseEntity="CDEcksteinFood"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDEcksteinMeal" inverseName="entries" inverseEntity="CDEcksteinMeal"/>
+    </entity>
+    <entity name="CDWorkoutType" representedClassName=".CDWorkoutType" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="lastUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWorkoutTypeExercise" inverseName="workoutType" inverseEntity="CDWorkoutTypeExercise"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="workoutTypes" inverseEntity="CDUser"/>
+        <relationship name="workouts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDWorkout" inverseName="workoutType" inverseEntity="CDWorkout"/>
+    </entity>
+    <entity name="CDWorkoutTypeExercise" representedClassName=".CDWorkoutTypeExercise" syncable="YES">
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="orderIndex" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="targetReps" attributeType="Integer 32" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="targetSets" attributeType="Integer 32" defaultValueString="3" usesScalarValueType="YES"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDExercise" inverseName="workoutTypeExercises" inverseEntity="CDExercise"/>
+        <relationship name="workoutType" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDWorkoutType" inverseName="exercises" inverseEntity="CDWorkoutType"/>
+    </entity>
+    <entity name="CDFatMealTracker" representedClassName=".CDFatMealTracker" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="fatMealsConsumed" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="remoteId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <attribute name="updatedAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="weekStartDate" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="fatMealTrackers" inverseEntity="CDUser"/>
+    </entity>
+    <entity name="CDCarbLoadTracker" representedClassName=".CDCarbLoadTracker" syncable="YES">
+        <attribute name="carbLoadDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
+        <attribute name="remoteId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="syncStatus" attributeType="String" defaultValueString="pending"/>
+        <attribute name="updatedAt" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <attribute name="weekStartDate" attributeType="Date" defaultDateTimeInterval="774135480" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="carbLoadTrackers" inverseEntity="CDUser"/>
+    </entity>
+</model>

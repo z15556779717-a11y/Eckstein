@@ -95,9 +95,10 @@ node_modules/
 *.md
 !README.md
 
-# SQL files (except FINAL_VERSION_APP_DB.sql)
+# SQL files (except FINAL_VERSION_APP_DB.sql and the migrations directory)
 *.sql
 !FINAL_VERSION_APP_DB.sql
+!supabase/migrations/*.sql
 
 # xfunnel-prod directory (unrelated project)
 xfunnel-prod/
