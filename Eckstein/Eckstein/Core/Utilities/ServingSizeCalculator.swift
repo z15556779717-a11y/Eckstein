@@ -7,6 +7,13 @@
 
 import Foundation
 
+/// Serving-unit conversion helpers.
+///
+/// **Partly deprecated in phase 2.** The unit tables are still general-purpose.
+/// `calculateNutrition(for: CDFood, servingGrams:)` is legacy — it reads the
+/// orphaned `CDFood` set. The official equivalent is
+/// `NutritionService.nutrition(for: CDEcksteinFood, grams:)`, which returns a
+/// `NutritionSnapshot`. See NUTRITION_MIGRATION_PLAN.md §11.
 struct ServingSizeCalculator {
     // Common serving units and their gram equivalents
     static let servingUnits: [String: Double] = [

@@ -141,11 +141,11 @@ struct FoodSearchView: View {
                     isPresented: $showBarcodeScanner,
                     onScan: barcodeViewModel.handleScannedCode
                 )
-                .onDisappear {
-                    if let food = barcodeViewModel.foundFood {
-                        selectFood(food)
-                    }
-                }
+                // This view is unreachable legacy code and its whole data path is
+                // the frozen `CDFood` set, so a scan result — which now resolves
+                // to an official `CDEcksteinFood` — has nothing to select here.
+                // Scans land in the official catalog via `BarcodeFoodResolver`.
+                // See NUTRITION_MIGRATION_PLAN.md §9.
             }
             .sheet(isPresented: $showAddFood) {
                 AddFoodView { newFood in

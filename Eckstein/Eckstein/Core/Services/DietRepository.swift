@@ -8,16 +8,27 @@
 import CoreData
 import Combine
 
+/// Legacy `CDFood` / `CDMeal` / `CDMealItem` data access.
+///
+/// **Deprecated in phase 2.** This is the orphaned half of the two parallel diet
+/// systems: no reachable view uses it, and no user data lives in its entities.
+/// The official nutrition path is `NutritionService` over
+/// `CDEcksteinFood` / `CDEcksteinMeal` / `CDEcksteinMealEntry` — see
+/// NUTRITION_MIGRATION_PLAN.md.
+///
+/// Nothing here is deleted. The entities stay in the model and old rows stay
+/// readable; the goal of phase 2 is only that no *new* data is written through
+/// this path. The catalog seeding that used to live in `init` now belongs to
+/// `NutritionCatalogSeed`, which writes the official entity instead.
 class DietRepository: ObservableObject {
     private let context: NSManagedObjectContext
     @Published var meals: [CDMeal] = []
     @Published var foods: [CDFood] = []
     @Published var todayMeals: [CDMeal] = []
     @Published var calorieBankBalance: Int = 0
-    
+
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.context = context
-        seedFoodsIfNeeded()
         fetchTodayMeals()
         fetchFoods()
         updateCalorieBankBalance()
@@ -117,7 +128,12 @@ class DietRepository: ObservableObject {
         fetchFoods()
     }
     
-    private func seedFoodsIfNeeded() {
+    /// Seeds the legacy `CDFood` catalog.
+    ///
+    /// No longer called from `init` — the launch path seeds the official
+    /// `CDEcksteinFood` catalog through `NutritionCatalogSeed` instead. Kept so
+    /// the legacy path still works if anything reaches it.
+    func seedFoodsIfNeeded() {
         FoodData.seedFoodsIfNeeded(context: context)
     }
     

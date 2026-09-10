@@ -343,7 +343,14 @@ struct AIContext {
     let recentActivitySummary: String
     let currentStats: String
     let recentWorkouts: [CDWorkout]
-    let recentMeals: [CDMeal]
+
+    /// Meals as plain values, not `CDMeal` entities.
+    ///
+    /// Phase 2 moved the AI layer onto the official nutrition path: it used to
+    /// hold `[CDMeal]` from the orphaned entity set, which receives no user
+    /// writes, so the coach saw zero meals for every real user. See
+    /// NUTRITION_MIGRATION_PLAN.md §13.
+    let recentMeals: [NutritionMealSummary]
     let weightTrend: WeightTrend
     let currentWeight: Double?
     let goalWeight: Double?

@@ -66,7 +66,7 @@ struct MealHistoryView: View {
                 }
                 
                 // Daily Summary
-                DailyNutritionSummary(nutrition: nutritionForSelectedDate)
+                DailyNutritionSummaryCard(nutrition: nutritionForSelectedDate)
                 
                 // Meals
                 if mealsForSelectedDate.isEmpty {
@@ -103,7 +103,10 @@ struct MealHistoryView: View {
     }
 }
 
-struct DailyNutritionSummary: View {
+/// Renamed from `DailyNutritionSummary` in phase 2: that name now belongs to the
+/// official nutrition aggregation value (`Core/Nutrition/DailyNutritionSummary.swift`).
+/// This view is unreachable from the live app — see NUTRITION_MIGRATION_PLAN.md §1.3.
+struct DailyNutritionSummaryCard: View {
     let nutrition: NutritionInfo
     
     var body: some View {

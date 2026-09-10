@@ -11,14 +11,14 @@ import CoreData
 @MainActor
 class AIContextBuilder {
     private let workoutRepository: WorkoutRepository
-    private let dietRepository: DietRepository
     private let weightRepository: WeightRepository
+    private let nutritionService: NutritionService
     private let context: NSManagedObjectContext
-    
+
     init() {
         self.workoutRepository = ServiceContainer.shared.workoutRepository
-        self.dietRepository = ServiceContainer.shared.dietRepository
         self.weightRepository = ServiceContainer.shared.weightRepository
+        self.nutritionService = NutritionService()
         self.context = PersistenceController.shared.container.viewContext
     }
     
@@ -75,15 +75,17 @@ class AIContextBuilder {
         }
     }
     
-    private func fetchRecentMeals() async -> [CDMeal] {
-        let request: NSFetchRequest<CDMeal> = CDMeal.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMeal.date, ascending: false)]
-        request.fetchLimit = 20
-        
+    /// The user's most recent meals, read through the official nutrition service.
+    ///
+    /// This used to fetch `CDMeal` directly. That entity receives no user writes
+    /// — every logged meal lives in `CDEcksteinMealEntry` — so the result was
+    /// always empty and the coach was told the user had never eaten. See
+    /// NUTRITION_MIGRATION_PLAN.md §13.
+    private func fetchRecentMeals() async -> [NutritionMealSummary] {
         do {
-            return try context.fetch(request)
+            return try nutritionService.recentMeals(limit: 20)
         } catch {
-            print("Error fetching meals: \(error)")
+            print("Error fetching recent meals: \(error)")
             return []
         }
     }
@@ -135,22 +137,23 @@ class AIContextBuilder {
         return stats.joined(separator: ", ")
     }
     
-    private func calculateAverageCalories(from meals: [CDMeal]) -> Int {
+    /// Mean daily calories across the days the given meals cover.
+    ///
+    /// Reads the nutrition snapshots the service already computed instead of
+    /// re-deriving them from `CDMeal` relationships.
+    private func calculateAverageCalories(from meals: [NutritionMealSummary]) -> Int {
         guard !meals.isEmpty else { return 0 }
-        
-        // Group by day
+
         let calendar = Calendar.current
-        let mealsByDay = Dictionary(grouping: meals) { meal in
-            calendar.startOfDay(for: meal.date ?? Date())
+        let byDay = Dictionary(grouping: meals) { meal in
+            calendar.startOfDay(for: meal.date)
         }
-        
-        let dailyCalories = mealsByDay.mapValues { meals in
-            let nutrition = NutritionCalculator.calculateNutritionForMeals(meals)
-            return nutrition.calories
+
+        let totalCalories = byDay.values.reduce(0.0) { running, mealsThatDay in
+            running + mealsThatDay.reduce(0.0) { $0 + $1.nutrition.calories }
         }
-        
-        let totalCalories = dailyCalories.values.reduce(0, +)
-        return totalCalories / max(dailyCalories.count, 1)
+
+        return Int((totalCalories / Double(byDay.count)).rounded())
     }
 }
 
@@ -183,26 +186,28 @@ extension AIContextBuilder {
     }
     
     func buildDietContext(for mealType: String?) -> String {
-        // Fetch recent meals of this type
-        let request: NSFetchRequest<CDMeal> = CDMeal.fetchRequest()
-        if let mealType = mealType {
-            request.predicate = NSPredicate(format: "mealType == %@", mealType)
-        }
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMeal.date, ascending: false)]
-        request.fetchLimit = 7
-        
+        // Read the official nutrition path rather than `CDMeal`, which receives
+        // no user writes — see NUTRITION_MIGRATION_PLAN.md §13.
+        let slot = mealType.map { MealType(storedValue: $0) }
+
         do {
-            let meals = try context.fetch(request)
-            if !meals.isEmpty {
-                let nutrition = NutritionCalculator.calculateNutritionForMeals(meals)
-                let avgCalories = nutrition.calories / meals.count
-                let avgProtein = Int(nutrition.protein) / meals.count
-                return "Recent \(mealType ?? "meal") averages: \(avgCalories) calories, \(avgProtein)g protein"
+            let meals = try nutritionService.recentMeals(limit: 21).filter { meal in
+                guard let slot = slot else { return true }
+                return meal.mealType == slot
             }
+
+            guard !meals.isEmpty else {
+                return "No recent \(mealType ?? "meal") data available"
+            }
+
+            let totals = meals.reduce(NutritionSnapshot.zero) { $0 + $1.nutrition }
+            let count = Double(meals.count)
+            let avgCalories = Int((totals.calories / count).rounded())
+            let avgProtein = Int((totals.protein / count).rounded())
+            return "Recent \(mealType ?? "meal") averages: \(avgCalories) calories, \(avgProtein)g protein"
         } catch {
             print("Error fetching meal history: \(error)")
+            return "No recent \(mealType ?? "meal") data available"
         }
-        
-        return "No recent \(mealType ?? "meal") data available"
     }
 }

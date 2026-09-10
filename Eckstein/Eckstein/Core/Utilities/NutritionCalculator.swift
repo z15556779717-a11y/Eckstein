@@ -7,6 +7,14 @@
 
 import Foundation
 
+/// **Partly deprecated in phase 2.**
+///
+/// The goal/energy-expenditure helpers (`calculateDailyCalorieNeeds`,
+/// `MacroTargets`, `MealTiming`, `NutritionGoal`) are still general-purpose and
+/// remain in use. The meal-macro helpers — `calculateNutritionForMeals(_:)` and
+/// anything else that takes `CDMeal` / `CDMealItem` / `CDFood` — belong to the
+/// orphaned entity set. The official equivalents operate on plain values:
+/// `NutritionAggregator` and `NutritionSnapshot`. See NUTRITION_MIGRATION_PLAN.md §11.
 struct NutritionCalculator {
     // Calculate daily calorie needs based on user stats and activity level
     static func calculateDailyCalorieNeeds(

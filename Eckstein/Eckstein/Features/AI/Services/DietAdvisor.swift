@@ -12,11 +12,15 @@ import CoreData
 class DietAdvisor {
     private let openAIService = OpenAIService.shared
     private let contextBuilder = AIContextBuilder()
-    private let dietRepository: DietRepository
-    
-    init(repository: DietRepository? = nil) {
-        self.dietRepository = repository ?? ServiceContainer.shared.dietRepository
-    }
+
+    /// The official nutrition path.
+    ///
+    /// Replaced a `DietRepository` dependency in phase 2: the weekly stats below
+    /// used to be derived from `CDMeal`, which receives no user writes, so they
+    /// were always empty. See NUTRITION_MIGRATION_PLAN.md §13.
+    private let nutritionService = NutritionService()
+
+    init() {}
     
     func getMealSuggestions(
         mealType: String,
@@ -199,44 +203,41 @@ class DietAdvisor {
     }
     
     private func calculateWeeklyStats() async -> WeeklyDietStats {
-        let calendar = Calendar.current
-        let now = Date()
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-        let meals = dietRepository.fetchMeals(from: weekAgo, to: now)
-        
-        guard !meals.isEmpty else {
-            return WeeklyDietStats(
-                avgCalories: 0,
-                avgProtein: 0,
-                avgCarbs: 0,
-                avgFats: 0,
-                targetCalories: UserDefaults.standard.integer(forKey: "dailyCalorieGoal")
-            )
+        let targetCalories = UserDefaults.standard.integer(forKey: "dailyCalorieGoal")
+
+        let zero = WeeklyDietStats(
+            avgCalories: 0,
+            avgProtein: 0,
+            avgCarbs: 0,
+            avgFats: 0,
+            targetCalories: targetCalories
+        )
+
+        let summaries: [DailyNutritionSummary]
+        do {
+            summaries = try nutritionService.summaries(endingOn: Date(), days: 7)
+        } catch {
+            print("Error fetching weekly nutrition: \(error)")
+            return zero
         }
-        
-        let dailyTotals = Dictionary(grouping: meals) { meal in
-            Calendar.current.startOfDay(for: meal.date ?? Date())
-        }.mapValues { dayMeals in
-            let nutrition = NutritionCalculator.calculateNutritionForMeals(dayMeals)
-            return (
-                calories: nutrition.calories,
-                protein: Int(nutrition.protein),
-                carbs: Int(nutrition.carbs),
-                fats: Int(nutrition.fat)
-            )
-        }
-        
-        let dayCount = max(dailyTotals.count, 1)
-        
+
+        // Average over the days that actually have logging, matching what the
+        // previous `CDMeal`-based version did (`dailyTotals.count`).
+        let loggedDays = summaries.filter { !$0.isEmpty }
+        guard !loggedDays.isEmpty else { return zero }
+
+        let count = Double(loggedDays.count)
+        let totals = loggedDays.reduce(NutritionSnapshot.zero) { $0 + $1.totals }
+
         return WeeklyDietStats(
-            avgCalories: dailyTotals.values.reduce(0) { $0 + $1.calories } / dayCount,
-            avgProtein: dailyTotals.values.reduce(0) { $0 + $1.protein } / dayCount,
-            avgCarbs: dailyTotals.values.reduce(0) { $0 + $1.carbs } / dayCount,
-            avgFats: dailyTotals.values.reduce(0) { $0 + $1.fats } / dayCount,
-            targetCalories: UserDefaults.standard.integer(forKey: "dailyCalorieGoal")
+            avgCalories: Int((totals.calories / count).rounded()),
+            avgProtein: Int((totals.protein / count).rounded()),
+            avgCarbs: Int((totals.carbs / count).rounded()),
+            avgFats: Int((totals.fat / count).rounded()),
+            targetCalories: targetCalories
         )
     }
-    
+
     private func extractRecommendations(from analysis: String) -> [String] {
         // Extract numbered recommendations
         var recommendations: [String] = []

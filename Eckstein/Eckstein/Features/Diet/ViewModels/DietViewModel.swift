@@ -9,6 +9,14 @@ import Foundation
 import Combine
 import CoreData
 
+/// **Deprecated in phase 2.**
+///
+/// Drives the orphaned `CDFood` / `CDMeal` / `CDMealItem` view suite rooted at
+/// `DietDashboardView`, which has no external caller. No user data lives in those
+/// entities and the live Diet tab writes through `EcksteinDietViewModel` instead.
+/// The official read/write path is `NutritionService`; the official aggregation
+/// is `NutritionAggregator`. Nothing here is deleted in phase 2 — the types stay
+/// so the frozen views still compile. See NUTRITION_MIGRATION_PLAN.md §11.
 @MainActor
 class DietViewModel: ObservableObject {
     @Published var todayMeals: [CDMeal] = []

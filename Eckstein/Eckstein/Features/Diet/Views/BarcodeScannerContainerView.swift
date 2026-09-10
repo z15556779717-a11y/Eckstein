@@ -360,6 +360,12 @@ struct ScannedNutritionRow: View {
 }
 
 // Add to DietViewModel
+//
+// **Deprecated in phase 2.** These helpers write and read `CDFood`, the orphaned
+// entity set. The official barcode path is `BarcodeFoodResolver`, which resolves
+// a scan into the `CDEcksteinFood` catalog instead. Kept only because the frozen
+// legacy views around them still compile against this type; nothing reachable
+// calls them. See NUTRITION_MIGRATION_PLAN.md §9 and §11.
 extension DietViewModel {
     func findFoodByBarcode(_ barcode: String) -> CDFood? {
         let request: NSFetchRequest<CDFood> = CDFood.fetchRequest()

@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+/// **Unreachable in phase 2 — root of the frozen legacy diet suite.**
+///
+/// This view has no external caller, which means every view it presents
+/// (`FoodSearchView`, `AddFoodView`, `FoodDetailView`, `MealDetailView`,
+/// `MealHistoryView`, `QuickAddView`, `BarcodeScannerContainerView`,
+/// `DailyGoalsView`, `MacroBreakdownView`, `WeeklyAnalyticsView`) is unreachable
+/// too, along with `DietViewModel` and `FoodSearchViewModel`. They read and write
+/// the orphaned `CDFood` / `CDMeal` set. The live Diet tab is
+/// `DietTabView → EcksteinDietView`. Nothing here is deleted in phase 2.
+/// See NUTRITION_MIGRATION_PLAN.md §1 and §11.
 struct DietDashboardView: View {
     @ObservedObject var viewModel: DietViewModel
     @State private var showFoodSearch = false
@@ -54,7 +64,7 @@ struct DietDashboardView: View {
                     
                     if viewModel.todayMeals.isEmpty {
                         EmptyMealsCard(onAddMeal: {
-                            selectedMealType = MealType.breakfast.rawValue
+                            selectedMealType = DietDashboardMealType.breakfast.rawValue
                             showFoodSearch = true
                         })
                     } else {
@@ -605,9 +615,15 @@ struct AnalyticsTabView: View {
     }
 }
 
-enum MealType: String, CaseIterable {
+/// Meal slots for this legacy dashboard's segmented control.
+///
+/// Renamed from `MealType` in phase 2: the official nutrition vocabulary now
+/// owns that name (`Core/Nutrition/MealType.swift`). This view is unreachable
+/// from the live app — see NUTRITION_MIGRATION_PLAN.md §1.3 — and is kept only
+/// so the frozen `CDFood`/`CDMeal` path still compiles.
+enum DietDashboardMealType: String, CaseIterable {
     case breakfast, lunch, dinner, snack
-    
+
     var displayName: String {
         rawValue.capitalized
     }

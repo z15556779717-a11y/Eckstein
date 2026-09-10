@@ -8,6 +8,16 @@
 import Foundation
 import CoreData
 
+/// The project's built-in per-100g food catalog.
+///
+/// The `FoodTemplate` values below are **not** legacy: `NutritionCatalogSeed`
+/// copies them into the official `CDEcksteinFood` catalog, and `BarcodeFoodResolver`
+/// consumes the same type for scanned products.
+///
+/// What *is* legacy is `seedFoodsIfNeeded(context:)` at the bottom of this file —
+/// it writes `CDFood` rows, the orphaned entity set. Nothing reachable calls it;
+/// `DietRepository.seedFoodsIfNeeded()` is its only wrapper. The official seeding
+/// path is `NutritionCatalogSeed`. See NUTRITION_MIGRATION_PLAN.md §3.3 and §11.
 struct FoodTemplate {
     let name: String
     let category: String

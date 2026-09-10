@@ -31,8 +31,15 @@ extension EcksteinApp {
         workoutRepository.seedExercisesIfNeeded()
         print("Exercise seeding completed")
         
-        // Seed foods if needed (already handled by DietRepository)
-        let dietRepository = DietRepository(context: context)
-        print("Food seeding completed")
+        // Seed the official nutrition catalog if needed.
+        //
+        // This replaced constructing a `DietRepository`, whose initialiser seeded
+        // the legacy `CDFood` catalog. See NUTRITION_MIGRATION_PLAN.md §3.3.
+        do {
+            let seeded = try NutritionCatalogSeed.seedIfNeeded(context: context)
+            print("Nutrition catalog seeding completed (\(seeded) rows)")
+        } catch {
+            print("Error seeding the nutrition catalog: \(error)")
+        }
     }
 }

@@ -9,6 +9,12 @@ import Foundation
 import CoreData
 import Combine
 
+/// **Deprecated in phase 2.**
+///
+/// Searches and writes `CDFood`, the orphaned entity set. It is reachable only
+/// from the unreachable view suite rooted at `DietDashboardView`. The official
+/// search path is `NutritionService.foods(matching:)` over `CDEcksteinFood`.
+/// See NUTRITION_MIGRATION_PLAN.md §11.
 @MainActor
 class FoodSearchViewModel: ObservableObject {
     @Published var searchText = ""
