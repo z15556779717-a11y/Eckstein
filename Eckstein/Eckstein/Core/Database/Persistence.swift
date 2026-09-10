@@ -10,6 +10,28 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
+    /// The one `NSManagedObjectModel` instance every container shares.
+    ///
+    /// `NSPersistentCloudKitContainer(name:)` compiles a *fresh* model object on
+    /// every call, and Core Data disambiguates `+entity` on the generated
+    /// `NSManagedObject` subclasses by scanning every model that is loaded. Two
+    /// containers therefore mean two models claiming `CDWorkout`, `CDChatMessage`
+    /// and the rest, and every `CDXxx(context:)` throws
+    /// "must have a valid NSEntityDescription
+    /// (… Multiple NSEntityDescriptions claim …)".
+    ///
+    /// The app only builds `shared`, so this never showed up at runtime, but any
+    /// second container (a preview, a test, a future background context) hit it.
+    /// Loading the model once and handing the same instance to every container
+    /// keeps `+entity` unambiguous.
+    static let managedObjectModel: NSManagedObjectModel = {
+        guard let url = Bundle.main.url(forResource: "Eckstein", withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: url) else {
+            fatalError("Failed to load the Eckstein Core Data model from \(Bundle.main.bundlePath)")
+        }
+        return model
+    }()
+
     @MainActor
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
@@ -57,7 +79,10 @@ struct PersistenceController {
     let container: NSPersistentCloudKitContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Eckstein")
+        container = NSPersistentCloudKitContainer(
+            name: "Eckstein",
+            managedObjectModel: Self.managedObjectModel
+        )
         
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
