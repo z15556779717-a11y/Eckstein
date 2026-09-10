@@ -822,3 +822,45 @@ The leaked `service_role` key recorded as `S1` in `AUDIT.md` remains in git
 history at `beddcff` and **still requires rotation in the Supabase dashboard**.
 That is a user action, not a code change, and it blocks nothing in this plan
 because the migration SQL contains no key.
+
+## 17. Verification record
+
+Phase 2 landed on `develop/my-fitness-app` as:
+
+| Commit | Subject |
+| --- | --- |
+| `073a190` | `docs: add nutrition migration plan` |
+| `692eeb9` | `feat: unify nutrition data model` |
+| `e9f4490` | `test: add nutrition data tests` |
+| `feabc47` | `fix: use NSNumber for nullable nutrition attributes` |
+| `4bfc025` | `fix: disambiguate shadowed food lookup in logEntry` |
+| `f03a81b` | `fix: hoist try over the coalescing operator in logEntry` |
+| `b263641` | `test: point the diet suite at the phase-2 architecture` |
+
+GitHub Actions run [`34484768906`](https://github.com/z15556779717-a11y/Eckstein/actions/runs/34484768906)
+on `b263641`, job *Build & Test (iOS Simulator)*:
+
+```
+** BUILD SUCCEEDED **
+Executed 111 tests, with 2 tests skipped and 0 failures (0 unexpected)
+** TEST SUCCEEDED **
+```
+
+`DietTests` 31 passed, `NutritionTests` 15 passed. The 2 skips are pre-existing
+and unrelated to nutrition. `main` is unmodified at `beddcff`.
+
+Four of the seven commits are fixes for compile errors reported by CI, each
+applied from the real Xcode log rather than guessed at:
+
+1. `feabc47` — `@NSManaged` cannot be applied to an optional Swift scalar, so
+   every nullable numeric attribute added by this phase is `NSNumber?` rather
+   than `Double?`. The scalar-with-default alternative was rejected: it would
+   collapse "unknown" into "zero" (§4.2, §5.1).
+2. `4bfc025` — `logEntry(food:)`'s parameter shadowed the `food(named:category:)`
+   method inside its own body.
+3. `f03a81b` — `try` inside the right-hand side of `??` does not satisfy the
+   compiler; it has to cover the whole expression.
+4. `b263641` — six pre-existing `DietTests` asserted the behaviour this phase
+   deliberately changed. None was deleted; each was repointed at the new data
+   path, which also proves the legacy `FoodData.seedFoodsIfNeeded` path still
+   works for the stores that hold rows it wrote.
