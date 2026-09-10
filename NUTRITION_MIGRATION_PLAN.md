@@ -163,11 +163,14 @@ Yes, in three places:
 
 **Q10 — Is there existing-user-data migration risk?**
 Yes, and it is structural rather than volume-related:
-- The store has exactly **one** model version directory (`Eckstein.xcdatamodel`)
-  and **no `.xccurrentversion` file**. Adding attributes to the existing
-  `contents` in place would leave existing stores with no version to migrate
-  *from* and the container would fail to open. A new version directory plus an
-  `.xccurrentversion` marker is mandatory.
+- The store has exactly **one** model version directory (`Eckstein.xcdatamodel`),
+  and `Eckstein.xcdatamodeld/.xccurrentversion` names it as the current version.
+  Adding attributes to the existing `contents` in place would leave existing
+  stores with no source version to migrate *from* — Core Data hashes the model
+  it finds the store was written with and looks that model up in the compiled
+  `.momd`, so a store written by the shipped build would find no matching model
+  and the container would fail to open. A new version directory that keeps the
+  old one, plus a repointed `.xccurrentversion`, is mandatory.
 - `PersistenceController` calls `fatalError` when a store fails to load
   (`B7` in AUDIT.md), so a migration failure is a crash on launch, not a
   degraded state. The migration must be lightweight-inferrable, and every new
@@ -320,10 +323,22 @@ keeps existing rows byte-identical.
   AI Coach never issue their own fetch requests against Nutrition entities.
 - `DietRepository`, `DietViewModel`, `FoodSearchViewModel`, `BarcodeViewModel`,
   `FoodSearchView`, `QuickAddView`, `DietDashboardView` and the rest of the
-  unreachable `CDFood` view suite are marked `@available(*, deprecated)`-style in
-  comments and stop being constructed by the live app. `DietRepository` is
-  removed from `ServiceContainer` and `EcksteinApp+Extensions` (its only live
-  callers) — that also removes the startup seed of ~30 `CDFood` rows.
+  unreachable `CDFood` view suite are marked deprecated in doc comments and stop
+  being constructed by the live app.
+- `EcksteinApp+Extensions` no longer constructs `DietRepository` at launch; it
+  calls `NutritionCatalogSeed.seedIfNeeded(context:)` instead, which also removes
+  the startup seed of ~30 `CDFood` rows. `DietRepository.init` no longer seeds
+  either. The `ServiceContainer.dietRepository` property is **kept**: it is the
+  only thing keeping the unreachable views compiling, and removing it is a
+  phase-3 deletion task, not a phase-2 one (§11).
+- `BarcodeViewModel` is retargeted rather than frozen: it now resolves through
+  `BarcodeFoodResolver` and publishes a `CDEcksteinFood`, so the last write path
+  into `CDFood` from a view model is closed. The one dead view that consumed its
+  result (`FoodSearchView`) keeps its scanner sheet but no longer bridges the
+  result into its `CDFood`-typed selection.
+- `FoodData`'s templates are **reused** as the seed source for `CDEcksteinFood`
+  catalog rows, so the seeded catalog is not lost, only relocated. Only
+  `FoodData.seedFoodsIfNeeded(context:)` — the `CDFood` writer — is legacy.
 - `FoodData`'s templates are **reused** as the seed source for `CDEcksteinFood`
   catalog rows, so the seeded catalog is not lost, only relocated.
 
@@ -333,7 +348,8 @@ keeps existing rows byte-identical.
 
 ### 4.1 Current state
 
-- `Eckstein.xcdatamodeld/` contains exactly one version: `Eckstein.xcdatamodel`.
+- `Eckstein.xcdatamodeld/` contains exactly one version: `Eckstein.xcdatamodel`,
+  named by `.xccurrentversion` as the current version.
 - There is **no `.xccurrentversion`**. Adding attributes in place is not
   acceptable: a store already written with the old schema would have no source
   version to migrate from.
@@ -347,9 +363,9 @@ keeps existing rows byte-identical.
 1. Copy `Eckstein.xcdatamodel` → **`Eckstein 2.xcdatamodel`** and add the new
    attributes there. The old version directory is **kept unchanged** so the
    source model remains resolvable.
-2. Write `Eckstein.xcdatamodeld/.xccurrentversion` as a plist pointing at
-   `Eckstein 2.xcdatamodel`. This is the file that makes the new version current;
-   without it Xcode and Core Data fall back to the alphabetically first version.
+2. Repoint `Eckstein.xcdatamodeld/.xccurrentversion` at `Eckstein 2.xcdatamodel`.
+   This file is what makes a version current; without it the tooling falls back
+   to the alphabetically first version, which would silently keep the old schema.
 3. **Every new attribute is optional.** This is required twice over: an optional
    attribute needs no default to infer a mapping for existing rows, and
    `NSPersistentCloudKitContainer` requires attributes to be optional or to carry
@@ -554,15 +570,26 @@ Only the last mile is bound to `CDFood`.
   the new seam. It maps `FoodTemplate` → `CDEcksteinFood` (macros into
   `*Per100g`, `brand`, `barcode`, `servingSize`, `servingUnit`, `source =
   "openfoodfacts"`). This *is* the "minimal adapter" the brief allows.
-- `BarcodeViewModel`'s `foundFood: CDFood?` becomes a `FoodTemplate?` /
-  `CDEcksteinFood?` result from the service. The scanner view type is unchanged.
-- Because `CDFood` and `CDEcksteinFood` are different entities with no shared
-  superclass, the two barcode lookup paths (`NutritionService.food(matchingBarcode:)`
-  for the canonical store, `DietRepository`'s for the frozen one) stay separate
-  functions rather than one polymorphic API — duplicating an entity binding is
-  acceptable; duplicating a scanner is not.
-- `BarcodeScannerContainerView` (unreachable) is left in place, marked
-  deprecated, and not retargeted, so no live behaviour changes.
+- `BarcodeViewModel`'s `foundFood: CDFood?` became `CDEcksteinFood?`, resolved
+  through a new `BarcodeFoodResolver` rather than direct fetches/inserts. The
+  scanner view type is unchanged.
+- `BarcodeFoodResolver` is that adapter, in one place: local catalog first
+  (`NutritionService.food(matchingBarcode:)`), then Open Food Facts, then
+  `NutritionService.upsertFood(from:source: "barcode")`. It is the only code that
+  maps a barcode onto a persistence entity.
+- `DietViewModel.findFoodByBarcode` / `createFoodFromAPI` (declared inside the
+  unreachable `BarcodeScannerContainerView.swift`) still write `CDFood`, but are
+  marked deprecated and have no reachable caller. They are not retargeted: their
+  consumer `ScannedFoodDetailView` takes a `CDFood` and rewiring it would mean
+  rewriting an unreachable view, which §11 defers.
+- `BarcodeScannerContainerView` and `FoodSearchView` (both unreachable) keep
+  their scanner sheets. `FoodSearchView`'s `onDisappear` bridge into its
+  `CDFood`-typed `selectFood` is removed — a `CDEcksteinFood` scan result has
+  nothing to select there.
+
+**Net effect:** the AVFoundation scanner and `FoodAPIService` are untouched, no
+second scanner exists, and the only remaining `CDFood` barcode binding is in
+unreachable, deprecated code with no caller.
 
 ---
 
@@ -626,17 +653,42 @@ already better prepared than the local model:
 - `meals.meal_type` already has `CHECK (meal_type IN ('breakfast','lunch','dinner','snack'))`.
 - RLS is enabled on all three Eckstein tables with owner-scoped policies.
 
-**Why this matters:** `SyncManager.encodeEntity`'s generic branch sends *every*
-attribute of a syncable entity, so a locally-added field with no remote column
-would make the upload fail with a PostgREST "column does not exist" error. The
-schema change is therefore not optional for sync to keep working — but it is
-small, additive, and confined to columns the remote schema already anticipates on
-the entries table.
+**Why this matters — and the correction to the earlier assumption.**
+`SyncManager.encodeEntity`'s generic branch does send *every* attribute of an
+entity that has no explicit case, but the Eckstein food/meal entities are **not**
+all generic:
 
-**Plan.** Add `supabase/migrations/<timestamp>_nutrition_fields.sql`, written to
-be **idempotent** (`ADD COLUMN IF NOT EXISTS`) and **non-destructive** — no
-`DROP`, no `DELETE`, no `UPDATE` of existing rows, no `ALTER TYPE`, no tightening
-of an existing constraint that could reject existing data:
+| Entity | Encoder path | Effect of the new local fields |
+|---|---|---|
+| `CDEcksteinFood` | `default:` generic branch — sends every attribute by its **Core Data name** | new fields are sent verbatim |
+| `CDEcksteinMeal` | explicit case, hand-written keys | new fields are **not** sent; totals are still hard-coded to `0` |
+| `CDEcksteinMealEntry` | explicit case, hand-written keys, `"the model doesn't have nutrition info"` | new fields are **not** sent; snapshot still hard-coded to `0` |
+| `CDUserPreferences` | explicit case | new goals are **not** sent |
+
+So adding the optional fields cannot break the meal, entry or preferences
+uploads — those encoders never look at them. Only `CDEcksteinFood` is affected.
+
+**A pre-existing defect, recorded but not fixed here.** The same generic branch
+sends Core Data attribute names verbatim — `dailyGrams`, `isCustom`, `isFat`,
+`createdAt` — while the documented remote schema uses `daily_grams`, `is_custom`,
+`is_fat`, `created_at`. `syncCreate` passes that dictionary straight to
+`supabaseService.create(table:data:)` with no case conversion. On the documented
+schema that insert cannot succeed. **This predates phase 2 and is not caused by
+the new fields** (which are all new, so they add keys of the same wrong shape,
+not a new class of error).
+
+Fixing it means renaming keys in `encodeEntity` — a sync-layer change that must
+be made against the *live* schema, which this repository does not contain.
+Guessing risks breaking a working path. It is therefore left as an explicit
+phase-3 item: reconcile encoder and schema together, as one change, using
+`supabase db diff --linked` as the source of truth. Phase 2 does not touch
+`SyncManager`'s key naming, and no local behaviour depends on sync succeeding.
+
+**Done.** `supabase/migrations/20260910120000_nutrition_fields.sql` is written to
+be **idempotent** (`ADD COLUMN IF NOT EXISTS`), **non-destructive** — no `DROP`,
+no `DELETE`, no `UPDATE` of existing rows, no `ALTER TYPE`, no tightening of an
+existing constraint that could reject existing data — and **prepared, not
+applied**:
 
 - `eckstein_foods`: `+ calories_per_100g, protein_per_100g, carbs_per_100g,
   fat_per_100g, fiber_per_100g, barcode, brand, serving_size, serving_unit,
