@@ -75,11 +75,11 @@ class NutritionTests: XCTestCase {
         food.dailyGrams = 0
         food.isCustom = false
         food.createdAt = Date()
-        food.caloriesPer100g = calories
-        food.proteinPer100g = protein
-        food.carbsPer100g = carbs
-        food.fatPer100g = fat
-        food.fiberPer100g = fiber
+        food.caloriesPer100g = calories.map { NSNumber(value: $0) }
+        food.proteinPer100g = protein.map { NSNumber(value: $0) }
+        food.carbsPer100g = carbs.map { NSNumber(value: $0) }
+        food.fatPer100g = fat.map { NSNumber(value: $0) }
+        food.fiberPer100g = fiber.map { NSNumber(value: $0) }
         food.barcode = barcode
         food.foodCategory = "Test"
         try context.save()
@@ -231,8 +231,8 @@ class NutritionTests: XCTestCase {
         XCTAssertEqual(Set(meals.map(\.objectID)).count, 2)
         for meal in Set(meals) {
             let fromEntries = meal.entriesArray.reduce(NutritionSnapshot.zero) { $0 + $1.nutritionSnapshot }
-            XCTAssertEqual(meal.totalCalories ?? -1, fromEntries.calories, accuracy: 0.0001)
-            XCTAssertEqual(meal.totalFiber ?? -1, fromEntries.fiber, accuracy: 0.0001)
+            XCTAssertEqual(meal.totalCalories?.doubleValue ?? -1, fromEntries.calories, accuracy: 0.0001)
+            XCTAssertEqual(meal.totalFiber?.doubleValue ?? -1, fromEntries.fiber, accuracy: 0.0001)
         }
     }
 
@@ -311,29 +311,29 @@ class NutritionTests: XCTestCase {
         let today = day(0)
 
         let entry = try log(food, grams: 100, on: today)
-        XCTAssertEqual(entry.calories ?? -1, 200, accuracy: 0.0001)
-        XCTAssertEqual(entry.fiber ?? -1, 2, accuracy: 0.0001)
+        XCTAssertEqual(entry.calories?.doubleValue ?? -1, 200, accuracy: 0.0001)
+        XCTAssertEqual(entry.fiber?.doubleValue ?? -1, 2, accuracy: 0.0001)
         XCTAssertTrue(entry.hasNutritionData)
 
         // The catalog row is corrected afterwards — a user fixing a mistake, or a
         // product being reformulated. History must not silently rewrite itself.
-        food.caloriesPer100g = 900
-        food.proteinPer100g = 90
-        food.fiberPer100g = 30
+        food.caloriesPer100g = NSNumber(value: 900)
+        food.proteinPer100g = NSNumber(value: 90)
+        food.fiberPer100g = NSNumber(value: 30)
         try context.save()
 
         let refetched = try XCTUnwrap(
             try service.entries(on: today, calendar: calendar).first
         )
-        XCTAssertEqual(refetched.calories ?? -1, 200, accuracy: 0.0001)
-        XCTAssertEqual(refetched.protein ?? -1, 20, accuracy: 0.0001)
-        XCTAssertEqual(refetched.fiber ?? -1, 2, accuracy: 0.0001)
+        XCTAssertEqual(refetched.calories?.doubleValue ?? -1, 200, accuracy: 0.0001)
+        XCTAssertEqual(refetched.protein?.doubleValue ?? -1, 20, accuracy: 0.0001)
+        XCTAssertEqual(refetched.fiber?.doubleValue ?? -1, 2, accuracy: 0.0001)
         XCTAssertEqual(try service.summary(on: today, calendar: calendar).dailyCalories,
                        200, accuracy: 0.0001)
 
         // A *new* entry from the same corrected food does pick the new values up.
         let fresh = try log(food, grams: 100, on: day(1))
-        XCTAssertEqual(fresh.calories ?? -1, 900, accuracy: 0.0001)
+        XCTAssertEqual(fresh.calories?.doubleValue ?? -1, 900, accuracy: 0.0001)
     }
 
     // MARK: - 11. Migration compatibility of the model version

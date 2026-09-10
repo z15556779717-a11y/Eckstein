@@ -23,20 +23,24 @@ extension CDEcksteinFood {
     // existed have no values, and `nil` means "unknown" rather than "zero".
     // See NUTRITION_MIGRATION_PLAN.md §4.2 and §5.1.
 
-    /// Energy per 100 g. `Double`, not `Int32`, so small values are not truncated
-    /// before the aggregation layer rounds once at the presentation boundary.
-    @NSManaged public var caloriesPer100g: Double?
-    @NSManaged public var proteinPer100g: Double?
-    @NSManaged public var carbsPer100g: Double?
-    @NSManaged public var fatPer100g: Double?
-    @NSManaged public var fiberPer100g: Double?
+    /// Energy per 100 g. Kept as `NSNumber?` rather than `Double`: the attribute
+    /// is `usesScalarValueType="NO"` so the store can hold a real `NULL`, and an
+    /// optional Swift scalar cannot be `@NSManaged` (it has no Objective-C
+    /// representation). `nil` means "unknown", which is why the column is not a
+    /// scalar defaulting to zero — a food with no declared values must not claim
+    /// to be zero-calorie. See NUTRITION_MIGRATION_PLAN.md §4.2 and §5.1.
+    @NSManaged public var caloriesPer100g: NSNumber?
+    @NSManaged public var proteinPer100g: NSNumber?
+    @NSManaged public var carbsPer100g: NSNumber?
+    @NSManaged public var fatPer100g: NSNumber?
+    @NSManaged public var fiberPer100g: NSNumber?
 
     /// Barcode and brand, so the Open Food Facts scanner can serve this entity.
     @NSManaged public var barcode: String?
     @NSManaged public var brand: String?
 
     /// Default serving. `servingSize` is in grams.
-    @NSManaged public var servingSize: Double?
+    @NSManaged public var servingSize: NSNumber?
     @NSManaged public var servingUnit: String?
 
     /// The free-form food group ("Protein", "Dairy", …).

@@ -165,8 +165,8 @@ final class NutritionService {
             calories: Double(preferences.dailyCalorieGoal),
             protein: Double(preferences.dailyProteinGoal),
             carbs: Double(preferences.dailyCarbGoal),
-            fat: preferences.dailyFatGoal,
-            fiber: preferences.dailyFiberGoal
+            fat: preferences.dailyFatGoal?.doubleValue,
+            fiber: preferences.dailyFiberGoal?.doubleValue
         )
     }
 
@@ -187,8 +187,8 @@ final class NutritionService {
         if let calories = goals.calories { preferences.dailyCalorieGoal = Int32(calories.rounded()) }
         if let protein = goals.protein { preferences.dailyProteinGoal = Int32(protein.rounded()) }
         if let carbs = goals.carbs { preferences.dailyCarbGoal = Int32(carbs.rounded()) }
-        preferences.dailyFatGoal = goals.fat
-        preferences.dailyFiberGoal = goals.fiber
+        preferences.dailyFatGoal = goals.fat.map { NSNumber(value: $0) }
+        preferences.dailyFiberGoal = goals.fiber.map { NSNumber(value: $0) }
 
         try context.save()
     }
@@ -285,11 +285,11 @@ final class NutritionService {
             totals += entry.nutritionSnapshot
         }
 
-        meal.totalCalories = totals.calories
-        meal.totalProtein = totals.protein
-        meal.totalCarbs = totals.carbs
-        meal.totalFat = totals.fat
-        meal.totalFiber = totals.fiber
+        meal.totalCalories = NSNumber(value: totals.calories)
+        meal.totalProtein = NSNumber(value: totals.protein)
+        meal.totalCarbs = NSNumber(value: totals.carbs)
+        meal.totalFat = NSNumber(value: totals.fat)
+        meal.totalFiber = NSNumber(value: totals.fiber)
         meal.updatedAt = Date()
     }
 
@@ -411,11 +411,11 @@ final class NutritionService {
     /// The nutrition in `grams` of a catalog food, or `nil` when nothing is known.
     func nutrition(for food: CDEcksteinFood, grams: Double) -> NutritionSnapshot? {
         NutritionSnapshot.per100g(
-            calories: food.caloriesPer100g,
-            protein: food.proteinPer100g,
-            carbs: food.carbsPer100g,
-            fat: food.fatPer100g,
-            fiber: food.fiberPer100g,
+            calories: food.caloriesPer100g?.doubleValue,
+            protein: food.proteinPer100g?.doubleValue,
+            carbs: food.carbsPer100g?.doubleValue,
+            fat: food.fatPer100g?.doubleValue,
+            fiber: food.fiberPer100g?.doubleValue,
             grams: grams
         )
     }
@@ -446,12 +446,12 @@ final class NutritionService {
         food.foodCategory = template.category
         food.barcode = template.barcode
         food.brand = template.brand
-        food.caloriesPer100g = Double(template.caloriesPer100g)
-        food.proteinPer100g = template.proteinPer100g
-        food.carbsPer100g = template.carbsPer100g
-        food.fatPer100g = template.fatPer100g
-        food.fiberPer100g = template.fiberPer100g
-        food.servingSize = template.servingSize
+        food.caloriesPer100g = NSNumber(value: Double(template.caloriesPer100g))
+        food.proteinPer100g = NSNumber(value: template.proteinPer100g)
+        food.carbsPer100g = NSNumber(value: template.carbsPer100g)
+        food.fatPer100g = NSNumber(value: template.fatPer100g)
+        food.fiberPer100g = template.fiberPer100g.map { NSNumber(value: $0) }
+        food.servingSize = template.servingSize.map { NSNumber(value: $0) }
         food.servingUnit = template.servingUnit
         food.isVerified = true
         food.updatedAt = Date()
@@ -494,11 +494,11 @@ final class NutritionService {
             return
         }
 
-        entry.calories = snapshot.calories
-        entry.protein = snapshot.protein
-        entry.carbs = snapshot.carbs
-        entry.fat = snapshot.fat
-        entry.fiber = snapshot.fiber
+        entry.calories = NSNumber(value: snapshot.calories)
+        entry.protein = NSNumber(value: snapshot.protein)
+        entry.carbs = NSNumber(value: snapshot.carbs)
+        entry.fat = NSNumber(value: snapshot.fat)
+        entry.fiber = NSNumber(value: snapshot.fiber)
     }
 
     private func existingFood(for template: FoodTemplate) throws -> CDEcksteinFood? {

@@ -30,8 +30,11 @@ class BarcodeViewModel: ObservableObject {
     private let resolver: BarcodeFoodResolver
     private var cancellables = Set<AnyCancellable>()
 
-    init(resolver: BarcodeFoodResolver = BarcodeFoodResolver()) {
-        self.resolver = resolver
+    /// `resolver` is optional rather than defaulted to `BarcodeFoodResolver()`.
+    /// A default argument is evaluated in a nonisolated thunk, which cannot call
+    /// the `@MainActor` initializer; constructing it in the body can.
+    init(resolver: BarcodeFoodResolver? = nil) {
+        self.resolver = resolver ?? BarcodeFoodResolver()
         checkCameraPermission()
     }
 

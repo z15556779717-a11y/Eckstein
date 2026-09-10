@@ -23,12 +23,16 @@ extension CDEcksteinMealEntry {
     //
     // Optional: entries logged before nutrition tracking have `nil`, meaning
     // "unknown", not "zero". See NUTRITION_MIGRATION_PLAN.md §5.2.
+    //
+    // `NSNumber?` rather than `Double?`: a nullable numeric attribute has no
+    // optional Swift scalar representation under `@NSManaged`, and the column
+    // has to stay nullable so "unknown" and "zero" remain distinguishable.
 
-    @NSManaged public var calories: Double?
-    @NSManaged public var protein: Double?
-    @NSManaged public var carbs: Double?
-    @NSManaged public var fat: Double?
-    @NSManaged public var fiber: Double?
+    @NSManaged public var calories: NSNumber?
+    @NSManaged public var protein: NSNumber?
+    @NSManaged public var carbs: NSNumber?
+    @NSManaged public var fat: NSNumber?
+    @NSManaged public var fiber: NSNumber?
 
     @NSManaged public var updatedAt: Date?
 
@@ -46,11 +50,11 @@ extension CDEcksteinMealEntry {
     /// zero so totals stay additive.
     var nutritionSnapshot: NutritionSnapshot {
         NutritionSnapshot(
-            calories: calories ?? 0,
-            protein: protein ?? 0,
-            carbs: carbs ?? 0,
-            fat: fat ?? 0,
-            fiber: fiber ?? 0
+            calories: calories?.doubleValue ?? 0,
+            protein: protein?.doubleValue ?? 0,
+            carbs: carbs?.doubleValue ?? 0,
+            fat: fat?.doubleValue ?? 0,
+            fiber: fiber?.doubleValue ?? 0
         )
     }
 

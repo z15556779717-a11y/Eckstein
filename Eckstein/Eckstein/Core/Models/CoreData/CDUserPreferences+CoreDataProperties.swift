@@ -26,8 +26,11 @@ extension CDUserPreferences {
     // Optional, so "not set" is distinguishable from a deliberate zero and no
     // value has to be invented for existing rows. See
     // NUTRITION_MIGRATION_PLAN.md §8.
-    @NSManaged public var dailyFatGoal: Double?
-    @NSManaged public var dailyFiberGoal: Double?
+    //
+    // `NSNumber?` rather than `Double?`: a nullable numeric attribute has no
+    // optional Swift scalar representation under `@NSManaged`.
+    @NSManaged public var dailyFatGoal: NSNumber?
+    @NSManaged public var dailyFiberGoal: NSNumber?
 
     @NSManaged public var weightUnit: String?
     @NSManaged public var heightCm: Int32

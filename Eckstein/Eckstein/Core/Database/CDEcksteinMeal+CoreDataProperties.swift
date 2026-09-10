@@ -29,11 +29,14 @@ extension CDEcksteinMeal {
     /// Denormalised roll-ups of `entries`, written by `NutritionService` so a
     /// day list does not have to walk every entry. Never the source of truth —
     /// `NutritionAggregator` recomputes from the entries themselves.
-    @NSManaged public var totalCalories: Double?
-    @NSManaged public var totalProtein: Double?
-    @NSManaged public var totalCarbs: Double?
-    @NSManaged public var totalFat: Double?
-    @NSManaged public var totalFiber: Double?
+    ///
+    /// `NSNumber?` for the same reason as the food columns: a nullable numeric
+    /// attribute cannot be an optional Swift scalar under `@NSManaged`.
+    @NSManaged public var totalCalories: NSNumber?
+    @NSManaged public var totalProtein: NSNumber?
+    @NSManaged public var totalCarbs: NSNumber?
+    @NSManaged public var totalFat: NSNumber?
+    @NSManaged public var totalFiber: NSNumber?
 
     @NSManaged public var updatedAt: Date?
 
