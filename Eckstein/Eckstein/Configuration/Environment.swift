@@ -17,11 +17,18 @@ enum AppEnvironment {
     /// `SUPABASE_URL` used to crash on launch. Configure via `.env`
     /// (see `EnvironmentLoader`). When unconfigured this returns a harmless
     /// placeholder; gate network work on `isSupabaseConfigured`.
+    ///
+    /// The placeholder must be a well-formed URL *with a host*: `SupabaseClient`
+    /// calls `fatalError` when `supabaseURL.host` is nil, and an earlier
+    /// `about:blank` placeholder took the whole app down on launch (and the unit
+    /// test host with it). `.invalid` is reserved by RFC 2606 and never resolves,
+    /// so a stray request fails as a network error instead of crashing.
     static var supabaseURL: URL {
         guard let urlString = EnvironmentLoader.shared.supabaseURL,
               !urlString.isEmpty,
-              let url = URL(string: urlString) else {
-            return URL(string: "about:blank")!
+              let url = URL(string: urlString),
+              url.host != nil else {
+            return URL(string: "https://unconfigured.invalid")!
         }
         return url
     }
