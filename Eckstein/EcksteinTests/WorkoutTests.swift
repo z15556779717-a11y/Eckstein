@@ -177,11 +177,22 @@ class WorkoutTests: XCTestCase {
     }
 
     func testFetchRecentExercisesRespectsLimit() {
-        makeExercise(name: "A", muscleGroup: "Chest")
-        makeExercise(name: "B", muscleGroup: "Back")
-        makeExercise(name: "C", muscleGroup: "Legs")
+        // `fetchRecentExercises` reports exercises that have been *logged in a
+        // set*, ordered by the workout's date — not every exercise in the
+        // library — so each one needs a set on a workout to be eligible.
+        let workout = repository.createWorkout(name: "Session", date: Date())
 
+        for (index, name) in ["A", "B", "C"].enumerated() {
+            let exercise = makeExercise(name: name, muscleGroup: "Chest")
+            addSet(to: workout, exercise: exercise, weight: 50, reps: 8, number: Int32(index + 1))
+        }
+
+        try? context.save()
+
+        XCTAssertEqual(repository.fetchAllExercises().count, 3)
         XCTAssertEqual(repository.fetchRecentExercises(limit: 2).count, 2)
+        // The limit is a cap, not an exact count.
+        XCTAssertEqual(repository.fetchRecentExercises(limit: 10).count, 3)
     }
 
     func testDeleteExercise() {

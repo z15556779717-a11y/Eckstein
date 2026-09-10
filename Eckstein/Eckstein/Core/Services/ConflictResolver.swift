@@ -42,15 +42,31 @@ class ConflictResolver {
         
         let conflict = SyncConflict(
             entityName: String(describing: type(of: localEntity)),
-            entityId: localEntity.objectID.uriRepresentation().absoluteString,
+            entityId: identifier(for: localEntity),
             localData: localData,
             remoteData: remoteDataEncoded,
             localTimestamp: localTimestamp,
             remoteTimestamp: remoteTimestamp
         )
-        
+
         conflicts.append(conflict)
         return conflict
+    }
+
+    /// A stable identifier for the entity.
+    ///
+    /// Every syncable entity carries a required `id: UUID`, so prefer it. The
+    /// object-ID fallback is only safe once the object is saved:
+    /// `uriRepresentation()` raises `NSInvalidArgumentException` on a temporary
+    /// ID, which would abort the process rather than throw.
+    private func identifier(for entity: NSManagedObject) -> String {
+        if let id = entity.value(forKey: "id") as? UUID {
+            return id.uuidString
+        }
+        if !entity.objectID.isTemporaryID {
+            return entity.objectID.uriRepresentation().absoluteString
+        }
+        return UUID().uuidString
     }
     
     // MARK: - Resolution
@@ -149,15 +165,36 @@ class ConflictResolver {
     
     // MARK: - Helpers
     
+    /// Encodes an entity's attributes for the conflict record.
+    ///
+    /// `Date`, `UUID` and `Data` attribute values are not valid JSON types, and
+    /// `JSONSerialization.data(withJSONObject:)` does not *throw* on them — it
+    /// raises an `NSInvalidArgumentException`, which Swift cannot catch and
+    /// which therefore terminated the process. Every syncable entity has a
+    /// `Date` attribute, so this returned nothing but aborted the caller. The
+    /// values are now converted the same way `SyncManager.encodeEntity` does:
+    /// dates to ISO-8601, UUIDs to strings, binary data to base64.
     private func encodeEntity(_ entity: NSManagedObject) -> Data? {
+        let dateFormatter = ISO8601DateFormatter()
         var dict: [String: Any] = [:]
-        
+
         for (key, _) in entity.entity.attributesByName {
-            if let value = entity.value(forKey: key) {
+            guard let value = entity.value(forKey: key) else { continue }
+
+            if let date = value as? Date {
+                dict[key] = dateFormatter.string(from: date)
+            } else if let uuid = value as? UUID {
+                dict[key] = uuid.uuidString
+            } else if let data = value as? Data {
+                dict[key] = data.base64EncodedString()
+            } else if let decimal = value as? NSDecimalNumber {
+                dict[key] = decimal.doubleValue
+            } else {
                 dict[key] = value
             }
         }
-        
+
+        guard JSONSerialization.isValidJSONObject(dict) else { return nil }
         return try? JSONSerialization.data(withJSONObject: dict)
     }
     

@@ -200,36 +200,45 @@ class SyncTests: XCTestCase {
     func testConflictDetection() {
         // `detectConflict` requires a `SyncableEntity` with a non-nil
         // `lastModified` and an attribute set that `JSONSerialization` accepts.
-        // `CDWorkout`/`CDMeal`/`CDWeightEntry` all carry `Date` and `UUID`
-        // attributes, which the resolver's private encoder copies verbatim, so
-        // it returns `nil` for them. Assert the real, observable contract:
-        // timestamps outside the ±1s window never conflict, and nothing is
-        // registered either way.
+        // It used to abort the process here: `ConflictResolver.encodeEntity`
+        // copied raw `Date` values into the payload, and
+        // `JSONSerialization.data(withJSONObject:)` raises an
+        // `NSInvalidArgumentException` for a `Date` rather than throwing, so
+        // `try?` did not help. `encodeEntity` now converts dates to ISO-8601
+        // (see AUDIT.md), and this asserts the real behaviour.
         let workout = CDWorkout.create(name: "Test Workout", date: Date(), in: context)
+        try? context.save()
 
         let remoteData: [String: Any] = [
             "id": workout.id?.uuidString ?? "",
             "name": "Updated Workout"
         ]
 
+        // A remote timestamp outside the ±1s window is not a conflict.
         let farApart = conflictResolver.detectConflict(
             localEntity: workout,
             remoteData: remoteData,
-            remoteTimestamp: Date().addingTimeInterval(-10) // 10 seconds earlier
+            remoteTimestamp: workout.date!.addingTimeInterval(-10)
         )
         XCTAssertNil(farApart)
+        XCTAssertTrue(conflictResolver.pendingConflicts().isEmpty)
 
-        // Same timestamp, i.e. inside the ±1s window, but the entity still has
-        // attributes that cannot be JSON-encoded, so no conflict is produced.
-        workout.date = Date()
+        // A remote timestamp within ±1s of the local `lastModified` is.
         let sameInstant = conflictResolver.detectConflict(
             localEntity: workout,
             remoteData: remoteData,
             remoteTimestamp: workout.date!
         )
-        XCTAssertNil(sameInstant)
 
-        XCTAssertTrue(conflictResolver.pendingConflicts().isEmpty)
+        XCTAssertNotNil(sameInstant)
+        XCTAssertEqual(sameInstant?.entityName, "CDWorkout")
+        // `CDWorkout.lastModified` is backed by `date` (it has no `updatedAt`).
+        XCTAssertEqual(sameInstant?.localTimestamp, workout.date)
+        XCTAssertEqual(sameInstant?.remoteTimestamp, workout.date)
+        // The identifier is the entity's own `id`, not a Core Data object URI.
+        XCTAssertEqual(sameInstant?.entityId, workout.id?.uuidString)
+        // The conflict is registered and unresolved.
+        XCTAssertEqual(conflictResolver.pendingConflicts().count, 1)
     }
 
     func testLastWriteWinsResolution() {

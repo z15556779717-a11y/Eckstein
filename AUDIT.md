@@ -594,6 +594,9 @@ Severity: **CRITICAL** > HIGH > MEDIUM > LOW. No secret values are reproduced.
 | B9 | **No strict-concurrency setting** | No `SWIFT_STRICT_CONCURRENCY`/`SWIFT_UPCOMING_FEATURE_*` is set, so the code compiles under minimal checking despite heavy `@MainActor` usage and `Task`/`async` code. It will not survive Swift 6 language mode as-is. | Open — phase 2 hardening. |
 | B10 | **Dead navigation notification** | `CreateWorkoutView.swift:57-62` posts `Notification.Name("NavigateToWorkout")`; **no observer exists anywhere**. The created workout is saved but never opened or made active. | Open — functional bug, not a build failure. |
 | B11 | **Deprecated `NavigationView`** | 64 occurrences across `Features/**`. Compiles today with deprecation warnings; should migrate to `NavigationStack`. | Open — phase 2 UI work. |
+| B12 | **Two `NSManagedObjectModel` instances** | `NSPersistentCloudKitContainer(name:)` compiles a fresh model on every call, and Core Data resolves the generated subclasses' `+entity` by scanning every loaded model. A second container therefore made `CDWorkout`/`CDChatMessage`/`CDFood`/… ambiguous and every `CDXxx(context:)` threw. Invisible in the app (one container), fatal for tests, previews, or any second container. | **Fixed** — `PersistenceController.managedObjectModel` is loaded once and shared. |
+| B13 | **`ConflictResolver.encodeEntity` aborts the process** | It copied raw `Date`/`UUID` attribute values into the payload; `JSONSerialization.data(withJSONObject:)` raises `NSInvalidArgumentException` for those rather than throwing, so `try?` did not catch it. `detectConflict` also called `objectID.uriRepresentation()` on possibly-temporary IDs, which raises the same way. `detectConflict` is currently unreachable from the app, so this never fired in production. | **Fixed** — values are converted (dates → ISO-8601, UUID → string, data → base64) and the identifier comes from the entity's `id`. |
+| B14 | **Unconfigured Supabase URL crashed on launch** | `SupabaseClient` calls `fatalError` when `supabaseURL.host` is nil, and the phase-1 placeholder was `about:blank` (no host). Any install without a `.env` would have crashed at launch, since `SupabaseService.shared` is built unconditionally. | **Fixed** — `https://unconfigured.invalid` (RFC 2606, never resolves), and a configured URL without a host is rejected too. |
 
 ---
 
@@ -620,9 +623,12 @@ Severity: **CRITICAL** > HIGH > MEDIUM > LOW. No secret values are reproduced.
 - **`WorkoutHistoryView.CalendarView` is a stub** — `Text("calendar_implementation")`
   with a "Calendar grid would go here" comment (`WorkoutHistoryView.swift:209-210`).
 - **`ContentView.syncBadgeForTab` always returns `nil`** — dead stub.
-- **`ConflictResolver` is inert** — detection never fires, merge functions fall
-  back to last-write-wins, the error type is never thrown, and the sync path does
-  not call it. Either wire it up or delete it.
+- **`ConflictResolver` is only half-wired.** `resolveAllConflicts` is called from
+  `SyncManager` (`:882`) but operates on a `conflicts` array that is always
+  empty, because nothing in the sync path calls `detectConflict`. Merge
+  strategies still fall back to last-write-wins and `ConflictError` is never
+  thrown. `detectConflict` itself is now correct — it used to abort the process
+  (see B13) — but the sync path still does not consult it.
 - **`SyncQueue.retryDelay` is unused** — no backoff; exhausted operations never
   expire.
 - **`CustomURLSession` / `CustomHTTPProtocol` is entirely dead code.**
