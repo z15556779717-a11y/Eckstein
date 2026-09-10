@@ -231,7 +231,10 @@ final class NutritionService {
         // Prefer the caller's food; otherwise resolve the diet-rule row by its
         // exact name and category, which is how the Eckstein pickers identify a
         // food. A catalog row (category "") will not match a diet-rule entry.
-        let resolvedFood = food ?? (try food(named: foodName, category: category))
+        //
+        // `self.` is required: the `food` parameter shadows the same-named
+        // lookup method inside this body.
+        let resolvedFood = food ?? (try self.food(named: foodName, category: category))
 
         let existing = meal.entriesArray.first {
             $0.foodName == foodName && $0.category == category
