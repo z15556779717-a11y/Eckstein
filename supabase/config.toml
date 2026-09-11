@@ -320,3 +320,9 @@ s3_region = "env(S3_REGION)"
 s3_access_key = "env(S3_ACCESS_KEY)"
 # Configures AWS_SECRET_ACCESS_KEY for S3 bucket
 s3_secret_key = "env(S3_SECRET_KEY)"
+
+[functions.ai-coach]
+# The AI provider key lives on the server, as a secret. The app never holds one.
+# verify_jwt = true is also the platform default; it is stated here because the
+# whole security model of this function depends on it.
+verify_jwt = true
