@@ -187,16 +187,18 @@ class PhaseFiveAITests: XCTestCase {
         logWeight(80, on: day(-20))
         logWeight(78, on: day(-1))
 
-        let previousGoal = weightRepository.goalWeight
-        weightRepository.goalWeight = 74
+        // Written through the setter rather than assigned to the property. The
+        // goal lives in `UserDefaults`, and building the context calls
+        // `weightRepository.refresh()`, which reloads the property from there —
+        // so a direct assignment is undone before anything reads it.
+        let previousGoal = UserDefaults.standard.object(forKey: "goalWeight") as? Double
+        weightRepository.setGoalWeight(74)
         defer {
-            weightRepository.goalWeight = previousGoal
-            // The repository mirrors the goal into `UserDefaults`, so restoring
-            // the property alone would leave the next test reading 74.
             if let previousGoal {
-                UserDefaults.standard.set(previousGoal, forKey: "goalWeight")
+                weightRepository.setGoalWeight(previousGoal)
             } else {
                 UserDefaults.standard.removeObject(forKey: "goalWeight")
+                weightRepository.goalWeight = nil
             }
         }
 
