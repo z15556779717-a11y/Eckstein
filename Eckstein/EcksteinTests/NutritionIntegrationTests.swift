@@ -506,10 +506,18 @@ class NutritionIntegrationTests: XCTestCase {
         for expected in [
             "daily_grams", "is_fat", "is_custom", "calories_per_100g",
             "protein_per_100g", "carbs_per_100g", "fat_per_100g", "fiber_per_100g",
-            "food_category", "serving_size", "serving_unit", "is_favorite",
-            "is_verified", "last_used", "created_at", "updated_at"
+            "food_category", "is_favorite", "is_verified", "created_at", "updated_at"
         ] {
             XCTAssertTrue(keys.contains(expected), "missing column \(expected)")
+        }
+
+        // These three are `nil` on this food, and a `nil` optional is omitted
+        // rather than sent as a zero, an empty string or an epoch instant. The
+        // columns are nullable, so an absent key leaves them NULL server-side —
+        // the same semantics the nutrition columns rely on. Asserting they must
+        // be present would have forced a fabricated value onto the wire.
+        for absent in ["serving_size", "serving_unit", "last_used"] {
+            XCTAssertFalse(keys.contains(absent), "nil column \(absent) should be omitted")
         }
 
         // The old encoder sent Core Data attribute names verbatim. None of those
@@ -858,7 +866,10 @@ class NutritionIntegrationTests: XCTestCase {
         let entry = CDEcksteinMealEntry(context: context)
         entry.id = UUID()
         entry.foodName = "Some Old Food"
-        entry.category = nil
+        // `category` is a required String with a `""` default on this entity, so
+        // a legacy row holds `""` here, not `nil`. The columns this test is
+        // actually about are the nullable nutrition ones, left unset below.
+        entry.category = ""
         entry.gramsConsumed = 250
         entry.meal = meal
         try context.save()
