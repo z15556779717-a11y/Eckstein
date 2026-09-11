@@ -105,11 +105,7 @@ class AIContextBuilder {
         
         let workoutCount = workouts.count
         let totalVolume: Double = workouts.reduce(0) { total, workout in
-            let sets = (workout.sets?.allObjects as? [CDWorkoutSet]) ?? []
-            let workoutVolume = sets.reduce(0) { setTotal, set in
-                setTotal + (set.weightKg * Double(set.reps))
-            }
-            return total + workoutVolume
+            total + WorkoutMetrics.workoutVolume(workout)
         }
         
         let exerciseTypes = Set(workouts.compactMap { workout in
