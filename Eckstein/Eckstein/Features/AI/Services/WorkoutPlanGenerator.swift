@@ -41,7 +41,7 @@ class WorkoutPlanGenerator {
         duration: Int,
         equipment: [String],
         focusArea: String?,
-        context: AIContext
+        context: AICoachContext
     ) -> String {
         var prompt = """
         Create a \(duration)-minute workout plan with the following requirements:

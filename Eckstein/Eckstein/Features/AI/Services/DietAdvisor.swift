@@ -90,7 +90,7 @@ class DietAdvisor {
         mealType: String,
         preferences: [String],
         restrictions: [String],
-        context: AIContext,
+        context: AICoachContext,
         dietContext: String
     ) -> String {
         """

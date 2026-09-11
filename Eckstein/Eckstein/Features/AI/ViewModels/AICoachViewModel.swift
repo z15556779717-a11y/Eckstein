@@ -16,13 +16,17 @@ class AICoachViewModel: ObservableObject {
     @Published var error: Error?
     @Published var isTyping = false
     @Published var suggestedActions: [SuggestedAction] = []
-    
+
     private let openAIService = OpenAIService.shared
-    private let contextBuilder = AIContextBuilder()
+    private let contextBuilder = AICoachContextBuilder()
     private let persistenceController: PersistenceController
 
-    // Message history for context
-    private var conversationHistory: [OpenAIMessage] = []
+    /// How many exchanges are replayed to the backend.
+    ///
+    /// Each exchange is two messages, so ten is twenty — the top of the range
+    /// the brief allows, and enough for "what about tomorrow?" to make sense.
+    /// The conversation is replayed as chat turns only; the user's history and
+    /// stats travel once, in the system prompt, and are not repeated per turn.
     private let maxHistoryMessages = 10
 
     /// - Parameter persistenceController: injected so tests can supply an
@@ -33,7 +37,7 @@ class AICoachViewModel: ObservableObject {
         setupWelcomeMessage()
         setupSuggestedActions()
     }
-    
+
     private func setupWelcomeMessage() {
         if messages.isEmpty {
             let welcomeMessage = ChatMessage(
@@ -44,163 +48,173 @@ class AICoachViewModel: ObservableObject {
             saveMessage(welcomeMessage)
         }
     }
-    
+
+    /// The four questions the brief asks the coach to answer.
+    ///
+    /// Each one is answerable from the context the builder sends — today's
+    /// advice from the training window, the diet from the seven-day nutrition
+    /// window, the summary from both, and progress from the weight trend. None
+    /// of them asks the coach to change anything, because it cannot: see
+    /// `OpenAIService.systemPrompt`.
+    ///
+    /// The first two titles are the ones the phase-4 tests assert on, so they
+    /// stay as they are; only the prompts behind them changed.
     private func setupSuggestedActions() {
         suggestedActions = [
             SuggestedAction(
                 title: "Plan Meal",
                 icon: "fork.knife",
-                prompt: "Help me plan my meals for today using the Eckstein gram system"
-            ),
-            SuggestedAction(
-                title: "Food Combo",
-                icon: "plus.circle",
-                prompt: "Calculate food combinations to reach 100% of my protein requirement"
-            ),
-            SuggestedAction(
-                title: "Carry-Over",
-                icon: "arrow.right.circle",
-                prompt: "Calculate my carry-over from Meal 1 to Meal 2"
+                prompt: "What should I eat today? Use my recent meals and my goals."
             ),
             SuggestedAction(
                 title: "Workout Plan",
                 icon: "figure.strengthtraining.traditional",
-                prompt: "Create a workout plan following the Eckstein training method"
+                prompt: "What should I train today? Use my recent training."
+            ),
+            SuggestedAction(
+                title: "Week Summary",
+                icon: "calendar",
+                prompt: "Summarize how my last 7 days of eating and training went."
+            ),
+            SuggestedAction(
+                title: "Progress",
+                icon: "chart.line.uptrend.xyaxis",
+                prompt: "How is my progress towards my goal?"
             )
         ]
     }
-    
+
+    /// Appends the user's message and asks for a reply.
+    ///
+    /// A second send while one is in flight is dropped rather than queued. The
+    /// reply is not streamed, so a duplicate would arrive as a second answer to
+    /// the same question, and the user's own message would appear twice.
     func sendMessage(_ content: String) {
+        guard !isLoading else { return }
+
         // Add user message
         let userMessage = ChatMessage(content: content, isUser: true)
         messages.append(userMessage)
         saveMessage(userMessage)
-        
+
         // Clear suggested actions after first message
         if messages.count == 2 {
             suggestedActions = []
         }
-        
+
         // Get AI response
         Task {
             await getAIResponse(for: content)
         }
     }
-    
+
     private func getAIResponse(for userMessage: String) async {
         isLoading = true
         isTyping = true
         error = nil
-        
+
+        defer {
+            isLoading = false
+            isTyping = false
+        }
+
         do {
             // Build context
             let context = await contextBuilder.buildContext()
-            
+
             // Build messages for API
             let apiMessages = openAIService.buildFitnessCoachMessages(
                 userMessage: userMessage,
                 context: context
             )
-            
+
             // Add conversation history
             let fullMessages = buildConversationMessages(apiMessages: apiMessages)
-            
+
             // Get response
             let response = try await openAIService.sendMessage(fullMessages)
-            
+
             // Add AI response
             let aiMessage = ChatMessage(content: response, isUser: false)
             messages.append(aiMessage)
             saveMessage(aiMessage)
-            
+
             // Update conversation history
             updateConversationHistory(userMessage: userMessage, aiResponse: response)
-            
+
         } catch {
             self.error = error
-            
-            // Provide more specific error messages
-            let errorContent: String
-            if let openAIError = error as? OpenAIError {
-                switch openAIError {
-                case .apiError(let message):
-                    if message.contains("API key") {
-                        errorContent = "OpenAI API key is not configured. Please check your .env file and ensure OPENAI_API_KEY is set."
-                    } else if message.contains("internet") || message.contains("network") {
-                        errorContent = "Unable to connect to the internet. Please check your network connection and try again."
-                    } else {
-                        errorContent = "Error: \(message)"
-                    }
-                case .httpError(let code):
-                    if code == 401 {
-                        errorContent = "Invalid API key. Please check your OpenAI API key in the .env file."
-                    } else if code == 429 {
-                        errorContent = "Rate limit exceeded. Please wait a moment and try again."
-                    } else {
-                        errorContent = "Server error (code: \(code)). Please try again later."
-                    }
-                case .rateLimitExceeded:
-                    errorContent = "Too many requests. Please wait a moment and try again."
-                default:
-                    errorContent = "Connection error: \(error.localizedDescription)"
-                }
-            } else {
-                errorContent = "Unexpected error: \(error.localizedDescription)"
-            }
-            
+
             let errorMessage = ChatMessage(
-                content: errorContent,
+                content: Self.failureMessage(for: error),
                 isUser: false
             )
             messages.append(errorMessage)
         }
-        
-        isLoading = false
-        isTyping = false
     }
-    
-    private func buildConversationMessages(apiMessages: [OpenAIMessage]) -> [OpenAIMessage] {
-        var messages = [apiMessages[0]] // System prompt
-        messages.append(contentsOf: conversationHistory)
-        messages.append(contentsOf: apiMessages[1...]) // Current context and user message
+
+    /// One sentence, chosen by the error case.
+    ///
+    /// This used to be built from `error.localizedDescription`, which for an
+    /// unhandled case meant pasting a transport or decoding error — a URL, a
+    /// status code, sometimes a whole response body — into the chat. Anything
+    /// that is not one of our own errors falls through to the generic sentence.
+    ///
+    /// Internal rather than private so `PhaseFiveAITests` can hand it a raw
+    /// transport error and assert that none of it reaches the user.
+    static func failureMessage(for error: Error) -> String {
+        (error as? OpenAIError)?.userMessage ?? OpenAIError.backendUnavailable.userMessage
+    }
+
+    /// Internal rather than private so the phase-5 tests can assert the window
+    /// without sending a request. See `PhaseFiveAITests`.
+    func buildConversationMessages(apiMessages: [OpenAIMessage]) -> [OpenAIMessage] {
+        // System prompt, then the recent conversation, then the new user turn.
+        // Earlier turns are dropped from the front, so the cap is on the window
+        // rather than on nothing.
+        var messages = [apiMessages[0]]
+        messages.append(contentsOf: conversationHistory.suffix(maxHistoryMessages * 2))
+        messages.append(contentsOf: apiMessages[1...])
         return messages
     }
-    
-    private func updateConversationHistory(userMessage: String, aiResponse: String) {
+
+    /// Internal rather than private for the same reason as
+    /// `buildConversationMessages`.
+    func updateConversationHistory(userMessage: String, aiResponse: String) {
         conversationHistory.append(OpenAIMessage(role: "user", content: userMessage))
         conversationHistory.append(OpenAIMessage(role: "assistant", content: aiResponse))
-        
+
         // Keep only recent messages
         if conversationHistory.count > maxHistoryMessages * 2 {
             conversationHistory = Array(conversationHistory.suffix(maxHistoryMessages * 2))
         }
     }
-    
+
     // MARK: - Quick Actions
-    
+
     func generateWorkoutPlan() async {
-        await sendMessage("Create a personalized workout plan for today based on my recent training history and goals")
+        sendMessage("Create a personalized workout plan for today based on my recent training history and goals")
     }
-    
+
     func generateMealPlan() async {
-        await sendMessage("Create a meal plan for today that fits my calorie goals and dietary preferences")
+        sendMessage("Create a meal plan for today that fits my calorie goals and dietary preferences")
     }
-    
+
     func analyzeForm(exercise: String) async {
-        await sendMessage("Give me detailed form tips and common mistakes to avoid for \(exercise)")
+        sendMessage("Give me detailed form tips and common mistakes to avoid for \(exercise)")
     }
-    
+
     func getMotivation() async {
-        await sendMessage("I need some motivation to stay on track with my fitness goals")
+        sendMessage("I need some motivation to stay on track with my fitness goals")
     }
-    
+
     // MARK: - Message Persistence
-    
+
     private func loadMessages() {
         let request: NSFetchRequest<CDChatMessage> = CDChatMessage.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDChatMessage.timestamp, ascending: true)]
         request.fetchLimit = 50
-        
+
         do {
             let savedMessages = try persistenceController.container.viewContext.fetch(request)
             messages = savedMessages.map { ChatMessage(from: $0) }
@@ -208,26 +222,26 @@ class AICoachViewModel: ObservableObject {
             print("Error loading messages: \(error)")
         }
     }
-    
+
     private func saveMessage(_ message: ChatMessage) {
         let cdMessage = CDChatMessage(context: persistenceController.container.viewContext)
         cdMessage.id = message.id
         cdMessage.content = message.content
         cdMessage.isUser = message.isUser
         cdMessage.timestamp = message.timestamp
-        
+
         do {
             try persistenceController.container.viewContext.save()
         } catch {
             print("Error saving message: \(error)")
         }
     }
-    
+
     func clearChat() {
         // Delete all messages
         let request: NSFetchRequest<NSFetchRequestResult> = CDChatMessage.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
-        
+
         do {
             try persistenceController.container.viewContext.execute(deleteRequest)
             do {
@@ -235,7 +249,7 @@ class AICoachViewModel: ObservableObject {
         } catch {
             print("Error saving message: \(error)")
         }
-            
+
             messages.removeAll()
             conversationHistory.removeAll()
             setupWelcomeMessage()
@@ -250,6 +264,7 @@ class AICoachViewModel: ObservableObject {
 
 struct SuggestedAction: Identifiable {
     let id = UUID()
+    /// The button's label, as written. `prompt` is what gets sent.
     let title: String
     let icon: String
     let prompt: String

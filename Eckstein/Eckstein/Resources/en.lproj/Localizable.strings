@@ -250,3 +250,11 @@
 "todays_meals" = "Today's Meals";
 "total_entries" = "Total Entries";
 "weight_entry" = "Weight Entry";
+
+
+/* Phase 5: what the AI coach says when it cannot answer. */
+"ai_error_sign_in" = "Please sign in to use the AI coach.";
+"ai_error_offline" = "No internet connection. Please check your network and try again.";
+"ai_error_unavailable" = "The AI coach can't respond right now. Please try again later.";
+"ai_error_rate_limited" = "Too many requests. Please wait a moment and try again.";
+"ai_error_empty" = "The AI coach sent an empty reply. Please try again.";

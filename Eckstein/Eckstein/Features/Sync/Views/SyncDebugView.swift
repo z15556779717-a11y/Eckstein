@@ -283,8 +283,8 @@ struct SyncDebugView: View {
         // Check environment. SECURITY: never print the URL or any key material
         // (prefixes included) -- they leak into the device console and sysdiagnose.
         debugOutput += "Supabase configured: \(AppEnvironment.isSupabaseConfigured)\n"
-        debugOutput += "OpenAI configured: \(AppEnvironment.isOpenAIConfigured)\n"
-        debugOutput += "Environment configured: \(AppEnvironment.isConfigured)\n"
+        debugOutput += "AI backend configured: \(AppEnvironment.isSupabaseConfigured)\n"
+        debugOutput += "Supabase configured: \(AppEnvironment.isSupabaseConfigured)\n"
         
         // Check network
         debugOutput += "\nNetwork Status:\n"

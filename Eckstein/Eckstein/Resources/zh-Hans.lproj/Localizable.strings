@@ -251,3 +251,11 @@
 "todays_meals" = "今日饮食";
 "total_entries" = "总记录数";
 "weight_entry" = "体重记录";
+
+
+/* Phase 5: what the AI coach says when it cannot answer. */
+"ai_error_sign_in" = "请先登录后使用 AI 教练。";
+"ai_error_offline" = "网络连接不可用，请检查网络后重试。";
+"ai_error_unavailable" = "AI 教练暂时无法响应，请稍后重试。";
+"ai_error_rate_limited" = "请求过于频繁，请稍后再试。";
+"ai_error_empty" = "AI 教练返回了空回复，请重试。";

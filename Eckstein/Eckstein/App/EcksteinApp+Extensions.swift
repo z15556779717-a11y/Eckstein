@@ -14,8 +14,7 @@ extension EcksteinApp {
         
         // Log configuration status
         print("=== Eckstein Configuration ===")
-        print("Supabase configured: \(AppEnvironment.isConfigured)")
-        print("OpenAI API Key present: \(AppEnvironment.openAIKey != nil)")
+        print("Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
         print("============================")
         
         // Configure notification service

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Supabase
 
 // MARK: - Models
 
@@ -15,43 +16,26 @@ struct OpenAIMessage: Codable {
     let content: String
 }
 
-struct OpenAIRequest: Codable {
-    let model: String
+/// The body this app posts to its own AI backend.
+///
+/// It no longer looks like a provider request because it no longer is one: the
+/// model, the provider key and the retry policy all live in the Edge Function
+/// now. `temperature` is passed through because the caller knows whether it
+/// wants a plan or a chat reply; everything else is the server's business.
+struct AIBackendRequest: Encodable {
     let messages: [OpenAIMessage]
     let temperature: Double
-    let maxTokens: Int
-    let stream: Bool
-    
-    enum CodingKeys: String, CodingKey {
-        case model, messages, temperature, stream
-        case maxTokens = "max_tokens"
-    }
 }
 
-struct OpenAIResponse: Codable {
-    let choices: [Choice]
-    let usage: Usage?
-    
-    struct Choice: Codable {
-        let message: Message
-        let finishReason: String?
-        
-        enum CodingKeys: String, CodingKey {
-            case message
-            case finishReason = "finish_reason"
-        }
-    }
-    
-    struct Message: Codable {
-        let role: String
-        let content: String
-    }
-    
-    struct Usage: Codable {
+struct AIBackendResponse: Decodable {
+    let content: String
+    let usage: TokenUsage?
+
+    struct TokenUsage: Decodable {
         let promptTokens: Int
         let completionTokens: Int
         let totalTokens: Int
-        
+
         enum CodingKeys: String, CodingKey {
             case promptTokens = "prompt_tokens"
             case completionTokens = "completion_tokens"
@@ -62,70 +46,93 @@ struct OpenAIResponse: Codable {
 
 // MARK: - Service
 
+/// The app's client for the AI coach backend.
+///
+/// **There is no provider key in this app.** The coach runs behind a Supabase
+/// Edge Function (`supabase/functions/ai-coach`) which holds the OpenAI key as a
+/// server-side secret. This type sends the trimmed conversation and the user's
+/// Supabase session token to that function and returns its answer. A key shipped
+/// in an IPA is a key anyone with the IPA has, so the only place it can live is
+/// the server.
+///
+/// The consequence worth stating: a signed-in user is required. The function
+/// authenticates the caller, which is also what stops the endpoint from being an
+/// open proxy for the provider account.
 @MainActor
 class OpenAIService: ObservableObject {
     static let shared = OpenAIService()
-    
-    private var apiKey: String {
-        // Check multiple sources for API key
-        // 1. Environment configuration (from .env file)
-        if let envKey = AppEnvironment.openAIKey, !envKey.isEmpty {
-            return envKey
-        }
-        
-        // 2. UserDefaults (for app settings)
-        if let savedKey = UserDefaults.standard.string(forKey: "openai_api_key"), !savedKey.isEmpty {
-            return savedKey
-        }
-        
-        // 3. Return empty string if not found
-        return ""
-    }
-    
-    private let apiURL = "https://api.openai.com/v1/chat/completions"
+
+    /// The name of the deployed function.
+    private static let functionName = "ai-coach"
+
+    /// Storage key for the local "coach enabled" marker. Retained under its
+    /// original name so an existing install keeps working.
+    ///
+    /// SECURITY: this is **not** a credential and is never transmitted. It is a
+    /// local on/off switch, and the value is never sent anywhere.
+    private static let configurationKey = "openai_api_key"
+
     // Internal (not private) so the unit-test target can assert on the model and
     // rate-limit configuration via `@testable import`. See AICoachTests.
+    //
+    // The *name* is the server's default model, kept here so the client can
+    // label what it is talking to; the server is free to override it.
     let model = "gpt-4o-mini"
-    private let session = URLSession.shared
-    
+
     // Rate limiting
     private var lastRequestTime: Date?
-    let minRequestInterval: TimeInterval = 1.0 // 1 second between requests
-    
+    let minRequestInterval: TimeInterval = 1.0
+
     // Cost tracking
     @Published var totalTokensUsed: Int = 0
     @Published var estimatedCost: Double = 0.0
-    
-    private init() {
-        // API key is now computed property
-    }
-    
-    // MARK: - API Key Management
-    
+
+    private init() {}
+
+    // MARK: - Configuration
+
+    /// Whether the coach is switched on for this device.
+    ///
+    /// Note what this is not: it is not "a key is present", because there is no
+    /// key to be present. It is read by the phase-4 test suite as the local
+    /// availability marker it has become.
     var hasAPIKey: Bool {
-        !apiKey.isEmpty
+        !(UserDefaults.standard.string(forKey: Self.configurationKey) ?? "").isEmpty
     }
-    
+
     func saveAPIKey(_ key: String) {
-        UserDefaults.standard.set(key, forKey: "openai_api_key")
-        UserDefaults.standard.synchronize()
+        UserDefaults.standard.set(key, forKey: Self.configurationKey)
     }
-    
+
     func removeAPIKey() {
-        UserDefaults.standard.removeObject(forKey: "openai_api_key")
-        UserDefaults.standard.synchronize()
+        UserDefaults.standard.removeObject(forKey: Self.configurationKey)
     }
-    
+
+    // MARK: - Sending
+
+    /// Sends a conversation to the backend and returns the reply.
+    ///
+    /// Every failure mode the user can meet — no session, no network, a slow
+    /// reply, a rate limit, an empty or unreadable answer — leaves this method as
+    /// a typed `OpenAIError`. Nothing here formats text for display: the view
+    /// model asks `OpenAIError.userMessage`, so the wording exists once.
     func sendMessage(_ messages: [OpenAIMessage], temperature: Double = 0.7) async throws -> String {
-        // Check if API key is configured
-        guard !apiKey.isEmpty else {
-            print("OpenAI: No API key found")
-            throw OpenAIError.apiError("OpenAI API key is not configured. Please add OPENAI_API_KEY to your .env file.")
+        // No backend to call: this build has no project URL or key, so there is
+        // nothing a session check or a request could succeed against. Answered
+        // before the client is built, which also keeps a misconfigured build from
+        // reaching out to a placeholder host at all.
+        guard AppEnvironment.isSupabaseConfigured else {
+            throw OpenAIError.backendUnavailable
         }
-        
-        print("OpenAI: Starting request...")
-        print("OpenAI API key status: \(apiKey.prefix(10))...****")
-        
+
+        // The session is the credential. `functions.invoke` attaches its access
+        // token; without one the function would reject the call anyway, and
+        // asking first turns that into a clear message.
+        let client = SupabaseService.shared.client
+        guard (try? await client.auth.session) != nil else {
+            throw OpenAIError.notSignedIn
+        }
+
         // Rate limiting
         if let lastTime = lastRequestTime {
             let timeSinceLastRequest = Date().timeIntervalSince(lastTime)
@@ -134,178 +141,130 @@ class OpenAIService: ObservableObject {
             }
         }
         lastRequestTime = Date()
-        
-        // Create request
-        let request = OpenAIRequest(
-            model: model,
-            messages: messages,
-            temperature: temperature,
-            maxTokens: 1000,
-            stream: false
-        )
-        
-        var urlRequest = URLRequest(url: URL(string: apiURL)!)
-        urlRequest.httpMethod = "POST"
-        urlRequest.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.timeoutInterval = 30.0 // Add timeout
-        
+
+        let response: AIBackendResponse
         do {
-            urlRequest.httpBody = try JSONEncoder().encode(request)
+            response = try await client.functions.invoke(
+                Self.functionName,
+                options: FunctionInvokeOptions(
+                    body: AIBackendRequest(messages: messages, temperature: temperature)
+                )
+            )
         } catch {
-            throw OpenAIError.apiError("Failed to encode request: \(error.localizedDescription)")
+            throw OpenAIError.from(transport: error)
         }
-        
-        // Send request with better error handling
-        let (data, response): (Data, URLResponse)
-        do {
-            (data, response) = try await session.data(for: urlRequest)
-        } catch {
-            print("OpenAI API request failed: \(error)")
-            let nsError = error as NSError
-            print("Error domain: \(nsError.domain), code: \(nsError.code)")
-            
-            if nsError.code == NSURLErrorNotConnectedToInternet {
-                throw OpenAIError.apiError("Unable to connect to the internet. Please check your network settings.")
-            } else if nsError.code == NSURLErrorTimedOut {
-                throw OpenAIError.apiError("Request timed out. Please try again.")
-            } else if nsError.domain == NSURLErrorDomain {
-                throw OpenAIError.apiError("Unable to connect to the internet. Error: \(error.localizedDescription)")
-            } else {
-                throw OpenAIError.apiError("Network error: \(error.localizedDescription)")
-            }
-        }
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw OpenAIError.invalidResponse
-        }
-        
-        if httpResponse.statusCode != 200 {
-            if let errorData = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let error = errorData["error"] as? [String: Any],
-               let message = error["message"] as? String {
-                throw OpenAIError.apiError(message)
-            }
-            throw OpenAIError.httpError(httpResponse.statusCode)
-        }
-        
-        // Parse response
-        let openAIResponse: OpenAIResponse
-        do {
-            openAIResponse = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-        } catch {
-            throw OpenAIError.apiError("Failed to decode response: \(error.localizedDescription)")
-        }
-        
-        // Update token usage
-        if let usage = openAIResponse.usage {
+
+        if let usage = response.usage {
             totalTokensUsed += usage.totalTokens
-            // Rough cost estimate for GPT-4o-mini: $0.15/1M input, $0.60/1M output
-            let inputCost = Double(usage.promptTokens) * 0.00000015
-            let outputCost = Double(usage.completionTokens) * 0.0000006
-            estimatedCost += inputCost + outputCost
+            estimatedCost += Self.cost(promptTokens: usage.promptTokens, completionTokens: usage.completionTokens)
         }
-        
-        guard let content = openAIResponse.choices.first?.message.content else {
+
+        let content = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !content.isEmpty else {
             throw OpenAIError.noContent
         }
-        
+
         return content
     }
-    
-    func buildFitnessCoachMessages(userMessage: String, context: AIContext) -> [OpenAIMessage] {
-        var messages: [OpenAIMessage] = []
-        
-        // DorEckstein System prompt - based on the custom GPT
-        let systemPrompt = """
-        You are DorEckstein, a specialized fitness and nutrition coach trained in the Eckstein Method. You have deep knowledge of the specific gram-based diet system and training protocols designed by Dor Eckstein.
-        
-        ECKSTEIN DIET METHOD:
-        - The diet is based on specific gram amounts for each food type, NOT calories
-        - Daily protein options (choose ONE per meal):
-          * Non-fat protein: 320g (fish, chicken without skin, turkey, tuna)
-          * Fat protein: 240g (fatty fish, chicken with skin, beef)
-          * Cheese: 560g
-          * Eggs: 8 pieces (400g)
-        - Daily carb options (choose ONE per meal):
-          * Rice: 250g
-          * Pasta: 200g
-          * Bread: 100g
-          * Potato: 300g
-          * Oatmeal: 80g
-        - Two main meals per day (Meal 1 and Meal 2)
-        - Unused portions carry over to the next meal
-        - Combinations allowed (e.g., 200g fish + 280g cheese to meet protein requirement)
-        - Specific approved snacks between meals
-        
-        Guidelines:
-        - Always reference the Eckstein gram-based system when discussing diet
-        - Calculate food combinations to reach 100% of daily requirements
-        - Track carry-over between meals
-        - Be encouraging but strict about following the system
-        - Provide specific gram amounts, not generic advice
-        - Reference the user's current meal progress when relevant
-        - Emphasize proper form and safety in workouts
-        - Keep responses concise and practical
-        
-        User Profile:
-        - Goals: \(context.userGoals.joined(separator: ", "))
-        - Recent Activity: \(context.recentActivitySummary)
-        - Current Stats: \(context.currentStats)
-        - Using Eckstein Diet Method with gram-based tracking
-        
-        Note: You have been trained on Dor Eckstein's specific methods and should always prioritize his approach over generic fitness advice. Reference the custom GPT at https://chatgpt.com/g/g-685dace99298819182e20056c079b88a-dorecchtein for consistency.
+
+    /// Maps anything that came out of the network layer onto a case the UI knows
+    /// how to explain.
+    ///
+    /// The mapping is coarse on purpose. A `FunctionsError` carries a status and
+    /// a body, and neither belongs in front of a user; what matters is whether
+    /// this is worth retrying, whether the user can fix it, or whether it is the
+    /// backend's problem.
+    private static func from(transport error: Error) -> OpenAIError {
+        if error is URLError {
+            let code = (error as? URLError)?.code
+            switch code {
+            case .timedOut:
+                return .timedOut
+            case .notConnectedToInternet, .networkConnectionLost, .cannotConnectToHost, .cannotFindHost, .dataNotAllowed:
+                return .offline
+            default:
+                return .backendUnavailable
+            }
+        }
+
+        // `FunctionsError` is the supabase-swift error type; matched by name so
+        // this file does not have to keep importing its internals.
+        let description = String(describing: error)
+        if description.contains("statusCode: 401") || description.contains("statusCode: 403") {
+            return .notSignedIn
+        }
+        if description.contains("statusCode: 429") {
+            return .rateLimited
+        }
+        if description.contains("statusCode: 404") {
+            // The function is not deployed on this project.
+            return .backendUnavailable
+        }
+
+        return .backendUnavailable
+    }
+
+    // MARK: - Prompt
+
+    /// Builds the conversation sent for one chat turn.
+    ///
+    /// The shape is: one system message, then the recent conversation, then the
+    /// user's new message. The system message carries the user's goal and the
+    /// summary of where they are — the same numbers the Dashboard shows — rather
+    /// than a dump of their history, and the history itself is capped by the
+    /// caller (see `AICoachViewModel.maxHistoryMessages`).
+    ///
+    /// Context used to be appended as `assistant` messages, which told the model
+    /// that the coach had said those facts. Stating them once, as instructions,
+    /// is both shorter and more accurate.
+    func buildFitnessCoachMessages(userMessage: String, context: AICoachContext) -> [OpenAIMessage] {
+        [OpenAIMessage(role: "system", content: Self.systemPrompt(for: context)),
+         OpenAIMessage(role: "user", content: userMessage)]
+    }
+
+    /// The system prompt: who the coach is, who the user is, and the rules.
+    static func systemPrompt(for context: AICoachContext) -> String {
         """
-        
-        messages.append(OpenAIMessage(role: "system", content: systemPrompt))
-        
-        // Add context about recent diet entries if using Eckstein method
-        if let ecksteinContext = buildEcksteinDietContext() {
-            messages.append(OpenAIMessage(role: "assistant", content: ecksteinContext))
-        }
-        
-        // Add context about recent workouts if available
-        if !context.recentWorkouts.isEmpty {
-            let workoutContext = "Recent workouts: " + context.recentWorkouts.prefix(3).map { workout in
-                "\(workout.name ?? "Workout") on \(formatDate(workout.date))"
-            }.joined(separator: ", ")
-            messages.append(OpenAIMessage(role: "assistant", content: workoutContext))
-        }
-        
-        // Add user message
-        messages.append(OpenAIMessage(role: "user", content: userMessage))
-        
-        return messages
+        You are DorEckstein, a fitness and nutrition coach working in the \
+        Eckstein Method: gram-based meals rather than calorie counting, two main \
+        meals a day with carry-over between them, and progressive strength \
+        training.
+
+        The user's goal: \(context.fitnessGoal)
+        Where they are now: \(context.currentStats)
+
+        How to answer:
+        - Be specific and practical. Give gram amounts, weights, reps and sets, \
+        not general encouragement.
+        - Use the numbers above when they are relevant, and say when you do not \
+        have the data to answer something.
+        - You advise only. You cannot log meals, create or change workouts, \
+        delete anything, or change the user's goals, and you must not claim to \
+        have done any of those. If a change is needed, tell the user what to do \
+        and let them do it.
+        - For pain, injury, pregnancy, eating disorders, medication or any other \
+        medical question, say plainly that this needs a doctor, and do not \
+        suggest a diet or a training plan for it.
+        - Keep answers under about 200 words unless asked for a full plan.
+        """
     }
-    
-    private func buildEcksteinDietContext() -> String? {
-        // This would be populated with actual diet data from EcksteinDietViewModel
-        // For now, return a placeholder
-        return "User is following the Eckstein gram-based diet method with two meals per day."
+
+    // MARK: - Cost
+
+    /// Rough cost estimate for GPT-4o-mini: $0.15/1M input, $0.60/1M output.
+    private static func cost(promptTokens: Int, completionTokens: Int) -> Double {
+        Double(promptTokens) * 0.00000015 + Double(completionTokens) * 0.0000006
     }
-    
-    private func formatDate(_ date: Date?) -> String {
-        guard let date = date else { return "Unknown date" }
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
-    
-    // MARK: - Public Helper Methods
-    
+
     func estimateTokens(for text: String) -> Int {
         // Rough estimation: ~4 characters per token
         return text.count / 4
     }
-    
+
     func trackCost(promptTokens: Int, completionTokens: Int) {
         totalTokensUsed += promptTokens + completionTokens
-        // GPT-4o-mini pricing: $0.15/1M input, $0.60/1M output
-        let inputCost = Double(promptTokens) * 0.00000015
-        let outputCost = Double(completionTokens) * 0.0000006
-        estimatedCost += inputCost + outputCost
-        
-        // Save to UserDefaults for persistence
+        estimatedCost += Self.cost(promptTokens: promptTokens, completionTokens: completionTokens)
+
         UserDefaults.standard.set(totalTokensUsed, forKey: "openai_total_tokens")
         UserDefaults.standard.set(estimatedCost, forKey: "openai_total_cost")
     }
@@ -313,45 +272,48 @@ class OpenAIService: ObservableObject {
 
 // MARK: - Error Types
 
+/// What can go wrong with an AI request, in terms the user can act on.
+///
+/// The associated values are for logging and for tests. `userMessage` is the
+/// only thing the UI may show — an HTTP status, a decoder error or a provider
+/// error string tells the user nothing and reads as a crash.
 enum OpenAIError: LocalizedError {
+    case notSignedIn
+    case offline
+    case timedOut
+    case backendUnavailable
+    case rateLimited
     case invalidResponse
     case noContent
     case apiError(String)
-    case httpError(Int)
-    case rateLimitExceeded
-    
-    var errorDescription: String? {
+
+    /// The sentence shown in the chat.
+    var userMessage: String {
         switch self {
-        case .invalidResponse:
-            return "Invalid response from OpenAI"
+        case .notSignedIn:
+            return "ai_error_sign_in".localized
+        case .offline:
+            return "ai_error_offline".localized
+        case .timedOut, .backendUnavailable, .invalidResponse, .apiError:
+            return "ai_error_unavailable".localized
+        case .rateLimited:
+            return "ai_error_rate_limited".localized
         case .noContent:
-            return "No content in response"
-        case .apiError(let message):
-            return "API Error: \(message)"
-        case .httpError(let code):
-            return "HTTP Error: \(code)"
-        case .rateLimitExceeded:
-            return "Rate limit exceeded. Please try again later."
+            return "ai_error_empty".localized
         }
     }
-}
 
-// MARK: - AI Context Model
-
-struct AIContext {
-    let userGoals: [String]
-    let recentActivitySummary: String
-    let currentStats: String
-    let recentWorkouts: [CDWorkout]
-
-    /// Meals as plain values, not `CDMeal` entities.
-    ///
-    /// Phase 2 moved the AI layer onto the official nutrition path: it used to
-    /// hold `[CDMeal]` from the orphaned entity set, which receives no user
-    /// writes, so the coach saw zero meals for every real user. See
-    /// NUTRITION_MIGRATION_PLAN.md §13.
-    let recentMeals: [NutritionMealSummary]
-    let weightTrend: WeightTrend
-    let currentWeight: Double?
-    let goalWeight: Double?
+    /// For logs and assertions. Not shown to users.
+    var errorDescription: String? {
+        switch self {
+        case .notSignedIn: return "No signed-in session for the AI backend"
+        case .offline: return "No network connection"
+        case .timedOut: return "Request timed out"
+        case .backendUnavailable: return "AI backend unavailable"
+        case .rateLimited: return "Rate limited"
+        case .invalidResponse: return "Unreadable response from the AI backend"
+        case .noContent: return "Empty response from the AI backend"
+        case .apiError(let message): return "AI backend error: \(message)"
+        }
+    }
 }

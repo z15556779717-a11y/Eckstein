@@ -220,7 +220,7 @@ class SyncManager: ObservableObject {
         
         print("Checking API configuration...")
         print("Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
-        print("OpenAI configured: \(AppEnvironment.isOpenAIConfigured)")
+        print("AI backend configured: \(AppEnvironment.isSupabaseConfigured)")
 
         // Sync only needs Supabase. It previously required a configured OpenAI key
         // too, which silently disabled sync whenever the AI coach was unset.
@@ -467,7 +467,7 @@ class SyncManager: ObservableObject {
         
         // Check environment
         print("Test - Supabase configured: \(AppEnvironment.isSupabaseConfigured)")
-        print("Test - OpenAI configured: \(AppEnvironment.isOpenAIConfigured)")
+        print("Test - AI backend configured: \(AppEnvironment.isSupabaseConfigured)")
         
         // Check pending changes
         print("Test - Pending changes count: \(pendingChangesCount)")

@@ -41,15 +41,6 @@ enum AppEnvironment {
         EnvironmentLoader.shared.supabaseAnonKey ?? ""
     }
 
-    // MARK: - OpenAI
-
-    static var openAIKey: String? {
-        guard let key = EnvironmentLoader.shared.openAIKey, !key.isEmpty else {
-            return nil
-        }
-        return key
-    }
-
     // Use Xcode configuration files in production
     static var isDebug: Bool {
         #if DEBUG
@@ -71,17 +62,6 @@ enum AppEnvironment {
             return false
         }
         return !containsPlaceholder(url) && !containsPlaceholder(key)
-    }
-
-    /// True when the AI coach has a usable key.
-    static var isOpenAIConfigured: Bool {
-        guard let key = openAIKey else { return false }
-        return !containsPlaceholder(key)
-    }
-
-    /// True when every optional backend integration is configured.
-    static var isConfigured: Bool {
-        isSupabaseConfigured && isOpenAIConfigured
     }
 
     private static func containsPlaceholder(_ value: String) -> Bool {

@@ -21,7 +21,8 @@ class EnvironmentLoader {
         // SECURITY: hardcoded Supabase URL / anon-key defaults were removed in the
         // phase-1 audit; they are now supplied only via .env or process env vars.
         // A service_role key must never be placed in any of these sources.
-        // OpenAI API key must be provided via .env file.
+        // The AI provider key is not read here: it lives on the server, in
+        // the `ai-coach` Edge Function. See OpenAIService.
         
         // Try to load from .env file
         if let envPath = Bundle.main.path(forResource: ".env", ofType: nil) {
@@ -74,10 +75,6 @@ class EnvironmentLoader {
         print("EnvironmentLoader: Loaded configuration:")
         print("  - SUPABASE_URL: \(supabaseURL != nil ? "✓" : "✗")")
         print("  - SUPABASE_ANON_KEY: \(supabaseAnonKey != nil ? "✓" : "✗")")
-        print("  - OPENAI_API_KEY: \(openAIKey != nil ? "✓" : "✗")")
-        if let key = openAIKey, !key.isEmpty {
-            print("  - OPENAI_API_KEY preview: \(key.prefix(10))...****")
-        }
     }
     
     private func loadFromFile(at path: String) {
@@ -104,7 +101,9 @@ class EnvironmentLoader {
                     if !key.isEmpty {
                         config[key] = value
                         if key.hasPrefix("OPENAI") || key.hasPrefix("SUPABASE") {
-                            print("EnvironmentLoader: Loaded \(key) = \(value.prefix(10))...")
+                            // SECURITY: the name only. This used to print the
+                            // first ten characters of the value.
+                            print("EnvironmentLoader: Loaded \(key)")
                         }
                     }
                 }
@@ -129,11 +128,4 @@ class EnvironmentLoader {
         getValue(for: "SUPABASE_ANON_KEY")
     }
     
-    var openAIKey: String? {
-        getValue(for: "OPENAI_API_KEY")
-    }
-    
-    var openAIOrgId: String? {
-        getValue(for: "OPENAI_ORG_ID")
-    }
 }
