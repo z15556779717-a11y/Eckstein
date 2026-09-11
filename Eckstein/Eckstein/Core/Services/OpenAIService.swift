@@ -151,7 +151,7 @@ class OpenAIService: ObservableObject {
                 )
             )
         } catch {
-            throw OpenAIError.from(transport: error)
+            throw OpenAIService.from(transport: error)
         }
 
         if let usage = response.usage {
