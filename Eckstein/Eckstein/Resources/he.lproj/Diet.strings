@@ -405,3 +405,11 @@
 // MARK: - Diet Day Edit View
 "editing_diet_data" = "עריכת נתוני תזונה";
 "days_progress" = "התקדמות היום";
+
+// MARK: - Apple Health nutrition export
+"export_to_apple_health" = "ייצוא היום ל-Apple Health";
+"export_healthkit_result" = "נכתבו %d דגימות ל-Apple Health";
+"export_healthkit_up_to_date" = "כבר מעודכן";
+"export_healthkit_unavailable" = "HealthKit אינו זמין במכשיר זה";
+"export_healthkit_denied" = "הרשאת כתיבה ל-HealthKit לא ניתנה";
+"export_healthkit_no_data" = "אין מה לייצא עדיין";

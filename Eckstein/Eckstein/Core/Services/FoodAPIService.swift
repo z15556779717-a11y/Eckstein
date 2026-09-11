@@ -125,9 +125,13 @@ class FoodAPIService: ObservableObject {
             category: "External",
             barcode: product.code,
             caloriesPer100g: Int(calories),
-            proteinPer100g: product.nutriments.proteins100g ?? 0,
-            carbsPer100g: product.nutriments.carbohydrates100g ?? 0,
-            fatPer100g: product.nutriments.fat100g ?? 0,
+            // Passed through as-is, `nil` included. A label that omits a macro
+            // states nothing about it, and `?? 0` here would record a claim the
+            // product never made — for a food whose calories are known but whose
+            // macros are not, that is a wrong number rather than a missing one.
+            proteinPer100g: product.nutriments.proteins100g,
+            carbsPer100g: product.nutriments.carbohydrates100g,
+            fatPer100g: product.nutriments.fat100g,
             fiberPer100g: product.nutriments.fiber100g,
             brand: product.brands,
             servingSize: nil,

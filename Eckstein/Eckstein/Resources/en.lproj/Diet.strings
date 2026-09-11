@@ -342,3 +342,11 @@
 // MARK: - Diet Day Edit View
 "editing_diet_data" = "Editing Diet Data";
 "days_progress" = "Day's Progress";
+
+// MARK: - Apple Health nutrition export
+"export_to_apple_health" = "Export Today to Apple Health";
+"export_healthkit_result" = "Wrote %d samples to Apple Health";
+"export_healthkit_up_to_date" = "Already up to date";
+"export_healthkit_unavailable" = "HealthKit is not available on this device";
+"export_healthkit_denied" = "HealthKit write permission not granted";
+"export_healthkit_no_data" = "Nothing to export yet";

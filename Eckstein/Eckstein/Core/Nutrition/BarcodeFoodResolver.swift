@@ -26,15 +26,32 @@ import Combine
 @MainActor
 final class BarcodeFoodResolver {
     /// `source` stamp for catalog rows that entered through a scan.
-    static let source = "barcode"
+    static let source: NutritionSource = .barcode
 
     private let service: NutritionService
     private let api: FoodAPIService
+
+    /// The network half of the lookup, as a closure.
+    ///
+    /// A closure rather than calling `api` directly so a test can exercise the
+    /// failure and not-found paths without a network. `FoodAPIService` has a
+    /// private initialiser and is not subclassable, so there is no other seam.
+    private let fetchProduct: (String) async throws -> FoodAPIResponse
 
     init(service: NutritionService = NutritionService(),
          api: FoodAPIService = FoodAPIService.shared) {
         self.service = service
         self.api = api
+        self.fetchProduct = { [api] barcode in
+            try await Self.fetch(barcode: barcode, from: api)
+        }
+    }
+
+    /// Builds a resolver over a supplied network lookup. For tests.
+    init(service: NutritionService, fetchProduct: @escaping (String) async throws -> FoodAPIResponse) {
+        self.service = service
+        self.api = FoodAPIService.shared
+        self.fetchProduct = fetchProduct
     }
 
     /// Local-first barcode lookup.
@@ -43,12 +60,16 @@ final class BarcodeFoodResolver {
     /// without touching the network — otherwise asks Open Food Facts and upserts
     /// the product into the official catalog. Returns `nil` when the barcode is
     /// unknown to both and the API has no usable product data.
+    ///
+    /// A network failure is thrown, not swallowed: the caller decides whether to
+    /// show "try again" or to fall back to manual entry, and a resolver that
+    /// turned an offline device into "unknown product" would be lying to it.
     func resolve(barcode: String) async throws -> CDEcksteinFood? {
         if let known = try service.food(matchingBarcode: barcode) {
             return known
         }
 
-        let response = try await fetchProduct(barcode: barcode)
+        let response = try await fetchProduct(barcode)
         guard let product = response.product,
               let template = api.createFoodFromAPIResponse(product) else {
             return nil
@@ -57,7 +78,7 @@ final class BarcodeFoodResolver {
         return try service.upsertFood(from: template, source: Self.source)
     }
 
-    private func fetchProduct(barcode: String) async throws -> FoodAPIResponse {
+    private static func fetch(barcode: String, from api: FoodAPIService) async throws -> FoodAPIResponse {
         try await withCheckedThrowingContinuation { continuation in
             var cancellable: AnyCancellable?
             cancellable = api.searchFoodByBarcode(barcode)

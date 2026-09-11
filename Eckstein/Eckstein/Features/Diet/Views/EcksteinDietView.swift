@@ -659,17 +659,22 @@ struct EcksteinDailySummaryCard: View {
     @ObservedObject var viewModel: EcksteinDietViewModel
     @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var localizationManager = LocalizationManager.shared
-    
+
+    /// The last Apple Health export's outcome, shown under the button. `nil`
+    /// until the user asks for an export.
+    @State private var healthExportMessage: String?
+    @State private var isExportingToHealth = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("daily_summary".localized)
                 .font(.headline)
-            
+
             if let summary = viewModel.getDailySummary() {
                 VStack(alignment: .leading, spacing: 8) {
                     SummaryRow(title: "total_protein".localized, value: "\(summary.totalProteinGrams)g", percentage: summary.proteinPercentage)
                     SummaryRow(title: "total_carbs".localized, value: "\(summary.totalCarbGrams)g", percentage: summary.carbPercentage)
-                    
+
                     if let carryOver = viewModel.getCarryOverFromPreviousMeal(for: 2),
                        viewModel.todayMeal2 == nil,
                        (carryOver.proteinPercentage != 0 || carryOver.carbPercentage != 0) {
@@ -698,10 +703,76 @@ struct EcksteinDailySummaryCard: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
+
+            appleHealthExportRow
         }
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(16)
+    }
+
+    /// The one user-initiated path from a logged meal into Apple Health.
+    ///
+    /// A button rather than a launch-time write: HealthKit write permission is
+    /// granted once, and pushing a user's history into their Health record on the
+    /// strength of that is not what they agreed to. Exporting is idempotent —
+    /// `NutritionHealthKitService` skips any sample whose entry and nutrient are
+    /// already recorded, so pressing this twice writes nothing the second time.
+    private var appleHealthExportRow: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Divider()
+
+            Button {
+                exportTodayToAppleHealth()
+            } label: {
+                HStack(spacing: 6) {
+                    if isExportingToHealth {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "heart.text.square")
+                    }
+                    Text("export_to_apple_health".localized)
+                }
+                .font(.subheadline)
+            }
+            .disabled(isExportingToHealth)
+
+            if let message = healthExportMessage {
+                Text(message)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+
+    /// Exports today's entries. Reads its result back into `healthExportMessage`
+    /// so a denied permission or an absent HealthKit store is visible rather than
+    /// silent.
+    private func exportTodayToAppleHealth() {
+        guard !isExportingToHealth else { return }
+        isExportingToHealth = true
+
+        Task { @MainActor in
+            let result = await NutritionHealthKitService.shared.exportDay()
+            healthExportMessage = Self.exportMessage(for: result)
+            isExportingToHealth = false
+        }
+    }
+
+    private static func exportMessage(for result: NutritionHealthKitExportResult) -> String {
+        if !result.isAvailable {
+            return "export_healthkit_unavailable".localized
+        }
+        if !result.isAuthorized {
+            return "export_healthkit_denied".localized
+        }
+        if result.didWrite {
+            return "export_healthkit_result".localized(result.written)
+        }
+        if result.wasAlreadyUpToDate {
+            return "export_healthkit_up_to_date".localized
+        }
+        return "export_healthkit_no_data".localized
     }
 }
 
