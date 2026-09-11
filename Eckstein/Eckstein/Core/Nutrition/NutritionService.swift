@@ -151,6 +151,60 @@ final class NutritionService {
         return summaries.reversed()
     }
 
+    /// One summary per day across `days` consecutive calendar days ending on
+    /// `date` (inclusive), oldest first, computed from a **single** fetch.
+    ///
+    /// The same result as `summaries(endingOn:days:)`, which walks back a day at
+    /// a time and issues one fetch per day. That per-day loop is fine for a week;
+    /// for the year-long trend chart it is 365 round trips, which is the N+1 the
+    /// Progress screen must not do. Read-only and additive — the existing
+    /// entry points are untouched.
+    func summaries(
+        inRangeEndingOn date: Date,
+        days: Int,
+        calendar: Calendar = .current
+    ) throws -> [DailyNutritionSummary] {
+        guard days > 0 else { return [] }
+
+        let lastDay = calendar.startOfDay(for: date)
+        guard let firstDay = calendar.date(byAdding: .day, value: -(days - 1), to: lastDay) else {
+            return []
+        }
+        // Half-open: from midnight on the first day to midnight after the last.
+        let end = NutritionAggregator.dayBounds(containing: lastDay, calendar: calendar).end
+
+        let request: NSFetchRequest<CDEcksteinMealEntry> = CDEcksteinMealEntry.fetchRequest()
+        request.predicate = NSPredicate(
+            format: "meal.date >= %@ AND meal.date < %@",
+            firstDay as NSDate,
+            end as NSDate
+        )
+
+        let entries: [NutritionEntry] = try context.fetch(request).compactMap { entry in
+            guard let mealDate = entry.meal?.date else { return nil }
+            return NutritionEntry(
+                date: mealDate,
+                mealType: MealType(storedValue: entry.meal?.mealType),
+                foodName: entry.foodName ?? "",
+                grams: Double(entry.gramsConsumed),
+                nutrition: entry.nutritionSnapshot
+            )
+        }
+
+        let goals = try goals()
+
+        // The aggregator filters to the day it is given, so handing it the whole
+        // range's entries is correct and does not double-count.
+        var summaries: [DailyNutritionSummary] = []
+        for offset in 0..<days {
+            guard let day = calendar.date(byAdding: .day, value: offset, to: firstDay) else { break }
+            summaries.append(
+                NutritionAggregator.summary(for: entries, on: day, calendar: calendar, goals: goals)
+            )
+        }
+        return summaries
+    }
+
     /// A day's meals, each rolled up. This is the shape the AI Coach reads.
     func recentMeals(
         limit: Int,
@@ -184,21 +238,36 @@ final class NutritionService {
     ///
     /// A missing preferences row yields `.unset` rather than creating one; goal
     /// editing is not part of this phase.
+    ///
+    /// The three goals that predate this phase are stored as non-optional `Int32`
+    /// and so cannot be NULL. A stored `0` is read back as "not set": there is no
+    /// calorie, protein or carbohydrate target a user could meaningfully intend
+    /// as zero, and a target of zero would otherwise put them over budget the
+    /// moment they ate anything. Mapping it here, at the one place that decides
+    /// whether a goal exists, keeps every consumer from repeating the rule.
     func goals() throws -> DailyNutritionGoals {
         guard let preferences = try fetchPreferences() else { return .unset }
         return DailyNutritionGoals(
-            calories: Double(preferences.dailyCalorieGoal),
-            protein: Double(preferences.dailyProteinGoal),
-            carbs: Double(preferences.dailyCarbGoal),
+            calories: Self.positiveGoal(preferences.dailyCalorieGoal),
+            protein: Self.positiveGoal(preferences.dailyProteinGoal),
+            carbs: Self.positiveGoal(preferences.dailyCarbGoal),
             fat: preferences.dailyFatGoal?.doubleValue,
             fiber: preferences.dailyFiberGoal?.doubleValue
         )
     }
 
+    /// An `Int32` goal column as an optional target, treating `0` as absent.
+    private static func positiveGoal(_ stored: Int32) -> Double? {
+        stored > 0 ? Double(stored) : nil
+    }
+
     /// Writes the user's daily targets, creating a preferences row if needed.
     ///
-    /// `nil` clears a goal. The three pre-existing goals are `Int32` in the
-    /// model, so they are rounded rather than silently truncated.
+    /// `nil` clears a goal. The three pre-existing goals are `Int32` in the model
+    /// and cannot hold NULL, so clearing one writes `0`, which `goals()` reads
+    /// back as unset — making the documented "nil clears" contract true for all
+    /// five rather than only for the two optional columns. Values are rounded
+    /// rather than truncated, and clamped so an absurd one cannot trap.
     func setGoals(_ goals: DailyNutritionGoals) throws {
         let preferences: CDUserPreferences
         if let existing = try fetchPreferences() {
@@ -209,13 +278,20 @@ final class NutritionService {
             preferences.user = try currentUser()
         }
 
-        if let calories = goals.calories { preferences.dailyCalorieGoal = Int32(calories.rounded()) }
-        if let protein = goals.protein { preferences.dailyProteinGoal = Int32(protein.rounded()) }
-        if let carbs = goals.carbs { preferences.dailyCarbGoal = Int32(carbs.rounded()) }
+        preferences.dailyCalorieGoal = Self.int32Goal(goals.calories)
+        preferences.dailyProteinGoal = Self.int32Goal(goals.protein)
+        preferences.dailyCarbGoal = Self.int32Goal(goals.carbs)
         preferences.dailyFatGoal = goals.fat.map { NSNumber(value: $0) }
         preferences.dailyFiberGoal = goals.fiber.map { NSNumber(value: $0) }
 
         try context.save()
+    }
+
+    /// A goal as stored in an `Int32` column: unset, non-finite or non-positive
+    /// becomes `0` (read back as unset by `goals()`).
+    private static func int32Goal(_ value: Double?) -> Int32 {
+        guard let value, value.isFinite, value > 0 else { return 0 }
+        return Int32(min(value.rounded(), Double(Int32.max)))
     }
 
     /// The day's totals read against the day's goals.
@@ -584,14 +660,25 @@ final class NutritionService {
 
     /// The nutrition in `grams` of a catalog food, or `nil` when nothing is known.
     func nutrition(for food: CDEcksteinFood, grams: Double) -> NutritionSnapshot? {
-        NutritionSnapshot.per100g(
-            calories: food.caloriesPer100g?.doubleValue,
-            protein: food.proteinPer100g?.doubleValue,
-            carbs: food.carbsPer100g?.doubleValue,
-            fat: food.fatPer100g?.doubleValue,
-            fiber: food.fiberPer100g?.doubleValue,
-            grams: grams
-        )
+        Self.scaledNutrition(for: food, grams: grams)
+    }
+
+    /// What `grams` of a food contributes, resolving the same way a write does.
+    ///
+    /// The catalog row wins; when there is none — or it declares nothing — the
+    /// shipped `DietRuleNutrition` fixture is the fallback. That is exactly the
+    /// resolution `applyNutrition(to:from:grams:)` performs before writing, so a
+    /// preview built from this cannot show a number different from the one that
+    /// gets stored.
+    ///
+    /// `nil` means "unknown", never "zero".
+    func snapshot(
+        for food: CDEcksteinFood?,
+        foodName: String,
+        category: String?,
+        grams: Double
+    ) -> NutritionSnapshot? {
+        Self.resolveSnapshot(food: food, foodName: foodName, category: category, grams: grams)
     }
 
     // MARK: - Catalog writes
@@ -657,26 +744,17 @@ final class NutritionService {
     ///
     /// When nothing is known, the snapshot is cleared to `nil` rather than
     /// written as zeros, so "unknown" stays distinguishable from "zero".
-    ///
-    /// The resolved catalog row wins. It is not the only source though: the
-    /// Eckstein diet rules are logged by name and category, and a row for one
-    /// exists only once the Diet screen has seeded it — while the ten carb-load
-    /// dishes have no row at all. Falling back to the shipped
-    /// `DietRuleNutrition` fixture is what makes a diet-rule meal contribute
-    /// calories instead of silently reading zero.
     private func applyNutrition(
         to entry: CDEcksteinMealEntry,
         from food: CDEcksteinFood?,
         grams: Double
     ) {
-        // `??` here binds tighter than the `let`, so the fallback is evaluated
-        // only when the row is missing or carries no values.
-        let snapshot = food.flatMap { nutrition(for: $0, grams: grams) }
-            ?? DietRuleNutrition.snapshot(
-                foodName: entry.foodName ?? "",
-                category: entry.category,
-                grams: grams
-            )
+        let snapshot = Self.resolveSnapshot(
+            food: food,
+            foodName: entry.foodName ?? "",
+            category: entry.category,
+            grams: grams
+        )
 
         guard let snapshot = snapshot else {
             entry.calories = nil
@@ -692,6 +770,41 @@ final class NutritionService {
         entry.carbs = NSNumber(value: snapshot.carbs)
         entry.fat = NSNumber(value: snapshot.fat)
         entry.fiber = NSNumber(value: snapshot.fiber)
+    }
+
+    /// How a portion's nutrition is decided, in one place.
+    ///
+    /// The resolved catalog row wins. It is not the only source though: the
+    /// Eckstein diet rules are logged by name and category, and a row for one
+    /// exists only once the Diet screen has seeded it — while the ten carb-load
+    /// dishes have no row at all. Falling back to the shipped
+    /// `DietRuleNutrition` fixture is what makes a diet-rule meal contribute
+    /// calories instead of silently reading zero.
+    ///
+    /// Both the write path and the Diet editor's live preview go through here,
+    /// so the number shown before saving is the number that gets saved.
+    private static func resolveSnapshot(
+        food: CDEcksteinFood?,
+        foodName: String,
+        category: String?,
+        grams: Double
+    ) -> NutritionSnapshot? {
+        // `??` here binds tighter than the `let`, so the fallback is evaluated
+        // only when the row is missing or carries no values.
+        food.flatMap { scaledNutrition(for: $0, grams: grams) }
+            ?? DietRuleNutrition.snapshot(foodName: foodName, category: category, grams: grams)
+    }
+
+    /// `per100g` scaling for a catalog row, without the diet-rule fallback.
+    private static func scaledNutrition(for food: CDEcksteinFood, grams: Double) -> NutritionSnapshot? {
+        NutritionSnapshot.per100g(
+            calories: food.caloriesPer100g?.doubleValue,
+            protein: food.proteinPer100g?.doubleValue,
+            carbs: food.carbsPer100g?.doubleValue,
+            fat: food.fatPer100g?.doubleValue,
+            fiber: food.fiberPer100g?.doubleValue,
+            grams: grams
+        )
     }
 
     private func existingFood(for template: FoodTemplate) throws -> CDEcksteinFood? {
