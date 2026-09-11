@@ -21,6 +21,12 @@ class AICoachViewModel: ObservableObject {
     private let contextBuilder = AICoachContextBuilder()
     private let persistenceController: PersistenceController
 
+    /// The conversation as the backend sees it, which is not the same as
+    /// `messages`: the persisted list holds every turn including the welcome
+    /// message and the error notices, and only real exchanges are replayed. Not
+    /// `@Published` — nothing on screen reads it.
+    private var conversationHistory: [OpenAIMessage] = []
+
     /// How many exchanges are replayed to the backend.
     ///
     /// Each exchange is two messages, so ten is twenty — the top of the range
