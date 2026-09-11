@@ -103,6 +103,14 @@ struct AICoachContext: Equatable {
     /// The one thing with no data behind it: a fresh install has no goal set.
     static let defaultFitnessGoal = "General fitness"
 
+    /// How much weight has to move before it is worth a sentence.
+    ///
+    /// Not `WeightTargetProgress.tolerance`, which is an epsilon for comparing
+    /// two `Double`s that should be equal. This is an editorial threshold: below
+    /// a tenth of a kilo the sentence would read "Down 0.0 kg over 30 days",
+    /// which tells the coach less than saying nothing.
+    private static let reportableWeightChangeKg = 0.1
+
     // MARK: - The prompt's view of this
 
     /// The goals, as the two prompt builders that predate this type expect them.
@@ -129,7 +137,7 @@ struct AICoachContext: Equatable {
         if let target = weight.targetKg {
             parts.append("Target \(String(format: "%.1f", target)) kg")
         }
-        if let change = weight.changeOverMonthKg, abs(change) >= WeightMetrics.tolerance {
+        if let change = weight.changeOverMonthKg, abs(change) >= Self.reportableWeightChangeKg {
             parts.append("\(change < 0 ? "Down" : "Up") \(String(format: "%.1f", abs(change))) kg over 30 days")
         }
 
