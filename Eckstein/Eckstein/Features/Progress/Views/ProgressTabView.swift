@@ -13,21 +13,9 @@ import SwiftUI
 import Charts
 
 struct ProgressTabView: View {
-    @StateObject private var viewModel: ProgressViewModel
+    @StateObject private var viewModel = ProgressViewModel()
     @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var localizationManager = LocalizationManager.shared
-
-    /// The view model is injectable so a preview can point the screen at an
-    /// in-memory store. The default is the one the app builds.
-    ///
-    /// `@MainActor` because of that default: a default argument is type-checked
-    /// in the enclosing declaration's isolation, and `ProgressViewModel` is
-    /// main-actor isolated. Left nonisolated, the default reads as a main-actor
-    /// call from a synchronous nonisolated context and does not compile.
-    @MainActor
-    init(viewModel: ProgressViewModel = ProgressViewModel()) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
 
     /// One sheet for both flows. Two `.sheet` modifiers on the same view is a
     /// known way to lose one of them, and this keeps the choice explicit.
@@ -347,6 +335,31 @@ struct ProgressTabView: View {
     }
 }
 
+// MARK: - Injection
+
+extension ProgressTabView {
+    /// Lets a preview point the screen at an in-memory store.
+    ///
+    /// Declared in an extension, and with its own argument label.
+    ///
+    /// In an extension because an initialiser written in the struct's own body
+    /// would suppress the memberwise initialiser — the one the tab bar builds
+    /// this view with — and the memberwise initialiser has to stay, because a
+    /// default argument is emitted into a synthesised *nonisolated* generator:
+    /// `init(viewModel: ProgressViewModel = ProgressViewModel())` does not
+    /// compile, since the default reads as a call to a main-actor initialiser
+    /// from a synchronous nonisolated context. Writing the property's default
+    /// instead works because `StateObject` takes it as an autoclosure, so the
+    /// view model is not built until the body first reads it.
+    ///
+    /// The label is `previewing` rather than `viewModel` so this cannot be
+    /// confused with the memberwise initialiser's own `viewModel` parameter,
+    /// which a call with a single argument would otherwise also match.
+    init(previewing viewModel: ProgressViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+}
+
 // MARK: - Sheet identity
 
 private enum ProgressSheet: Identifiable {
@@ -522,7 +535,7 @@ private extension View {
 #if DEBUG
 #Preview {
     ProgressTabView(
-        viewModel: ProgressViewModel(
+        previewing: ProgressViewModel(
             nutrition: PreviewSupport.nutritionService(),
             weightRepository: PreviewSupport.weightRepository()
         )

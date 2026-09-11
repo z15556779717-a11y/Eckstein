@@ -13,21 +13,9 @@
 import SwiftUI
 
 struct DietDayView: View {
-    @StateObject private var viewModel: DietDayViewModel
+    @StateObject private var viewModel = DietDayViewModel()
     @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var localizationManager = LocalizationManager.shared
-
-    /// The view model is injectable so a preview can point the screen at an
-    /// in-memory store. The default is the one the app builds.
-    ///
-    /// `@MainActor` because of that default: a default argument is type-checked
-    /// in the enclosing declaration's isolation, and `DietDayViewModel` is
-    /// main-actor isolated. Left nonisolated, the default reads as a main-actor
-    /// call from a synchronous nonisolated context and does not compile.
-    @MainActor
-    init(viewModel: DietDayViewModel = DietDayViewModel()) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
 
     /// The sheet's subject: adding to a slot, or editing one entry.
     @State private var editorTarget: EditorTarget?
@@ -281,6 +269,31 @@ struct DietDayView: View {
     }
 }
 
+// MARK: - Injection
+
+extension DietDayView {
+    /// Lets a preview point the screen at an in-memory store.
+    ///
+    /// Declared in an extension, and with its own argument label.
+    ///
+    /// In an extension because an initialiser written in the struct's own body
+    /// would suppress the memberwise initialiser — the one the Diet tab builds
+    /// this view with — and the memberwise initialiser has to stay, because a
+    /// default argument is emitted into a synthesised *nonisolated* generator:
+    /// `init(viewModel: DietDayViewModel = DietDayViewModel())` does not
+    /// compile, since the default reads as a call to a main-actor initialiser
+    /// from a synchronous nonisolated context. Writing the property's default
+    /// instead works because `StateObject` takes it as an autoclosure, so the
+    /// view model is not built until the body first reads it.
+    ///
+    /// The label is `previewing` rather than `viewModel` so this cannot be
+    /// confused with the memberwise initialiser's own `viewModel` parameter,
+    /// which a call with a single argument would otherwise also match.
+    init(previewing viewModel: DietDayViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+}
+
 /// Rendered against an in-memory store, so the sample meals the preview shows
 /// cannot reach the store on disk.
 ///
@@ -289,7 +302,7 @@ struct DietDayView: View {
 #if DEBUG
 #Preview {
     NavigationView {
-        DietDayView(viewModel: DietDayViewModel(nutrition: PreviewSupport.nutritionService()))
+        DietDayView(previewing: DietDayViewModel(nutrition: PreviewSupport.nutritionService()))
     }
 }
 #endif

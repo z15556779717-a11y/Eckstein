@@ -15,22 +15,10 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject private var appCoordinator: AppCoordinator
-    @StateObject private var viewModel: DashboardViewModel
+    @StateObject private var viewModel = DashboardViewModel()
     @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var localizationManager = LocalizationManager.shared
     @State private var showingAddWeight = false
-
-    /// The view model is injectable so a preview can point the screen at an
-    /// in-memory store. The default is the one the app builds.
-    ///
-    /// `@MainActor` because of that default: a default argument is type-checked
-    /// in the enclosing declaration's isolation, and `DashboardViewModel` is
-    /// main-actor isolated. Left nonisolated, the default reads as a main-actor
-    /// call from a synchronous nonisolated context and does not compile.
-    @MainActor
-    init(viewModel: DashboardViewModel = DashboardViewModel()) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
 
     var body: some View {
         NavigationView {
@@ -138,6 +126,31 @@ extension View {
     }
 }
 
+// MARK: - Injection
+
+extension DashboardView {
+    /// Lets a preview point the screen at an in-memory store.
+    ///
+    /// Declared in an extension, and with its own argument label.
+    ///
+    /// In an extension because an initialiser written in the struct's own body
+    /// would suppress the memberwise initialiser — the one the tab bar builds
+    /// this view with — and the memberwise initialiser has to stay, because a
+    /// default argument is emitted into a synthesised *nonisolated* generator:
+    /// `init(viewModel: DashboardViewModel = DashboardViewModel())` does not
+    /// compile, since the default reads as a call to a main-actor initialiser
+    /// from a synchronous nonisolated context. Writing the property's default
+    /// instead works because `StateObject` takes it as an autoclosure, so the
+    /// view model is not built until the body first reads it.
+    ///
+    /// The label is `previewing` rather than `viewModel` so this cannot be
+    /// confused with the memberwise initialiser's own `viewModel` parameter,
+    /// which a call with a single argument would otherwise also match.
+    init(previewing viewModel: DashboardViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+}
+
 /// Rendered against an in-memory store, so the sample meals and weigh-ins the
 /// preview shows cannot reach the store on disk.
 ///
@@ -146,7 +159,7 @@ extension View {
 #if DEBUG
 #Preview {
     DashboardView(
-        viewModel: DashboardViewModel(
+        previewing: DashboardViewModel(
             nutrition: PreviewSupport.nutritionService(),
             weightRepository: PreviewSupport.weightRepository()
         )
