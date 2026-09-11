@@ -136,7 +136,7 @@ class DietTests: XCTestCase {
         let request: NSFetchRequest<CDEcksteinFood> = CDEcksteinFood.fetchRequest()
         let seeded = try? context.fetch(request)
         XCTAssertEqual(seeded?.count, 34)
-        XCTAssertTrue(seeded?.allSatisfy { $0.source == NutritionCatalogSeed.source } ?? false)
+        XCTAssertTrue(seeded?.allSatisfy { $0.nutritionSource == NutritionCatalogSeed.source } ?? false)
     }
 
     func testSeedingIsIdempotent() {
