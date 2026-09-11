@@ -1,0 +1,259 @@
+/*
+  Workout.strings
+  Eckstein
+
+  Simplified Chinese Localization - Workout Module
+*/
+
+// MARK: - Workout List View
+"quick_stats" = "快速统计";
+"current_streak" = "当前连续打卡";
+"total" = "总计";
+"active_workout" = "进行中的训练";
+"history" = "历史";
+"no_active_workout" = "暂无进行中的训练";
+"select_workout_or_create" = "从历史中选择训练，或创建新训练";
+"workouts" = "训练";
+"exercises" = "动作";
+"analytics" = "数据分析";
+"workout_complete" = "训练完成！🎉";
+"days" = "天";
+
+// MARK: - Workout Detail View
+"complete_workout" = "完成训练";
+"cancel_workout" = "取消训练";
+"add_exercise" = "添加动作";
+"rest_timer" = "休息计时";
+"set" = "组";
+"reps" = "次数";
+"weight" = "重量";
+"notes" = "备注";
+"add_set" = "添加组";
+"remove_set" = "删除组";
+"exercise_notes" = "动作备注";
+"previous_performance" = "上次表现";
+"no_previous_data" = "暂无历史数据";
+
+// MARK: - Workout History
+"workout_history" = "训练历史";
+"all_workouts" = "全部训练";
+"filter_workouts" = "筛选训练";
+"duration" = "时长";
+"exercises_count" = "%d 个动作";
+"exercise_count_singular" = "1 个动作";
+"total_volume" = "总训练容量";
+"swipe_to_delete" = "左滑删除";
+"delete_workout" = "删除训练";
+"delete_workout_confirm" = "确定要删除这次训练吗？";
+"no_workouts_found" = "未找到训练";
+"start_new_workout" = "开始新的训练后会显示在这里";
+"total_workouts" = "训练总数";
+"swipe_left_delete_workouts" = "左滑删除训练";
+"calendar_implementation" = "日历功能";
+"workout" = "训练";
+"min" = "min";
+"sets_count" = "%d 组";
+"unknown" = "未知";
+
+// MARK: - Create/Edit Workout
+"create_workout" = "创建训练";
+"edit_workout" = "编辑训练";
+"workout_name" = "训练名称";
+"enter_workout_name" = "输入训练名称";
+"select_exercises" = "选择动作";
+"save_workout" = "保存训练";
+"workout_saved" = "训练已保存";
+"name_required" = "请填写训练名称";
+"select_at_least_one" = "请至少选择一个动作";
+"no_workout_types" = "暂无训练类型";
+"create_workout_types_first" = "先创建训练类型，开始记录你的训练";
+"create_workout_type" = "创建训练类型";
+"select_todays_workout" = "选择今天的训练";
+"start_workout" = "开始训练";
+"never" = "从未";
+"unnamed_workout" = "未命名训练";
+"last" = "上次";
+
+// MARK: - Exercise List
+"select_exercise" = "选择动作";
+"all_exercises" = "全部动作";
+"chest" = "胸";
+"back" = "背";
+"legs" = "腿";
+"shoulders" = "肩";
+"arms" = "手臂";
+"core" = "核心";
+"cardio" = "有氧";
+"search_exercises" = "搜索动作...";
+"no_exercises_yet" = "暂无动作";
+"no_exercises_found" = "未找到动作";
+"create_first_custom_exercise" = "创建你的第一个自定义动作，开始使用";
+"create_custom_exercise" = "创建自定义动作";
+"custom_exercise" = "自定义动作";
+"add_custom_exercise" = "添加自定义动作";
+"recent" = "最近";
+"search_results" = "搜索结果";
+"edit_exercise" = "编辑动作";
+"view_details" = "查看详情";
+"muscle" = "肌肉";
+"category" = "分类";
+"equipment" = "器械";
+"all" = "全部";
+"other" = "其他";
+
+// MARK: - Exercise Detail
+"exercise_details" = "动作详情";
+"primary_muscle" = "主要肌肉";
+"secondary_muscles" = "次要肌肉";
+"equipment" = "器械";
+"instructions" = "动作要领";
+"tips" = "提示";
+"recent_performance" = "最近表现";
+"personal_record" = "个人纪录";
+"average_weight" = "平均重量";
+"average_reps" = "平均次数";
+"last_performed" = "上次训练时间";
+
+// MARK: - Rest Timer
+"rest_timer" = "休息计时";
+"start_timer" = "开始";
+"pause" = "暂停";
+"resume" = "继续";
+"skip_rest" = "跳过";
+"reset_timer" = "重置";
+"rest_complete" = "休息结束！";
+"time_remaining" = "剩余时间";
+
+// MARK: - Analytics
+"analytics" = "数据分析";
+"workout_analytics" = "训练数据分析";
+"weekly_progress" = "每周趋势";
+"monthly_progress" = "每月趋势";
+"yearly_progress" = "每年趋势";
+"personal_records" = "个人纪录";
+"most_trained" = "最常训练";
+"total_volume" = "总训练容量";
+"workout_frequency" = "训练频率";
+"muscle_distribution" = "肌群分布";
+"strength_progress" = "力量趋势";
+"consistency_score" = "坚持度评分";
+"select_exercise" = "选择动作";
+"time_frame" = "时间范围";
+"week" = "周";
+"month" = "月";
+"3_months" = "3 个月";
+"year" = "年";
+"weight_progress" = "重量趋势";
+"weight_kg" = "重量 (kg)";
+"reps_achievement" = "次数完成度";
+"achievement_percent" = "完成度 %";
+"training_volume" = "训练容量";
+"volume_kg" = "训练容量 (kg)";
+"unknown_exercise" = "未知动作";
+"max_weight" = "最大重量";
+"avg_volume" = "平均训练容量";
+"select_exercise_view_analytics" = "选择动作以查看数据分析";
+
+// MARK: - Exercise Categories
+"compound_exercises" = "复合动作";
+"isolation_exercises" = "孤立动作";
+"bodyweight_exercises" = "自重动作";
+"free_weights" = "自由重量";
+"machines" = "固定器械";
+"cables" = "绳索";
+
+// MARK: - Tooltips
+"tip_swipe_delete_workout" = "左滑删除训练";
+"tip_long_press_edit" = "长按编辑";
+"tip_complete_all_sets" = "完成所有组数以结束该动作";
+"tip_add_notes" = "添加备注，记录更完整";
+
+// MARK: - Workout Types
+"push_workout" = "推类训练";
+"pull_workout" = "拉类训练";
+"legs_workout" = "腿部训练";
+"upper_body" = "上肢";
+"lower_body" = "下肢";
+"full_body" = "全身";
+"custom_workout" = "自定义训练";
+
+// MARK: - Status Messages
+"loading_exercises" = "正在加载动作...";
+"saving_workout" = "正在保存训练...";
+"workout_in_progress" = "训练进行中";
+"tap_to_continue" = "点击继续";
+
+// MARK: - Workout Detail View
+"workout_timer" = "训练计时";
+"break_timer" = "间歇计时";
+"workout_details" = "训练详情";
+"finish_workout" = "结束训练";
+"complete_more_to_finish" = "再完成 %d%% 即可结束";
+"delete_workout" = "删除训练";
+"delete_workout_message" = "确定要删除这次训练吗？此操作无法撤销。";
+"pause" = "暂停";
+"start" = "开始";
+"reset" = "重置";
+"add_exercise" = "添加动作";
+
+// MARK: - Common Units
+"kg" = "kg";
+"lbs" = "lbs";
+"min" = "min";
+"sec" = "s";
+"cal" = "cal";
+"kcal" = "kcal";
+
+// MARK: - Common Time
+"today" = "今天";
+"yesterday" = "昨天";
+"this_week" = "本周";
+"this_month" = "本月";
+"all_workouts" = "全部训练";
+"streak" = "连续打卡";
+
+// MARK: - Rest Timer
+"rest_time" = "休息时间";
+"skip" = "跳过";
+"quick_select" = "快速选择";
+"rest_time_complete" = "休息结束！";
+"time_to_get_back" = "回到训练吧 💪";
+
+// MARK: - Common Actions
+"done" = "完成";
+"cancel" = "取消";
+"save" = "保存";
+"delete" = "删除";
+"edit" = "编辑";
+"add" = "添加";
+"close" = "关闭";
+
+// MARK: - Common Status
+"completed" = "已完成";
+"total_sets" = "总组数";
+
+// MARK: - Workout Types
+"no_workouts" = "暂无训练";
+"create_workout_types_description" = "创建不同的训练类型，记录你的训练计划";
+"never_used" = "从未使用";
+"no_exercises_added" = "未添加动作";
+"last_used" = "上次使用";
+"reps_target" = "次数目标";
+"update_targets" = "更新目标";
+"delete_exercise" = "删除动作";
+"target_settings" = "目标设置";
+"sets" = "组数";
+"target_reps" = "目标次数";
+"target_settings_description" = "为该动作设置目标次数。系统会根据目标记录你的实际表现。";
+"update_exercise" = "更新动作";
+"workout_name_description" = "为训练起一个具体的名称，例如“胸和肱三头肌”或“练腿日”";
+"create" = "创建";
+"exit" = "退出";
+
+// MARK: - Exercise Set Card
+"no_sets_added" = "未添加组";
+"target" = "目标";
+"actual" = "实际";
+"tap_checkmark_complete_set" = "点击对勾完成一组";
+"select_weight" = "选择重量";
+"select_reps" = "选择次数";

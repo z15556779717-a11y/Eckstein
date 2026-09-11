@@ -1,0 +1,50 @@
+/*
+  Common.strings
+  Eckstein
+
+  Created by Eliad Shahar on 23/07/2025.
+
+  Simplified Chinese Localization
+*/
+
+// MARK: - Navigation
+"back_button" = "返回";
+"continue_button" = "继续";
+"finish_button" = "完成";
+"start_button" = "开始";
+"stop_button" = "停止";
+"pause_button" = "暂停";
+"resume_button" = "继续";
+
+// MARK: - Alerts
+"alert_title_error" = "错误";
+"alert_title_success" = "成功";
+"alert_title_warning" = "警告";
+"alert_title_confirm" = "确认";
+"alert_button_ok" = "好";
+"alert_button_cancel" = "取消";
+"alert_button_delete" = "删除";
+"alert_button_save" = "保存";
+
+// MARK: - Empty States
+"empty_list" = "暂无项目";
+"empty_search" = "未找到结果";
+"empty_history" = "暂无历史记录";
+
+// MARK: - Loading States
+"loading_data" = "正在加载数据...";
+"loading_please_wait" = "请稍候...";
+"syncing_data" = "同步中...";
+
+// MARK: - Errors
+"error_generic" = "出了点问题";
+"error_network" = "网络错误";
+"error_no_internet" = "无网络连接";
+"error_server" = "服务器错误";
+"error_unauthorized" = "未授权";
+
+// MARK: - Success Messages
+"success_saved" = "保存成功";
+"success_deleted" = "删除成功";
+"success_updated" = "更新成功";
+"success_created" = "创建成功";

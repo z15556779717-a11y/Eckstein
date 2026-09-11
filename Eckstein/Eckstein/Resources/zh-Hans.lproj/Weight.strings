@@ -1,0 +1,336 @@
+/*
+  Weight.strings
+  Eckstein
+
+  Simplified Chinese Localization - Weight Module
+*/
+
+// MARK: - Weight View
+"weight" = "体重";
+"current_weight" = "当前体重";
+"goal_weight" = "目标体重";
+"weight_progress" = "体重趋势";
+"add_weight" = "添加体重";
+"weight_history" = "体重记录";
+"no_weight_entries" = "暂无体重记录";
+"start_tracking_weight" = "开始记录体重，查看你的趋势";
+"todays_weight" = "今日体重";
+"enter_weight" = "输入体重";
+"save_weight" = "保存体重";
+"delete_entry" = "删除记录";
+"delete_weight_confirm" = "确定要删除这条体重记录吗？";
+
+// MARK: - Weight Stats
+"starting_weight" = "起始体重";
+"current_weight" = "当前体重";
+"total_lost" = "累计减少";
+"total_gained" = "累计增加";
+"weekly_average" = "每周平均";
+"monthly_average" = "每月平均";
+"bmi" = "BMI";
+"healthy_range" = "健康范围";
+
+// MARK: - Time Periods
+"last_7_days" = "最近 7 天";
+"last_30_days" = "最近 30 天";
+"last_90_days" = "最近 90 天";
+"last_year" = "过去一年";
+"all_time" = "全部时间";
+
+// MARK: - Weight Goals
+"set_goal" = "设置目标";
+"update_goal" = "更新目标";
+"goal_reached" = "目标达成！";
+"pounds_to_go" = "还差 %@ lbs";
+"kilos_to_go" = "还差 %@ kg";
+
+// MARK: - Charts
+"weight_chart" = "体重图表";
+"progress_chart" = "趋势图表";
+"trend_line" = "趋势线";
+
+// MARK: - Messages
+"weight_saved" = "体重保存成功";
+"goal_updated" = "体重目标已更新";
+"entry_deleted" = "体重记录已删除";
+
+// MARK: - Additional UI
+"weight_tracking" = "体重追踪";
+"dashboard" = "概览";
+"history" = "历史记录";
+"progress" = "趋势";
+"analytics" = "数据分析";
+"smart_scale" = "智能体重秤";
+"last_weigh_in" = "上次称重";
+"battery" = "电量";
+"manual_entry" = "手动记录";
+"key_metrics" = "关键指标";
+"weight_distribution" = "体重分布";
+"no_data_available" = "暂无数据";
+"export" = "导出";
+"sort_by" = "排序方式";
+"source" = "来源";
+"units_measurements" = "单位与测量";
+"height" = "身高";
+"searching_for_scales" = "正在搜索体重秤...";
+"no_scales_found" = "未找到体重秤";
+"available_scales" = "可用体重秤";
+"connection" = "连接";
+"saved_scale" = "已保存的体重秤";
+"measurement" = "测量";
+"kilograms_kg" = "千克 (kg)";
+"pounds_lbs" = "磅 (lbs)";
+"remove_goal" = "移除目标";
+"xiaomi_scale" = "小米体重秤";
+"apple_health" = "Apple 健康";
+"sync_with_health" = "与健康同步";
+"health_permissions" = "健康权限";
+"last_synced" = "上次同步";
+"enable_sync" = "启用同步";
+"sync_now" = "立即同步";
+"health_data_access" = "健康数据访问";
+"grant_access" = "授权访问";
+"syncing" = "正在同步...";
+"sync_complete" = "同步完成";
+"sync_failed" = "同步失败";
+"no_new_data" = "没有新数据";
+"entries_synced" = "已同步 %d 条记录";
+"last_updated" = "上次更新";
+"never_synced" = "从未同步";
+"body_fat" = "体脂率";
+"muscle_mass" = "肌肉量";
+"date_time" = "日期与时间";
+"goal" = "目标";
+"edit_entry" = "编辑记录";
+"target_weight" = "目标体重";
+"target_date" = "目标日期";
+"remove_goal" = "移除目标";
+"set_goal" = "设置目标";
+"per_week" = "每周";
+"to_go" = "还差";
+"goal_progress" = "目标趋势";
+
+// MARK: - Scale Connection
+"scanning" = "正在扫描";
+"scan_for_scales" = "扫描体重秤";
+"connect_to_last_scale" = "连接上次的体重秤";
+"scale_connection" = "体重秤连接";
+"done" = "完成";
+"connection_error" = "连接错误";
+"ok" = "好";
+"please_turn_on_bluetooth" = "请打开蓝牙";
+"failed_to_connect_scale" = "无法连接到体重秤";
+"connected" = "已连接";
+"disconnected" = "已断开";
+"auto_connect_scale" = "自动连接体重秤";
+"forget" = "忽略";
+"weight_unit" = "体重单位";
+"jin" = "斤";
+"auto_save_measurements" = "自动保存测量数据";
+"notify_on_weight_capture" = "称重时通知";
+"user_profiles" = "用户档案";
+"manage_profiles" = "管理用户";
+"troubleshooting" = "故障排除";
+"connection_help" = "连接帮助";
+"supported_models" = "支持的型号";
+"scale_settings" = "体重秤设置";
+"forget_scale" = "忽略此体重秤";
+"forget_scale_message" = "确定要忽略此体重秤吗？";
+"week" = "周";
+"kg" = "kg";
+"lbs" = "lbs";
+"percentage_symbol" = "%";
+"days" = "天";
+"most_often_weigh_on" = "最常在 %@ 称重";
+"body_fat_placeholder" = "15.5";
+"muscle_mass_placeholder" = "30.5";
+"weight_placeholder_kg" = "65.0";
+"weight_placeholder_lbs" = "143.0";
+
+// MARK: - Sorting and Filtering
+"sort_by_label" = "排序方式：";
+"newest_first" = "最新优先";
+"oldest_first" = "最早优先";
+"heaviest_first" = "最重优先";
+"lightest_first" = "最轻优先";
+
+// MARK: - Deletion Confirmations
+"delete_entry_title" = "删除记录";
+"delete_entry_message" = "确定要删除这条体重记录吗？此操作无法撤销。";
+"delete_all_weight_data" = "删除全部体重数据";
+"delete_all_data_message" = "这将永久删除你的所有体重记录、目标和分析数据。此操作无法撤销。";
+
+// MARK: - Measurements
+"bmi_format" = "BMI：%@";
+"cm" = "cm";
+"height_description" = "身高用于计算 BMI";
+
+// MARK: - Reminders
+"daily_reminders" = "每日提醒";
+"frequency" = "频率";
+"daily" = "每天";
+"every_3_days" = "每 3 天";
+"weekly" = "每周";
+"reminders_description" = "定期收到记录体重的提醒";
+
+// MARK: - Privacy
+"privacy_mode" = "隐私模式";
+"show_body_composition" = "显示身体成分";
+"privacy_display" = "隐私与显示";
+"privacy_mode_description" = "隐私模式会在主屏幕上隐藏体重数值";
+
+// MARK: - Health Integration
+"auto_sync_healthkit" = "自动与 HealthKit 同步";
+"health_integration" = "健康集成";
+
+// MARK: - Data Management
+"export_data" = "导出数据";
+"import_data" = "导入数据";
+"delete_all_data" = "删除全部数据";
+"data_management" = "数据管理";
+
+// MARK: - Export Options
+"export_format" = "导出格式";
+"date_range" = "日期范围";
+"include_body_composition" = "包含身体成分";
+"options" = "选项";
+"body_composition_description" = "体脂率和肌肉量数据";
+"export_options" = "导出选项";
+"all_time_option" = "全部时间";
+"last_month" = "上个月";
+"last_3_months" = "最近 3 个月";
+"last_6_months" = "最近 6 个月";
+
+// MARK: - About
+"version" = "版本";
+"help_support" = "帮助与支持";
+"about" = "关于";
+
+// MARK: - Notifications
+"weight_reminder_title" = "该称重了";
+"weight_reminder_body" = "记录体重，随时掌握你的健身目标";
+"test_notification_title" = "测试通知";
+"test_notification_body" = "体重提醒功能正常！";
+"send_test_notification" = "发送测试通知";
+"dismiss" = "关闭";
+
+// MARK: - Widget
+"current_weight_widget" = "当前体重";
+"weight_goal_widget" = "体重目标";
+"days_remaining" = "剩余 %d 天";
+
+// MARK: - Achievements
+"achievements" = "成就";
+"no_achievements_yet" = "暂无成就";
+"first_weigh_in" = "首次称重";
+"started_journey" = "开启你的体重记录之旅";
+"1kg_milestone" = "减重 1kg";
+"lost_1kg" = "成功减掉 1kg";
+"5kg_milestone" = "5kg 减重达人";
+"lost_5kg" = "成功减重 5kg";
+"10kg_milestone" = "10kg 减重大师";
+"lost_10kg" = "惊人蜕变，减重 10kg";
+"week_streak" = "一周达人";
+"7_days_tracking" = "连续记录 7 天";
+"month_streak" = "月度大师";
+"30_days_tracking" = "连续记录 30 天";
+"goal_reached" = "目标达成！";
+"reached_target_weight" = "达成你的目标体重";
+"next_milestone" = "下一个成就";
+"keep_going" = "继续记录即可解锁";
+
+// MARK: - Analytics View
+"progress_timeline" = "趋势时间轴";
+"patterns_insights" = "规律与洞察";
+"stable_weight_insight" = "体重稳定";
+"detailed_statistics" = "详细统计";
+"longest_tracking_streak" = "连续记录 %@ 天";
+"high_variability_insight" = "检测到体重波动较大";
+"std_dev" = "标准差";
+"median" = "中位数";
+"percentile_75" = "第 75 百分位";
+"percentile_25" = "第 25 百分位";
+"avg_daily_change" = "日均变化";
+"range" = "范围";
+"total_change" = "总变化";
+"entries" = "记录";
+"consistency" = "坚持度";
+"see_all" = "查看全部";
+"add_weight_entries_chart" = "添加体重记录以查看图表";
+"body_composition_optional" = "身体成分（可选）";
+"notes_optional" = "备注（可选）";
+"current_goal" = "当前目标";
+"goal_line" = "目标线";
+"trend" = "趋势";
+"stable" = "稳定";
+
+// MARK: - Insights
+"losing_weight_insight" = "你正在以健康的速度减重";
+"gaining_weight_insight" = "你的体重正在增加";
+"goal_75_percent_insight" = "你已完成目标的 75%！";
+"goal_50_percent_insight" = "你已完成目标的一半！";
+"days_since_last_entry_insight" = "距离上次称重已经过去 %@ 天";
+"est_completion" = "预计完成";
+"no_body_composition_data" = "暂无身体成分数据";
+"morning" = "早晨";
+"midday" = "中午";
+"afternoon" = "下午";
+"evening" = "晚上";
+"typical_weigh_in_time" = "通常称重时间：%@";
+"longest_tracking_streak" = "连续记录 %@ 天";
+"csv_format" = "CSV";
+"json_format" = "JSON";
+"bmi_prefix" = "BMI";
+"fat_suffix" = "体脂";
+"muscle_suffix" = "肌肉";
+
+// MARK: - Steps Counter
+"steps_counter" = "计步器";
+"steps" = "步";
+"steps_goal_progress" = "%@ / %@ 步";
+"today" = "今天";
+"weekly_avg" = "周平均";
+"monthly_avg" = "月平均";
+
+// MARK: - Weight Trends
+"losing" = "下降";
+"gaining" = "上升";
+
+// MARK: - Time References
+"yesterday" = "昨天";
+"days_ago" = "%@ 天前";
+"3_months" = "3 个月";
+"6_months" = "6 个月";
+"statistics" = "统计";
+"avg" = "平均";
+"max" = "最高";
+"min" = "最低";
+"entry_details" = "记录详情";
+"manual" = "手动";
+"body_composition_trends" = "身体成分趋势";
+"typical_weigh_in_time" = "通常称重时间";
+"weight_settings" = "体重设置";
+"done" = "完成";
+"units_measurements" = "单位与测量";
+"weight_unit" = "体重单位";
+"kilograms_kg" = "千克 (kg)";
+"height" = "身高";
+"height_description" = "身高用于计算 BMI";
+"reminders" = "提醒";
+"daily_reminders" = "每日提醒";
+"reminder_time" = "提醒时间";
+"frequency" = "频率";
+"daily" = "每天";
+"reminders_description" = "定期收到记录体重的提醒";
+"privacy_display" = "隐私与显示";
+"privacy_mode" = "隐私模式";
+"show_body_composition" = "显示身体成分";
+"privacy_mode_description" = "隐私模式会在主屏幕上隐藏体重数值";
+"health_integration" = "健康集成";
+"auto_sync_healthkit" = "自动与 HealthKit 同步";
+"sync_now" = "立即同步";
+"data_management" = "数据管理";
+"export_data" = "导出数据";
+"import_data" = "导入数据";
+"delete_all_data" = "删除全部数据";
+"weight_goal" = "体重目标";

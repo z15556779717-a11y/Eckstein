@@ -72,4 +72,15 @@ enum MealType: String, CaseIterable, Codable, Hashable {
         case .unspecified: return "Other"
         }
     }
+
+    /// The label to show a user, resolved through the string tables.
+    ///
+    /// `String.localized` returns the key itself when it finds nothing, so the
+    /// miss case is detectable and `displayName` — not the raw key — is what a
+    /// missing or not-yet-translated table falls back to.
+    var localizedName: String {
+        let key = "meal_\(rawValue)"
+        let translated = key.localized
+        return translated == key ? displayName : translated
+    }
 }

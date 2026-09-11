@@ -1,0 +1,352 @@
+/*
+  Diet.strings
+  Eckstein
+
+  Simplified Chinese Localization - Diet Module
+*/
+
+// MARK: - Diet View
+"diet" = "饮食";
+"calories_today" = "今日热量";
+"calories_remaining" = "剩余热量";
+"protein" = "蛋白质";
+"carbs" = "碳水";
+"fat" = "脂肪";
+"calories" = "热量";
+"add_meal" = "添加餐次";
+"no_meals_today" = "今日没有餐次";
+"start_tracking_nutrition" = "添加第一餐，开始记录你的营养摄入";
+"search_food" = "搜索食物";
+"quick_add" = "快速添加";
+"barcode_scan" = "扫描条形码";
+"recent_foods" = "最近的食物";
+"my_foods" = "我的食物";
+"calorie_bank" = "热量银行";
+"calorie_bank_description" = "通过存入或借用热量来平衡每周摄入";
+"saved_calories" = "已存热量";
+"borrowed_calories" = "已借热量";
+"available_to_use" = "可用";
+"to_repay" = "待偿还";
+
+// MARK: - Meal Types
+"breakfast" = "早餐";
+"lunch" = "午餐";
+"dinner" = "晚餐";
+"snack" = "加餐";
+
+// MARK: - Meal Detail
+"meal_details" = "餐次详情";
+"add_food" = "添加食物";
+"food_name" = "食物名称";
+"quantity" = "数量";
+"serving_size" = "份量";
+"nutritional_info" = "营养信息";
+"per_serving" = "每份";
+"total_calories" = "总热量";
+"save_meal" = "保存餐次";
+"delete_meal" = "删除餐次";
+"delete_meal_confirm" = "确定要删除这个餐次吗？";
+
+// MARK: - Food Search
+"search_foods" = "搜索食物...";
+"all_foods" = "全部食物";
+"branded" = "品牌";
+"common" = "常见";
+"custom" = "自定义";
+"no_foods_found" = "未找到食物";
+"try_different_search" = "换个关键词试试";
+"create_custom_food" = "创建自定义食物";
+"food_details" = "食物详情";
+"add_to_meal" = "添加到餐次";
+
+// MARK: - Create Food
+"create_food" = "创建食物";
+"food_info" = "食物信息";
+"enter_food_name" = "输入食物名称";
+"brand_optional" = "品牌（可选）";
+"enter_brand" = "输入品牌";
+"serving_info" = "份量信息";
+"serving_size_amount" = "份量数值";
+"serving_unit" = "份量单位";
+"nutrition_facts" = "营养成分";
+"per" = "每";
+"optional" = "可选";
+"save_food" = "保存食物";
+
+// MARK: - Nutrition Units
+"grams" = "g";
+"milligrams" = "mg";
+"ounces" = "oz";
+"pounds" = "lbs";
+"cups" = "cups";
+"tablespoons" = "tbsp";
+"teaspoons" = "tsp";
+"pieces" = "pieces";
+"slices" = "slices";
+
+// MARK: - Daily Summary
+"daily_summary" = "每日汇总";
+"weekly_summary" = "每周汇总";
+"nutrition_goals" = "营养目标";
+"calories_goal" = "热量目标";
+"protein_goal" = "蛋白质目标";
+"carbs_goal" = "碳水目标";
+"fat_goal" = "脂肪目标";
+"update_goals" = "更新目标";
+
+// MARK: - Messages
+"meal_saved" = "餐次保存成功";
+"food_added" = "食物已添加到餐次";
+"food_created" = "自定义食物已创建";
+"goals_updated" = "营养目标已更新";
+
+// MARK: - Eckstein Diet View
+"diet_tracker" = "饮食记录";
+"todays_progress" = "今日进度";
+"meal_1" = "餐次 1";
+"meal_2" = "餐次 2";
+"snacks" = "加餐";
+"meal_number" = "餐次 %d";
+"carb_load_meal" = "碳水补充餐";
+"carb_load" = "碳水补充";
+
+// MARK: - Meal Status
+"borrowing_from_meal_2" = "从餐次 2 借用";
+"borrowing_to_meal_1" = "借给餐次 1";
+"has_carry_over" = "有结转";
+"meal_2_budget" = "餐次 2 预算：";
+"available_for_meal_2" = "餐次 2 可用：";
+
+// MARK: - Food Categories
+"carb_load_foods" = "碳水补充食物";
+
+// MARK: - Progress and Tracking
+"borrowed" = "已借";
+"carry_over" = "结转";
+"of_daily" = "占每日";
+"total_progress" = "总进度";
+"incl_carry_over" = "含结转";
+"incl_borrowing" = "含借用";
+
+// MARK: - Actions
+"add_more" = "添加更多";
+"add" = "添加";
+"add_snack" = "添加加餐";
+"no_quantity_limits_carb_load" = "碳水补充不限量！";
+
+// MARK: - Snacks Section
+"no_snacks_logged_today" = "今日没有加餐记录";
+
+// MARK: - Daily Summary Section
+"total_protein" = "总蛋白质";
+"total_carbs" = "总碳水";
+"start_logging_meals_summary" = "开始记录餐次以查看汇总";
+
+// MARK: - Fat Meals
+"weekly_fat_meals" = "每周脂肪餐";
+"fat_meal_remaining_singular" = "剩余 1 次脂肪餐";
+"fat_meals_remaining" = "剩余 %d 次脂肪餐";
+"fat_meal_limit_reached" = "本周脂肪餐已达上限";
+"resets_sunday" = "周日重置";
+
+// MARK: - Carb Load
+"weekly_carb_load" = "每周碳水补充";
+"active" = "进行中";
+"used" = "已使用";
+"available" = "可用";
+"one_per_week" = "每周 1 次";
+"combining_meals_carb_load" = "将多个餐次合并为一次碳水补充";
+"carb_load_replacing_meal" = "碳水补充替代餐次 %d";
+"separate_meals" = "分开餐次";
+"combine_meals" = "合并餐次";
+"cancel" = "取消";
+"activate_carb_load_day" = "启用碳水补充日";
+"used_on" = "使用于";
+
+// MARK: - Food Picker
+"carb_load_day_no_limits" = "碳水补充日 - 不限量！";
+"weekly_treat" = "每周犒赏";
+"enjoy_carb_load_no_restrictions" = "尽情享用碳水补充食物，不限数量！";
+"fat_meals_this_week" = "本周脂肪餐";
+"limit_reached" = "已达上限";
+"add_to_carb_load" = "添加到碳水补充";
+"add_to_meal" = "添加到餐次 %d";
+"select" = "选择";
+"invalid_amount" = "数量无效";
+"ok" = "确定";
+"please_enter_valid_grams" = "请输入有效的克数";
+"protein_fat" = "蛋白质（脂肪）";
+"protein_non_fat" = "蛋白质（非脂肪）";
+"snack" = "加餐";
+
+// MARK: - Calorie Bank
+"save_unused_calories_tooltip" = "存下未使用的热量，用于犒赏和特殊场合";
+"todays_calories" = "今日热量";
+"used_today" = "今日已用";
+"saved_balance" = "存款余额";
+
+// MARK: - Milk Bank
+"milk_bank" = "牛奶银行";
+"ml_left" = "剩余 ml";
+"consumed" = "已摄入";
+"daily_limit" = "每日上限";
+"add_milk" = "添加牛奶";
+"add_milk_consumption" = "添加牛奶摄入";
+"amount_ml" = "数量（ml）";
+"available" = "可用";
+
+// MARK: - Analytics View
+"your_progress" = "你的进度";
+"this_weeks_performance" = "本周表现";
+"score" = "得分";
+"days_complete" = "完成天数";
+"avg_protein" = "平均蛋白质";
+"avg_carbs" = "平均碳水";
+"outstanding_keep_it_up" = "太棒了！继续保持！🌟";
+"great_job_doing_well" = "做得好！你表现得很棒！";
+"good_progress_room_improve" = "进展不错！还有提升空间。";
+"on_track_stay_focused" = "你走在正轨上，保持专注！";
+"lets_get_back_on_track" = "让我们重回正轨！";
+"insights_and_tips" = "见解与提示";
+"excellent_protein_intake" = "蛋白质摄入很棒！你一直稳定达成每日目标。";
+"protein_intake_good_add_more" = "蛋白质摄入不错。每天再增加 %dg 即可达成目标。";
+"great_calorie_savings" = "热量存款很棒！你已存入 %d 热量，可用于特殊场合。";
+"build_up_calorie_bank" = "通过存入每日未使用的热量来积累热量银行。当前为 %d。";
+"try_complete_meal_2_more" = "尽量更频繁地完成餐次 2。这对全天均衡营养很重要。";
+"vary_protein_sources" = "建议变换蛋白质来源，以获得更丰富的营养。";
+"weekly_trends" = "每周趋势";
+"start_tracking_see_progress" = "开始记录，查看你的进度！";
+"calorie_bank_summary" = "热量银行汇总";
+"saved" = "已存";
+"today" = "今天";
+"could_save_more_calories" = "本周你还可以再存入 %d 热量！";
+"consistency_score" = "坚持度得分";
+"current_streak" = "当前连续天数";
+"best_streak" = "最佳连续天数";
+"compliance" = "达成率";
+"great_start_keep_going" = "开局很棒！继续加油！";
+"building_momentum" = "势头正盛！";
+"excellent_consistency" = "坚持得非常棒！";
+"one_week_strong" = "坚持一周！💪";
+"two_weeks_unstoppable" = "两周了！你势不可挡！";
+"three_weeks_habit_formed" = "三周了 - 习惯已养成！";
+"incredible_dedication_days" = "令人惊叹的坚持！%d 天！";
+"achievements" = "成就";
+"view_all" = "查看全部";
+
+// MARK: - Calendar View
+"sun_short" = "日";
+"mon_short" = "一";
+"tue_short" = "二";
+"wed_short" = "三";
+"thu_short" = "四";
+"fri_short" = "五";
+"sat_short" = "六";
+"legend" = "图例";
+"complete" = "完成";
+"partial" = "部分完成";
+"no_data" = "无数据";
+"diet_history" = "饮食历史";
+"done" = "完成";
+
+// MARK: - Achievements
+"achievement_first_day_title" = "第一天";
+"achievement_first_day_desc" = "完成你的第一天";
+"achievement_first_day_req" = "某天完成两个餐次，或单餐达到 200%";
+
+"achievement_week_warrior_title" = "一周勇士";
+"achievement_week_warrior_desc" = "连续 7 天";
+"achievement_week_warrior_req" = "连续 7 天完成饮食计划";
+
+"achievement_two_week_champion_title" = "两周冠军";
+"achievement_two_week_champion_desc" = "连续 14 天";
+"achievement_two_week_champion_req" = "连续 14 天完成饮食计划";
+
+"achievement_month_master_title" = "月度大师";
+"achievement_month_master_desc" = "连续 30 天";
+"achievement_month_master_req" = "连续 30 天完成饮食计划";
+
+"achievement_protein_power_title" = "蛋白质之力";
+"achievement_protein_power_desc" = "连续一周达成蛋白质目标";
+"achievement_protein_power_req" = "连续 7 天达到 100% 蛋白质目标";
+
+"achievement_carb_master_title" = "碳水大师";
+"achievement_carb_master_desc" = "连续一周达成碳水目标";
+"achievement_carb_master_req" = "连续 7 天达到 100% 碳水目标";
+
+"achievement_macro_balance_title" = "营养均衡";
+"achievement_macro_balance_desc" = "连续 7 天同时达成蛋白质和碳水目标";
+"achievement_macro_balance_req" = "连续 7 天达到 100% 蛋白质和碳水目标";
+
+"achievement_bank_saver_title" = "储蓄达人";
+"achievement_bank_saver_desc" = "存入 1000 以上热量";
+"achievement_bank_saver_req" = "在热量银行中累计存入 1000 或更多热量";
+
+"achievement_bank_master_title" = "银行大师";
+"achievement_bank_master_desc" = "存满热量银行";
+"achievement_bank_master_req" = "达到 1500 热量的银行上限";
+
+"achievement_early_bird_title" = "早起的鸟儿";
+"achievement_early_bird_desc" = "连续 7 天在中午前完成餐次 1";
+"achievement_early_bird_req" = "连续 7 天在中午 12:00 前记录餐次 1";
+
+"achievement_full_day_hero_title" = "全日英雄";
+"achievement_full_day_hero_desc" = "连续 14 天完成两个餐次";
+"achievement_full_day_hero_req" = "连续 14 天完成餐次 1 和餐次 2";
+
+"achievement_variety_chef_title" = "多样厨师";
+"achievement_variety_chef_desc" = "一周内使用 5 种以上不同蛋白质来源";
+"achievement_variety_chef_req" = "7 天内记录至少 5 种不同的蛋白质食物";
+
+"achievement_carb_cyclist_title" = "碳水骑手";
+"achievement_carb_cyclist_desc" = "一周内使用 3 种以上不同碳水来源";
+"achievement_carb_cyclist_req" = "7 天内记录至少 3 种不同的碳水食物";
+
+"achievement_no_waste_week_title" = "零浪费一周";
+"achievement_no_waste_week_desc" = "一周内使用热量银行少于 3 次";
+"achievement_no_waste_week_req" = "一整周使用热量银行不超过 2 次";
+
+"achievement_perfect_week_title" = "完美一周";
+"achievement_perfect_week_desc" = "一周内完美完成所有餐次";
+"achievement_perfect_week_req" = "连续 7 天以 100% 达成率完成每一餐";
+
+"achievement_consistency_king_title" = "坚持之王";
+"achievement_consistency_king_desc" = "80% 达成率";
+"achievement_consistency_king_req" = "30 天内保持 80% 或更高的达成率";
+
+// MARK: - Calorie Bank Additional
+"daily_allowance_calories" = "每日额度：150 热量";
+"maximum_balance_calories" = "最高余额：1,500 热量（10 天）";
+"todays_usage" = "今日用量";
+"manual_entry" = "手动输入";
+"log_calorie_consumption" = "记录热量消耗";
+"total" = "合计";
+"food_item" = "食物项";
+"food_item_placeholder" = "例如：酱油、油、沙拉酱";
+"enter_calories" = "输入热量";
+"common_items" = "常见项目";
+"log_consumption" = "记录消耗";
+"insufficient_balance_calories" = "余额不足。你当前可用 %d 热量。";
+
+// MARK: - Milk Bank Additional
+"add_consumption" = "添加消耗";
+"todays_consumption" = "今日消耗";
+"no_milk_consumed_today" = "今日没有牛奶消耗";
+"total_consumed" = "总消耗";
+"remaining" = "剩余";
+"milk_history" = "牛奶历史";
+
+// MARK: - Achievement Unlock
+"achievement_unlocked" = "成就已解锁！";
+
+// MARK: - Diet Day Edit View
+"editing_diet_data" = "编辑饮食数据";
+"days_progress" = "当日进度";
+
+// MARK: - Apple Health nutrition export
+"export_to_apple_health" = "将今日数据导出到 Apple Health";
+"export_healthkit_result" = "已向 Apple Health 写入 %d 个样本";
+"export_healthkit_up_to_date" = "已是最新";
+"export_healthkit_unavailable" = "此设备不支持 HealthKit";
+"export_healthkit_denied" = "未获得 HealthKit 写入权限";
+"export_healthkit_no_data" = "暂无可导出的数据";

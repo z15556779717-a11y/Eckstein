@@ -1,0 +1,200 @@
+/*
+  Localizable.strings
+  Eckstein
+
+  Created by Eliad Shahar on 23/07/2025.
+
+  Simplified Chinese Localization
+*/
+
+// MARK: - Tab Bar
+"tab_workout" = "训练";
+"tab_diet" = "饮食";
+"tab_weight" = "体重";
+"tab_ai_coach" = "AI 教练";
+"tab_profile" = "我的";
+
+// MARK: - Common Actions
+"save" = "保存";
+"cancel" = "取消";
+"delete" = "删除";
+"edit" = "编辑";
+"done" = "完成";
+"add" = "添加";
+"close" = "关闭";
+"back" = "返回";
+"next" = "下一步";
+"previous" = "上一步";
+"submit" = "提交";
+"confirm" = "确认";
+"ok" = "好";
+"yes" = "是";
+"no" = "否";
+"search" = "搜索";
+"filter" = "筛选";
+"sort" = "排序";
+"refresh" = "刷新";
+"share" = "分享";
+"copy" = "复制";
+"paste" = "粘贴";
+"select" = "选择";
+"select_all" = "全选";
+"skip" = "跳过";
+"get_started" = "开始使用";
+
+// MARK: - Status Messages
+"loading" = "加载中...";
+"saving" = "保存中...";
+"deleting" = "删除中...";
+"updating" = "更新中...";
+"syncing" = "同步中...";
+"processing" = "处理中...";
+"please_wait" = "请稍候...";
+"success" = "成功";
+"error" = "错误";
+"warning" = "警告";
+"info" = "提示";
+"no_data" = "暂无数据";
+"no_results" = "未找到结果";
+"empty_state" = "这里还什么都没有";
+"pull_to_refresh" = "下拉刷新";
+
+// MARK: - Time & Date
+"today" = "今天";
+"yesterday" = "昨天";
+"tomorrow" = "明天";
+"this_week" = "本周";
+"last_week" = "上周";
+"this_month" = "本月";
+"last_month" = "上个月";
+"days_ago" = "%d 天前";
+"hours_ago" = "%d 小时前";
+"minutes_ago" = "%d 分钟前";
+"just_now" = "刚刚";
+
+// MARK: - Units
+"kg" = "kg";
+"lbs" = "lbs";
+"g" = "g";
+"mg" = "mg";
+"cal" = "cal";
+"kcal" = "kcal";
+"ml" = "ml";
+"l" = "L";
+"oz" = "oz";
+"cm" = "cm";
+"m" = "m";
+"km" = "km";
+"mi" = "mi";
+"min" = "min";
+"sec" = "sec";
+"hr" = "hr";
+"reps" = "次数";
+"sets" = "组";
+"calories" = "热量";
+
+// MARK: - Validation
+"field_required" = "此项为必填";
+"invalid_email" = "邮箱地址无效";
+"password_too_short" = "密码至少需要 6 个字符";
+"passwords_dont_match" = "两次输入的密码不一致";
+"invalid_value" = "数值无效";
+"value_too_low" = "数值过低";
+"value_too_high" = "数值过高";
+"please_try_again" = "请重试";
+"something_went_wrong" = "出了点问题";
+
+// MARK: - Phase 4 UI
+"tab_home" = "首页";
+"tab_progress" = "趋势";
+"meal_breakfast" = "早餐";
+"meal_lunch" = "午餐";
+"meal_dinner" = "晚餐";
+"meal_snack" = "加餐";
+"meal_unspecified" = "其他";
+"dashboard_greeting_morning" = "早上好";
+"dashboard_greeting_afternoon" = "下午好";
+"dashboard_greeting_evening" = "晚上好";
+"dashboard_today_nutrition" = "今日营养";
+"dashboard_no_goal_set" = "未设置目标";
+"dashboard_over_by" = "超出 %@ kcal";
+"dashboard_left_today" = "剩余 %@ kcal";
+"dashboard_today_workout" = "今日训练";
+"dashboard_no_workout_today" = "今天还没有训练记录";
+"dashboard_body_weight" = "体重";
+"dashboard_quick_actions" = "快捷操作";
+"dashboard_log_food" = "记录饮食";
+"dashboard_start_workout" = "开始训练";
+"dashboard_log_weight" = "记录体重";
+"dashboard_ask_ai" = "询问 AI";
+"range_7_days" = "7 天";
+"range_30_days" = "30 天";
+"range_90_days" = "90 天";
+"range_1_year" = "1 年";
+"progress_weight_trend" = "体重趋势";
+"progress_calorie_trend" = "热量";
+"progress_protein_trend" = "蛋白质";
+"progress_range" = "时间范围";
+"progress_change" = "变化";
+"progress_insufficient_data" = "数据不足";
+"progress_no_entries_in_range" = "该时间范围内没有记录";
+"bmi_underweight" = "偏低";
+"bmi_normal" = "正常";
+"bmi_overweight" = "偏高";
+"bmi_obese" = "明显偏高";
+"bmi_no_height" = "填写身高后显示 BMI";
+"weight_to_go_lose" = "还需减 %@ kg";
+"weight_to_go_gain" = "还需增 %@ kg";
+"weight_at_target" = "已达到目标体重";
+"weight_no_target_set" = "未设置目标体重";
+"weight_empty_state" = "还没有体重记录";
+"weight_empty_state_message" = "记录第一次体重，开始查看趋势。";
+"nutrition_goals" = "营养目标";
+"daily_calorie_goal" = "每日热量";
+"daily_protein_goal" = "每日蛋白质";
+"daily_carb_goal" = "每日碳水";
+"daily_fat_goal" = "每日脂肪";
+"daily_fiber_goal" = "每日膳食纤维";
+"goals_saved" = "目标已保存";
+"fitness_goal" = "健身目标";
+"goal_lose_fat" = "减脂";
+"goal_build_muscle" = "增肌";
+"goal_maintain" = "维持";
+"diet_add_food" = "添加食物";
+"diet_edit_entry" = "编辑记录";
+"diet_delete_entry_title" = "删除这条记录？";
+"diet_delete_entry_message" = "该食物将从这一餐中移除。";
+"diet_entry_food" = "食物";
+"diet_entry_meal" = "餐次";
+"diet_entry_amount" = "数量";
+"diet_no_entries_for_day" = "这一天还没有记录";
+"diet_per_100g" = "每 100 克";
+"favorite" = "收藏";
+"favorites" = "收藏";
+"recents" = "最近记录";
+"barcode" = "条码";
+"scan_barcode" = "扫描条码";
+"custom_food" = "自定义食物";
+"custom_food_name" = "食物名称";
+"no_search_results" = "没有找到匹配的食物";
+"fiber" = "膳食纤维";
+
+// MARK: - Phase 4 UI
+"retry" = "重试";
+"error_loading_data" = "无法加载数据";
+"unavailable_temporarily" = "暂时无法使用";
+
+// MARK: - Phase 4 UI
+"weight_analytics" = "详细分析";
+"average" = "平均";
+
+// MARK: - Phase 4 UI
+"goals_clear_hint" = "留空即可取消该目标。";
+
+// MARK: - Phase 4 UI
+"body_metrics" = "身体指标";
+"not_set" = "未设置";
+"height_invalid" = "请输入 50–260 之间的身高";
+"height_hint" = "用于计算 BMI，留空即可清除。";
+"weight_to_goal" = "距目标";
+"days_overdue" = "已超过目标日期";

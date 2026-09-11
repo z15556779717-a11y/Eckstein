@@ -26,12 +26,21 @@ struct ProfileLanguageSection: View {
                         Text("english".localized)
                     }
                     .tag("en")
-                    
+
                     HStack {
                         Image(systemName: "flag.fill")
                         Text("עברית")
                     }
                     .tag("he")
+
+                    // Endonyms, like the Hebrew entry above: a language is
+                    // named in itself, so it stays legible to the person
+                    // looking for it whatever the app is currently set to.
+                    HStack {
+                        Image(systemName: "flag.fill")
+                        Text("简体中文")
+                    }
+                    .tag("zh-Hans")
                 }
                 .pickerStyle(MenuPickerStyle())
                 .labelsHidden()

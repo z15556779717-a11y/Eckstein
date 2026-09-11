@@ -1,0 +1,87 @@
+/*
+  Auth.strings
+  Eckstein
+
+  Simplified Chinese Localization - Auth Module
+*/
+
+// MARK: - Sign In
+"sign_in" = "登录";
+"email" = "邮箱";
+"password" = "密码";
+"forgot_password" = "忘记密码？";
+"dont_have_account" = "还没有账号？";
+"sign_up" = "注册";
+"sign_in_with_apple" = "通过 Apple 登录";
+"sign_in_with_google" = "通过 Google 登录";
+"or" = "或";
+
+// MARK: - Sign Up
+"create_account" = "创建账号";
+"full_name" = "姓名";
+"confirm_password" = "确认密码";
+"already_have_account" = "已有账号？";
+"agree_to_terms" = "我同意服务条款和隐私政策";
+"create_account_button" = "创建账号";
+
+// MARK: - Forgot Password
+"reset_password" = "重置密码";
+"enter_email_reset" = "请输入你的邮箱地址，我们会向你发送重置密码的说明。";
+"send_reset_link" = "发送重置链接";
+"back_to_login" = "返回登录";
+"check_email" = "查收邮件";
+"reset_link_sent" = "我们已将密码重置链接发送到你的邮箱。";
+
+// MARK: - Validation
+"email_required" = "请输入邮箱";
+"invalid_email" = "请输入有效的邮箱地址";
+"password_required" = "请输入密码";
+"password_too_short" = "密码至少需要 8 个字符";
+"passwords_not_match" = "两次输入的密码不一致";
+"name_required" = "请输入姓名";
+"agree_terms_required" = "你需要同意条款";
+
+// MARK: - Error Messages
+"invalid_credentials" = "邮箱或密码错误";
+"account_exists" = "该邮箱已被注册";
+"network_error" = "网络错误，请重试。";
+"something_went_wrong" = "出了点问题，请重试。";
+"weak_password" = "密码强度太弱。请混合使用字母、数字和符号。";
+
+// MARK: - Success Messages
+"account_created" = "账号创建成功！";
+"password_reset_sent" = "密码重置说明已发送到你的邮箱";
+"password_updated" = "密码更新成功";
+"signed_in" = "登录成功";
+"signed_out" = "退出登录成功";
+
+// MARK: - App Usage Guide
+"track_your_workouts" = "记录你的训练";
+"track_workouts_description" = "记录你的动作、组数和次数。通过详细的数据分析追踪你的长期进展。";
+"track_workouts_tip1" = "点击 + 添加新的训练";
+"track_workouts_tip2" = "滑动删除动作";
+"track_workouts_tip3" = "查看你的训练历史";
+
+"monitor_your_diet" = "监控你的饮食";
+"monitor_diet_description" = "记录热量和营养素，并维护热量银行，实现灵活饮食。";
+"monitor_diet_tip1" = "搜索食物或扫描条形码";
+"monitor_diet_tip2" = "保存你喜爱的餐食";
+"monitor_diet_tip3" = "用热量银行换取零食";
+
+"track_your_weight" = "追踪你的体重";
+"track_weight_description" = "监测体重变化并查看趋势。连接小米体重秤即可自动记录。";
+"track_weight_tip1" = "每天记录体重效果最佳";
+"track_weight_tip2" = "设定切实可行的目标";
+"track_weight_tip3" = "查看进度图表";
+
+"ai_fitness_coach" = "AI 健身教练";
+"ai_coach_description" = "获取个性化建议、训练计划，以及你的健身问题解答。";
+"ai_coach_tip1" = "询问动作姿势与技巧";
+"ai_coach_tip2" = "获取餐食建议";
+"ai_coach_tip3" = "定制专属训练计划";
+
+"dont_show_guide_again" = "不再显示此指南";
+"previous" = "上一步";
+"next" = "下一步";
+"get_started" = "开始使用";
+"skip" = "跳过";

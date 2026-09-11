@@ -1,0 +1,115 @@
+/* 
+  Profile.strings
+  Eckstein
+  
+  Simplified Chinese Localization - Profile Module
+*/
+
+// MARK: - Profile View
+"profile" = "我的";
+"personal_info" = "个人信息";
+"settings" = "设置";
+"preferences" = "偏好设置";
+"account" = "账号";
+"sign_out" = "退出登录";
+"sign_out_confirm" = "确定要退出登录吗？";
+
+// MARK: - Personal Info
+"name" = "姓名";
+"email" = "邮箱";
+"phone" = "手机号";
+"date_of_birth" = "出生日期";
+"gender" = "性别";
+"male" = "男";
+"female" = "女";
+"other" = "其他";
+"height" = "身高";
+"activity_level" = "活动水平";
+"sedentary" = "久坐";
+"lightly_active" = "轻度活动";
+"moderately_active" = "中度活动";
+"very_active" = "高度活动";
+"extremely_active" = "极高强度活动";
+
+// MARK: - Settings
+"notifications" = "通知";
+"workout_reminders" = "训练提醒";
+"meal_reminders" = "饮食提醒";
+"weigh_in_reminders" = "称重提醒";
+"app_theme" = "应用主题";
+"light_theme" = "浅色";
+"dark_theme" = "深色";
+"system_theme" = "跟随系统";
+"language" = "语言";
+"units" = "单位";
+"metric_units" = "公制 (kg, cm)";
+"imperial_units" = "英制 (lbs, in)";
+
+// MARK: - Privacy & Security
+"privacy_security" = "隐私与安全";
+"change_password" = "修改密码";
+"two_factor_auth" = "双重验证";
+"privacy_policy" = "隐私政策";
+"terms_of_service" = "服务条款";
+
+// MARK: - Data Management
+"data_management" = "数据管理";
+"export_data" = "导出数据";
+"import_data" = "导入数据";
+"delete_account" = "注销账号";
+"delete_account_warning" = "此操作无法撤销。你的所有数据将被永久删除。";
+
+// MARK: - Diet Progress Section
+"diet_progress" = "减脂进度";
+"days_on_diet" = "减脂天数";
+"starting_weight" = "起始体重";
+"current_weight" = "当前体重";
+"progress" = "进度";
+"set_diet_start_info" = "设置减脂起始信息";
+"edit_diet_info" = "编辑减脂信息";
+"diet_start_information" = "减脂起始信息";
+"start_date" = "开始日期";
+"current_progress" = "当前进度";
+"weight_change" = "体重变化";
+"reset_diet_info" = "重置减脂信息";
+"diet_settings" = "减脂设置";
+"cancel" = "取消";
+"save" = "保存";
+
+// MARK: - Meeting Section
+"set_a_meeting" = "预约会议";
+
+// MARK: - Settings Section
+"weight_and_health" = "体重与健康";
+"diet_and_nutrition" = "饮食与营养";
+"app_usage_guide" = "应用使用指南";
+"show_tips" = "显示提示";
+"reset_all_tips" = "重置所有提示";
+
+// MARK: - Appearance
+"appearance" = "外观";
+"theme" = "主题";
+"system" = "跟随系统";
+"light" = "浅色";
+"dark" = "深色";
+"accent_color" = "强调色";
+
+// MARK: - Language
+"app_language" = "应用语言";
+"english" = "English";
+"hebrew" = "עברית";
+
+// MARK: - Support
+"support" = "支持";
+"help_center" = "帮助中心";
+"contact_support" = "联系客服";
+"report_bug" = "反馈问题";
+"suggest_feature" = "建议新功能";
+"rate_app" = "评价应用";
+"version" = "版本";
+
+// MARK: - Messages
+"profile_updated" = "个人资料更新成功";
+"settings_saved" = "设置已保存";
+"password_changed" = "密码修改成功";
+"data_exported" = "数据导出成功";

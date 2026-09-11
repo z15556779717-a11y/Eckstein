@@ -11,26 +11,58 @@ import SwiftUI
 @MainActor
 class LocalizationManager: ObservableObject {
     static let shared = LocalizationManager()
-    
+
+    /// The languages the app ships a `.lproj` for.
+    static let supportedLanguages = ["en", "he", "zh-Hans"]
+
+    /// Maps a BCP-47 tag onto one of ``supportedLanguages``.
+    ///
+    /// `Locale.current.language.languageCode` is not enough on its own: it
+    /// reports `zh` for every Chinese variant, and the app ships Simplified
+    /// only. The script subtag is what separates `zh-Hans` from `zh-Hant`.
+    static func resolveLanguage(_ identifier: String) -> String {
+        let parts = identifier
+            .replacingOccurrences(of: "_", with: "-")
+            .split(separator: "-")
+            .map { $0.lowercased() }
+        guard let code = parts.first else { return "en" }
+
+        guard code == "zh" else {
+            return supportedLanguages.contains(code) ? code : "en"
+        }
+
+        // Traditional regions fall back to English rather than being handed
+        // Simplified, which is not the script they asked for.
+        let subtags = Set(parts.dropFirst())
+        let isTraditional = subtags.contains("hant")
+            || subtags.contains("tw") || subtags.contains("hk") || subtags.contains("mo")
+        return isTraditional ? "en" : "zh-Hans"
+    }
+
     @Published var currentLanguage: String {
         didSet {
+            // Kept here rather than only in `setLanguage`, so the picker —
+            // which binds straight to this property — cannot leave `isRTL`
+            // describing the previous language.
+            isRTL = currentLanguage == "he"
             UserDefaults.standard.set(currentLanguage, forKey: "app_language")
             Bundle.setLanguage(currentLanguage)
             NotificationCenter.default.post(name: .languageChanged, object: nil)
         }
     }
-    
+
     @Published var isRTL: Bool
-    
+
     private init() {
-        let savedLanguage = UserDefaults.standard.string(forKey: "app_language")
-        let systemLanguage = Locale.current.language.languageCode?.identifier ?? "en"
-        
-        // Use saved language, or Hebrew if system is Hebrew, otherwise English
-        let language = savedLanguage ?? (systemLanguage == "he" ? "he" : "en")
+        let saved = UserDefaults.standard.string(forKey: "app_language")
+        let systemLanguage = Locale.preferredLanguages.first ?? "en"
+
+        // A saved language is only honoured if it is one we actually ship.
+        let language = saved.flatMap { Self.supportedLanguages.contains($0) ? $0 : nil }
+            ?? Self.resolveLanguage(systemLanguage)
         self.currentLanguage = language
         self.isRTL = language == "he"
-        
+
         Bundle.setLanguage(language)
     }
     

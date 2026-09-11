@@ -103,3 +103,97 @@
 "value_too_high" = "Value is too high";
 "please_try_again" = "Please try again";
 "something_went_wrong" = "Something went wrong";
+// MARK: - Phase 4 UI
+"tab_home" = "Home";
+"tab_progress" = "Progress";
+"meal_breakfast" = "Breakfast";
+"meal_lunch" = "Lunch";
+"meal_dinner" = "Dinner";
+"meal_snack" = "Snack";
+"meal_unspecified" = "Other";
+"dashboard_greeting_morning" = "Good morning";
+"dashboard_greeting_afternoon" = "Good afternoon";
+"dashboard_greeting_evening" = "Good evening";
+"dashboard_today_nutrition" = "Today's Nutrition";
+"dashboard_no_goal_set" = "No goal set";
+"dashboard_over_by" = "Over by %@ kcal";
+"dashboard_left_today" = "%@ kcal left";
+"dashboard_today_workout" = "Today's Workout";
+"dashboard_no_workout_today" = "No workout logged today";
+"dashboard_body_weight" = "Body Weight";
+"dashboard_quick_actions" = "Quick Actions";
+"dashboard_log_food" = "Log Food";
+"dashboard_start_workout" = "Start Workout";
+"dashboard_log_weight" = "Log Weight";
+"dashboard_ask_ai" = "Ask AI";
+"range_7_days" = "7 Days";
+"range_30_days" = "30 Days";
+"range_90_days" = "90 Days";
+"range_1_year" = "1 Year";
+"progress_weight_trend" = "Weight Trend";
+"progress_calorie_trend" = "Calories";
+"progress_protein_trend" = "Protein";
+"progress_range" = "Range";
+"progress_change" = "Change";
+"progress_insufficient_data" = "Not enough data yet";
+"progress_no_entries_in_range" = "No entries in this range";
+"bmi_underweight" = "Below range";
+"bmi_normal" = "In range";
+"bmi_overweight" = "Above range";
+"bmi_obese" = "Well above range";
+"bmi_no_height" = "Add your height to see BMI";
+"weight_to_go_lose" = "%@ kg to go";
+"weight_to_go_gain" = "%@ kg to gain";
+"weight_at_target" = "At your target weight";
+"weight_no_target_set" = "No target weight set";
+"weight_empty_state" = "No weigh-ins yet";
+"weight_empty_state_message" = "Log your first weight to start a trend.";
+"nutrition_goals" = "Nutrition Goals";
+"daily_calorie_goal" = "Daily Calories";
+"daily_protein_goal" = "Daily Protein";
+"daily_carb_goal" = "Daily Carbs";
+"daily_fat_goal" = "Daily Fat";
+"daily_fiber_goal" = "Daily Fiber";
+"goals_saved" = "Goals saved";
+"fitness_goal" = "Fitness Goal";
+"goal_lose_fat" = "Lose Fat";
+"goal_build_muscle" = "Build Muscle";
+"goal_maintain" = "Maintain";
+"diet_add_food" = "Add Food";
+"diet_edit_entry" = "Edit Entry";
+"diet_delete_entry_title" = "Delete this entry?";
+"diet_delete_entry_message" = "This food will be removed from the meal.";
+"diet_entry_food" = "Food";
+"diet_entry_meal" = "Meal";
+"diet_entry_amount" = "Amount";
+"diet_no_entries_for_day" = "Nothing logged for this day";
+"diet_per_100g" = "per 100 g";
+"favorite" = "Favorite";
+"favorites" = "Favorites";
+"recents" = "Recents";
+"barcode" = "Barcode";
+"scan_barcode" = "Scan Barcode";
+"custom_food" = "Custom Food";
+"custom_food_name" = "Food Name";
+"no_search_results" = "No matching foods";
+"fiber" = "Fiber";
+
+// MARK: - Phase 4 UI
+"retry" = "Retry";
+"error_loading_data" = "Couldn't load your data";
+"unavailable_temporarily" = "This isn't available right now";
+
+// MARK: - Phase 4 UI
+"weight_analytics" = "Detailed Analytics";
+"average" = "average";
+
+// MARK: - Phase 4 UI
+"goals_clear_hint" = "Leave a field empty to remove that target.";
+
+// MARK: - Phase 4 UI
+"body_metrics" = "Body Metrics";
+"not_set" = "Not set";
+"height_invalid" = "Enter a height between 50 and 260 cm";
+"height_hint" = "Used to calculate BMI. Leave empty to clear.";
+"weight_to_goal" = "To Target";
+"days_overdue" = "Past the target date";
