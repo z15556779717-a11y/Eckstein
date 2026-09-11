@@ -1034,3 +1034,60 @@ Existing tests were neither deleted nor weakened.
 * `CDFood` / `CDMeal` / `CDMealItem` remain in the model and unreachable from the
   official path (`MealDetailView`, `QuickAddView`, `DietRepository`). Physical
   deletion is deferred.
+
+### 18.11 CI verification
+
+Phase 3 is green on GitHub Actions:
+
+| | |
+|---|---|
+| Run | `34593060805` (`iOS CI`, `macos-latest`) |
+| Commit | `c260924` |
+| Result | `** BUILD SUCCEEDED **` / `** TEST SUCCEEDED **` |
+| Tests | 159 executed, 2 skipped, 0 failures |
+
+159 is the Phase 2 baseline of 111 plus the 48 new integration cases, so no
+existing test was removed to reach green.
+
+Three runs were needed. The first two are recorded here because what they
+caught is the useful part:
+
+* `34591298152` — the **app target built**, but the test target did not compile:
+  `DietTests.swift:139` compared a raw `String` source against
+  `NutritionCatalogSeed.source`, which is now a `NutritionSource`. Fixed by
+  reading it through the `nutritionSource` accessor.
+* `34591987905` — compiled and ran all 159 tests, 4 failures in 2 cases. Both
+  were the test asserting behaviour the architecture deliberately does not have,
+  and both keep their original intent:
+  * `testFoodDTOEncodesSnakeCaseColumnNames` required `serving_size`,
+    `serving_unit` and `last_used` on the wire. They are `nil` on that food and
+    a `nil` optional is omitted rather than sent as `0` / `""` / an epoch —
+    the same NULL semantics the nutrition columns depend on (§18.5). It now
+    asserts they are absent.
+  * `testALegacyEntryWithNullNutritionStaysReadable` set `category = nil`, but
+    `category` is a required `String` on `CDEcksteinMealEntry` and the
+    assignment could never validate (Cocoa 1570). A legacy row holds `""`. The
+    nullable columns the test is actually about are the nutrition ones, and
+    those are still left unset.
+* `34593060805` — green on `c260924`.
+
+Context for scale: `CDEcksteinFood`'s macros are optional, `CDFood`'s are not.
+Making `FoodTemplate`'s macros `Double?` so an unknown macro stays unknown broke
+two `CDFood` call sites (`Core/Data/FoodData.swift`,
+`Features/Diet/ViewModels/FoodSearchViewModel.swift`), both fixed by `?? 0` at
+that boundary only. The official `CDEcksteinFood` path still stores `nil`.
+
+Two changes were made defensively rather than from a failure, because this
+machine has no compiler and CI is the only build:
+
+* `import Combine` in `NutritionHealthKitService.swift`, making the
+  `ObservableObject` dependency explicit.
+* Tuple labels on `CustomFoodManager.seedDefaultFoodsIfNeeded`'s name/category
+  list, so the element type is not inferred unlabelled at the call.
+
+### 18.12 Open item carried into Phase 4
+
+`NutritionService.delete` calls `recalculateTotals(for: meal)` immediately after
+`context.delete(entry)`. Core Data updates inverse to-many relationships
+synchronously on `delete`, and the *"delete refreshing totals"* case passes, but
+the ordering has not been confirmed on a device.
