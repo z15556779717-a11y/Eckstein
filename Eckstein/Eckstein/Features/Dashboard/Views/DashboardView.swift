@@ -22,6 +22,12 @@ struct DashboardView: View {
 
     /// The view model is injectable so a preview can point the screen at an
     /// in-memory store. The default is the one the app builds.
+    ///
+    /// `@MainActor` because of that default: a default argument is type-checked
+    /// in the enclosing declaration's isolation, and `DashboardViewModel` is
+    /// main-actor isolated. Left nonisolated, the default reads as a main-actor
+    /// call from a synchronous nonisolated context and does not compile.
+    @MainActor
     init(viewModel: DashboardViewModel = DashboardViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
