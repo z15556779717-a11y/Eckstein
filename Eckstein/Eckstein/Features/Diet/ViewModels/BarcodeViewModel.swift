@@ -20,12 +20,27 @@ import AVFoundation
 /// See NUTRITION_MIGRATION_PLAN.md §9.
 @MainActor
 class BarcodeViewModel: ObservableObject {
+    /// The camera permission as the screen needs to see it.
+    ///
+    /// A plain `Bool` cannot tell "not asked yet" from "refused", and the two
+    /// want different things: the first is a request, the second is a trip to
+    /// Settings, and a disabled button explains neither.
+    enum CameraPermission {
+        case authorized
+        case notDetermined
+        case refused
+    }
+
     @Published var scannedCode: String?
     @Published var isScanning = false
     @Published var foundFood: CDEcksteinFood?
     @Published var isLoading = false
     @Published var error: Error?
-    @Published var hasCameraPermission = false
+    @Published var cameraPermission: CameraPermission = .notDetermined
+
+    /// Whether the scanner can actually run. Kept for callers that only need
+    /// the yes/no.
+    var hasCameraPermission: Bool { cameraPermission == .authorized }
 
     private let resolver: BarcodeFoodResolver
     private var cancellables = Set<AnyCancellable>()
@@ -41,17 +56,17 @@ class BarcodeViewModel: ObservableObject {
     func checkCameraPermission() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            hasCameraPermission = true
+            cameraPermission = .authorized
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
                 DispatchQueue.main.async {
-                    self?.hasCameraPermission = granted
+                    self?.cameraPermission = granted ? .authorized : .refused
                 }
             }
         case .denied, .restricted:
-            hasCameraPermission = false
+            cameraPermission = .refused
         @unknown default:
-            hasCameraPermission = false
+            cameraPermission = .refused
         }
     }
 

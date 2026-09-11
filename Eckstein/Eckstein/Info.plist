@@ -8,12 +8,14 @@
 		<string>bluetooth-central</string>
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Eckstein uses Bluetooth to connect to your Xiaomi scale and automatically track your weight measurements.</string>
+	<string>Eckstein connects to your Xiaomi scale over Bluetooth so your weigh-ins are recorded without typing them in.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Eckstein uses Bluetooth to connect to your Xiaomi scale and automatically track your weight measurements.</string>
+	<string>Eckstein connects to your Xiaomi scale over Bluetooth so your weigh-ins are recorded without typing them in.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Eckstein uses the camera to scan food barcodes, so you can log a meal without typing the product name.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Eckstein can read your health data to provide comprehensive fitness tracking and insights.</string>
+	<string>Eckstein reads your weight, body fat, lean body mass and step count from Apple Health so your trends stay in one place.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Eckstein can save your workout and weight data to Apple Health to keep all your fitness data in sync.</string>
+	<string>Eckstein saves the weight, body fat and lean body mass readings you record to Apple Health.</string>
 </dict>
 </plist>

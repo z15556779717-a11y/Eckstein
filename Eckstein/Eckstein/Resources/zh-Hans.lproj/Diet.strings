@@ -350,3 +350,6 @@
 "export_healthkit_unavailable" = "此设备不支持 HealthKit";
 "export_healthkit_denied" = "未获得 HealthKit 写入权限";
 "export_healthkit_no_data" = "暂无可导出的数据";
+"diet_camera_permission_title" = "需要相机权限";
+"diet_camera_permission_message" = "需要相机权限才能扫描食品条码，可在设置中开启。";
+"diet_open_settings" = "去设置";

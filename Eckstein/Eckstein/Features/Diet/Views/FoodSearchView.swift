@@ -6,12 +6,30 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct FoodSearchView: View {
     @StateObject private var viewModel = FoodSearchViewModel()
     @StateObject private var barcodeViewModel = BarcodeViewModel()
     @State private var showBarcodeScanner = false
     @State private var showAddFood = false
+    @State private var showCameraDeniedAlert = false
+
+    /// The scan button has two jobs now: opening the scanner, and — when the
+    /// camera has been refused — being the one place that says why it will not
+    /// open and offers the only thing that can change that.
+    private func handleScanTap() {
+        if barcodeViewModel.cameraPermission == .refused {
+            showCameraDeniedAlert = true
+        } else {
+            showBarcodeScanner = true
+        }
+    }
+
+    private func openAppSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
     @State private var selectedFood: CDFood?
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var themeManager = ThemeManager.shared
@@ -29,12 +47,21 @@ struct FoodSearchView: View {
                     TextField("Search foods...", text: $viewModel.searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
-                    Button(action: { showBarcodeScanner = true }) {
+                    Button(action: handleScanTap) {
                         Image(systemName: "barcode.viewfinder")
                             .font(.title2)
                             .foregroundColor(themeManager.dietPrimaryColor)
                     }
-                    .disabled(!barcodeViewModel.hasCameraPermission)
+                    // Disabled only while the system prompt is still up: once the
+                    // answer is known, a refusal has to stay tappable or the trip
+                    // to Settings is behind a dead button.
+                    .disabled(barcodeViewModel.cameraPermission == .notDetermined)
+                    .alert("diet_camera_permission_title".localized, isPresented: $showCameraDeniedAlert) {
+                        Button("alert_button_cancel".localized, role: .cancel) {}
+                        Button("diet_open_settings".localized) { openAppSettings() }
+                    } message: {
+                        Text("diet_camera_permission_message".localized)
+                    }
                     .tooltip(
                         "Scan barcodes to quickly add foods",
                         tipId: TipManager.TipID.foodSearch,

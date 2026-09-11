@@ -350,3 +350,6 @@
 "export_healthkit_unavailable" = "HealthKit is not available on this device";
 "export_healthkit_denied" = "HealthKit write permission not granted";
 "export_healthkit_no_data" = "Nothing to export yet";
+"diet_camera_permission_title" = "Camera access needed";
+"diet_camera_permission_message" = "Eckstein needs camera access to scan food barcodes. You can turn it on in Settings.";
+"diet_open_settings" = "Open Settings";
