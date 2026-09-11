@@ -197,3 +197,33 @@
 "height_hint" = "Used to calculate BMI. Leave empty to clear.";
 "weight_to_goal" = "To Target";
 "days_overdue" = "Past the target date";
+
+// MARK: - Phase 4 UI
+"previous_day" = "Previous Day";
+"next_day" = "Next Day";
+"diet_no_entries_for_meal" = "Nothing logged";
+"diet_unknown_food" = "Unknown food";
+"diet_select_food" = "Select Food";
+"diet_food_category" = "Category";
+"diet_per_100g_line" = "per 100 g: %@";
+"diet_nutrition_unknown" = "Nutrition unknown for this food";
+"diet_slot_change_hint" = "Changing the meal moves the entry; the amount stays the same.";
+"diet_picker_scope" = "Show";
+"diet_no_foods" = "No foods yet";
+"diet_no_foods_message" = "Add a custom food to get started.";
+"diet_no_favorites" = "No favorites";
+"diet_no_favorites_message" = "Swipe a food to add it to favorites.";
+"diet_no_recents" = "No recent foods";
+"diet_no_recents_message" = "Foods you log will show up here.";
+"no_search_results_message" = "Try a different name.";
+"unfavorite" = "Remove from Favorites";
+"custom_food_name_hint" = "The name shown in your food list.";
+"custom_food_macros_hint" = "Leave a value empty if the label doesn't list it.";
+"custom_food_name_required" = "Enter a food name";
+"barcode_searching" = "Looking up product…";
+"barcode_not_found" = "Product not found";
+"barcode_not_found_message" = "This barcode isn't in the database yet. You can enter it as a custom food.";
+"scan_again" = "Scan Again";
+
+// MARK: - Phase 4 validation
+"invalid_fields_named" = "%@: enter a valid value";

@@ -10,7 +10,7 @@ import Combine
 import Supabase
 
 class AppCoordinator: ObservableObject {
-    @Published var selectedTab: Tab = .workout
+    @Published var selectedTab: Tab = .home
     @Published var isAuthenticated = false
     @Published var showOnboarding = false
     @Published var currentUser: User?
@@ -44,47 +44,63 @@ class AppCoordinator: ObservableObject {
         }
     }
     
+    /// The six primary destinations, in the order they appear in the tab bar:
+    /// 首页 / 饮食 / 训练 / 趋势 / AI / 我的.
+    ///
+    /// `home` is the Dashboard and is where a launch lands. `weight` is gone as a
+    /// tab: the weight log and its trends are the body of the `progress` tab, and
+    /// keeping both would have put seven items in the bar — past the point where
+    /// iOS folds the extras into a "More" list and the last two tabs stop being
+    /// reachable in one tap.
     enum Tab: Int, CaseIterable {
-        case workout = 0
+        case home = 0
         case diet = 1
-        case weight = 2
-        case ai = 3
-        case profile = 4
-        
+        case workout = 2
+        case progress = 3
+        case ai = 4
+        case profile = 5
+
         var title: String {
             switch self {
-            case .workout: return "tab_workout".localized
+            case .home: return "tab_home".localized
             case .diet: return "tab_diet".localized
-            case .weight: return "tab_weight".localized
+            case .workout: return "tab_workout".localized
+            case .progress: return "tab_progress".localized
             case .ai: return "tab_ai_coach".localized
             case .profile: return "tab_profile".localized
             }
         }
-        
+
         var icon: String {
             switch self {
-            case .workout: return "figure.strengthtraining.traditional"
+            case .home: return "house.fill"
             case .diet: return "fork.knife"
-            case .weight: return "scalemass"
+            case .workout: return "figure.strengthtraining.traditional"
+            case .progress: return "chart.line.uptrend.xyaxis"
             case .ai: return "bubble.left.and.bubble.right"
             case .profile: return "person.circle"
             }
         }
     }
-    
+
     func handleDeepLink(_ url: URL) {
         // Prepare for future deep linking
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             return
         }
-        
+
         switch components.path {
+        case "/home":
+            selectedTab = .home
         case "/workout":
             selectedTab = .workout
         case "/diet":
             selectedTab = .diet
-        case "/weight":
-            selectedTab = .weight
+        // `/weight` still resolves, and now lands on the tab that holds the
+        // weight log. Repointing it rather than dropping it keeps any link
+        // already in the wild working.
+        case "/weight", "/progress":
+            selectedTab = .progress
         case "/ai":
             selectedTab = .ai
         case "/profile":
@@ -93,13 +109,13 @@ class AppCoordinator: ObservableObject {
             break
         }
     }
-    
+
     func signOut() async {
         do {
             try await AuthService.shared.signOut()
             // Reset to first tab after sign out
             await MainActor.run {
-                selectedTab = .workout
+                selectedTab = .home
             }
         } catch {
             print("Error signing out: \(error)")

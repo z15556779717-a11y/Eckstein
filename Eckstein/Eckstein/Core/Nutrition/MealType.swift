@@ -18,8 +18,14 @@ import Foundation
 /// decodes anything unrecognised to `.unspecified` rather than failing.
 ///
 /// This is separate from `CDEcksteinMeal.mealNumber` (the Eckstein method's
-/// two-meal partition, 1 or 2). Neither can be derived from the other, and
-/// `mealNumber` is untouched by this layer.
+/// two-meal partition, 1 or 2). Neither can be derived from the other for data
+/// written before slots existed, and this layer never rewrites a `mealNumber`
+/// that is already stored.
+///
+/// It does *assign* one for new rows, though — see ``slotMealNumber``. The
+/// slot lives on the meal rather than on the entry, so the Diet screen's
+/// 早餐/午餐/晚餐/加餐 sections are only distinguishable if each slot is filed
+/// under its own meal row.
 enum MealType: String, CaseIterable, Codable, Hashable {
     case breakfast
     case lunch
@@ -70,6 +76,30 @@ enum MealType: String, CaseIterable, Codable, Hashable {
         case .dinner: return "Dinner"
         case .snack: return "Snack"
         case .unspecified: return "Other"
+        }
+    }
+
+    /// The `CDEcksteinMeal.mealNumber` a new entry in this slot is filed under.
+    ///
+    /// `mealType` is a property of the **meal**, not of the entry, so entries can
+    /// only be told apart by slot if each slot gets its own meal row. Reserving
+    /// 1–4 for the four slots is what makes them separate sections instead of one
+    /// list that relabels itself.
+    ///
+    /// `.unspecified` has no slot of its own and shares row 1. It writes no
+    /// `mealType` at all (`storedValue` is `nil`), so it stays absent on the way
+    /// back out rather than claiming to be breakfast.
+    ///
+    /// Rows already stored under `mealNumber` 1 or 2 keep their number: the
+    /// lookup is by `(day, mealNumber)`, so pre-existing data is merged into
+    /// rather than moved.
+    var slotMealNumber: Int32 {
+        switch self {
+        case .breakfast: return 1
+        case .lunch: return 2
+        case .dinner: return 3
+        case .snack: return 4
+        case .unspecified: return 1
         }
     }
 

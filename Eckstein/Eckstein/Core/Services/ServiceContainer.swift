@@ -27,7 +27,11 @@ class ServiceContainer: ObservableObject {
         let context = persistenceController.container.viewContext
         self.workoutRepository = WorkoutRepository(context: context)
         self.dietRepository = DietRepository(context: context)
-        self.weightRepository = WeightRepository(context: context)
+        // The shared instance, not a second one. Two repositories over the same
+        // context would each hold their own `weightEntries` / `currentWeight`
+        // cache, and the Dashboard, the Weight tab and the Profile summary would
+        // then be able to disagree about the user's current weight.
+        self.weightRepository = WeightRepository.shared
         
         // Bluetooth services
         self.bluetoothManager = BluetoothManager.shared

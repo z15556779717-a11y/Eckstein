@@ -25,7 +25,18 @@ class WeightRepository: ObservableObject {
     }
     
     // MARK: - Fetch Operations
-    
+
+    /// Re-reads the store into the published properties.
+    ///
+    /// Screens that show weight outside the Weight tab — the Dashboard and the
+    /// Progress screen — call this on appear rather than fetching their own copy.
+    /// One cache over one context is the point: a second instance would be a
+    /// second `currentWeight`, and two of those can disagree.
+    func refresh() {
+        fetchWeightEntries()
+        loadGoalWeight()
+    }
+
     func fetchWeightEntries() {
         let request: NSFetchRequest<CDWeightEntry> = CDWeightEntry.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWeightEntry.date, ascending: false)]

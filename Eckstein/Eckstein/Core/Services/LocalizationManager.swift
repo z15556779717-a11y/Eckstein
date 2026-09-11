@@ -102,6 +102,23 @@ extension Bundle {
     static var currentLanguageBundle: Bundle? {
         return objc_getAssociatedObject(Bundle.main, &bundleKey) as? Bundle
     }
+
+    /// The English resources, used when the active language has no entry for a
+    /// key.
+    ///
+    /// `he` and `zh-Hans` are both translations of an app written in English, and
+    /// neither is complete: a string added for one is often not translated for
+    /// the other. `NSLocalizedString` against a specific `.lproj` bundle returns
+    /// the key itself when a table has no entry, so without this the missing side
+    /// renders `dashboard_log_weight` on screen instead of words.
+    ///
+    /// A `static let` so the `lproj` lookup happens once rather than per string.
+    static let englishLanguageBundle: Bundle? = {
+        guard let path = Bundle.main.path(forResource: "en", ofType: "lproj") else {
+            return nil
+        }
+        return Bundle(path: path)
+    }()
 }
 
 private class AnyLanguageBundle: Bundle {

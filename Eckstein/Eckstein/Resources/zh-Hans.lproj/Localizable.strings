@@ -198,3 +198,33 @@
 "height_hint" = "用于计算 BMI，留空即可清除。";
 "weight_to_goal" = "距目标";
 "days_overdue" = "已超过目标日期";
+
+// MARK: - Phase 4 UI
+"previous_day" = "前一天";
+"next_day" = "后一天";
+"diet_no_entries_for_meal" = "还没有记录";
+"diet_unknown_food" = "未知食物";
+"diet_select_food" = "选择食物";
+"diet_food_category" = "分类";
+"diet_per_100g_line" = "每 100 克：%@";
+"diet_nutrition_unknown" = "该食物的营养数据未知";
+"diet_slot_change_hint" = "切换餐次只会移动这条记录，数量保持不变。";
+"diet_picker_scope" = "显示";
+"diet_no_foods" = "还没有食物";
+"diet_no_foods_message" = "添加自定义食物即可开始。";
+"diet_no_favorites" = "还没有收藏";
+"diet_no_favorites_message" = "左滑食物即可加入收藏。";
+"diet_no_recents" = "还没有最近记录";
+"diet_no_recents_message" = "记录过的食物会显示在这里。";
+"no_search_results_message" = "换个名称试试。";
+"unfavorite" = "取消收藏";
+"custom_food_name_hint" = "食物列表中显示的名称。";
+"custom_food_macros_hint" = "标签上没有的数值可以留空。";
+"custom_food_name_required" = "请输入食物名称";
+"barcode_searching" = "正在查询商品…";
+"barcode_not_found" = "没有找到该商品";
+"barcode_not_found_message" = "数据库中没有这个条码，可以手动添加为自定义食物。";
+"scan_again" = "重新扫描";
+
+// MARK: - Phase 4 validation
+"invalid_fields_named" = "%@：请输入有效数值";
