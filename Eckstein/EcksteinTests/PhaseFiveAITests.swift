@@ -38,7 +38,7 @@ class PhaseFiveAITests: XCTestCase {
             weightRepository: weightRepository,
             nutritionService: nutritionService,
             calendar: .current,
-            now: { [now] in now }
+            now: { [fixedNow = now] in fixedNow }
         )
     }
 
@@ -64,11 +64,11 @@ class PhaseFiveAITests: XCTestCase {
         food.id = UUID()
         food.name = "Chicken"
         food.category = ""
-        food.caloriesPer100g = 165
-        food.proteinPer100g = 31
-        food.carbsPer100g = 0
-        food.fatPer100g = 3.6
-        food.fiberPer100g = 0
+        food.caloriesPer100g = NSNumber(value: 165)
+        food.proteinPer100g = NSNumber(value: 31)
+        food.carbsPer100g = NSNumber(value: 0)
+        food.fatPer100g = NSNumber(value: 3.6)
+        food.fiberPer100g = NSNumber(value: 0)
         try context.save()
 
         return try nutritionService.logEntry(
@@ -139,7 +139,7 @@ class PhaseFiveAITests: XCTestCase {
             weightRepository: WeightRepository(context: emptyController.container.viewContext),
             nutritionService: NutritionService(context: emptyController.container.viewContext),
             calendar: .current,
-            now: { [now] in now }
+            now: { [fixedNow = now] in fixedNow }
         )
         let empty = await emptyBuilder.buildContext().nutrition
         XCTAssertFalse(empty.hasData)
@@ -392,15 +392,12 @@ class PhaseFiveAITests: XCTestCase {
     }
 
     private func counts() throws -> [Int] {
-        func count<T: NSManagedObject>(_ type: T.Type) throws -> Int {
-            try context.count(for: T.fetchRequest())
-        }
-        return [
-            try count(CDWorkout.self),
-            try count(CDWorkoutSet.self),
-            try count(CDExercise.self),
-            try count(CDWeightEntry.self),
-            try count(CDEcksteinMealEntry.self)
+        try [
+            context.fetch(CDWorkout.fetchRequest()).count,
+            context.fetch(CDWorkoutSet.fetchRequest()).count,
+            context.fetch(CDExercise.fetchRequest()).count,
+            context.fetch(CDWeightEntry.fetchRequest()).count,
+            context.fetch(CDEcksteinMealEntry.fetchRequest()).count
         ]
     }
 
