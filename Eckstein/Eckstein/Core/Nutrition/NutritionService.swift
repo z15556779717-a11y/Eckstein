@@ -251,14 +251,29 @@ final class NutritionService {
             calories: Self.positiveGoal(preferences.dailyCalorieGoal),
             protein: Self.positiveGoal(preferences.dailyProteinGoal),
             carbs: Self.positiveGoal(preferences.dailyCarbGoal),
-            fat: preferences.dailyFatGoal?.doubleValue,
-            fiber: preferences.dailyFiberGoal?.doubleValue
+            fat: Self.positiveGoal(preferences.dailyFatGoal),
+            fiber: Self.positiveGoal(preferences.dailyFiberGoal)
         )
     }
 
     /// An `Int32` goal column as an optional target, treating `0` as absent.
     private static func positiveGoal(_ stored: Int32) -> Double? {
         stored > 0 ? Double(stored) : nil
+    }
+
+    /// The same rule for the two optional columns.
+    ///
+    /// `fat` and `fiber` are `NSNumber?` rather than `Int32`, so a row written
+    /// before this rule existed — or by any path that bypasses
+    /// `NutritionGoalDraft`, which normalises `0` to `nil` — can hold a stored
+    /// zero. Read straight through, that would surface as a target of zero and
+    /// render "over by 40 g" against it. Normalising here keeps the answer to
+    /// "does this goal exist?" in one place, which is what `goals()` is for.
+    private static func positiveGoal(_ stored: NSNumber?) -> Double? {
+        guard let value = stored?.doubleValue, value > 0, value.isFinite else {
+            return nil
+        }
+        return value
     }
 
     /// Writes the user's daily targets, creating a preferences row if needed.
