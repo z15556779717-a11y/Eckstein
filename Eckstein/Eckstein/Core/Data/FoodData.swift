@@ -101,9 +101,13 @@ struct FoodData {
                     food.category = template.category
                     food.barcode = template.barcode
                     food.caloriesPer100g = Int32(template.caloriesPer100g)
-                    food.proteinPer100g = template.proteinPer100g
-                    food.carbsPer100g = template.carbsPer100g
-                    food.fatPer100g = template.fatPer100g
+                    // `CDFood` is the deprecated compatibility entity and its
+                    // macros are non-optional scalars, so "unknown" has no
+                    // representation here. The official `CDEcksteinFood` path
+                    // keeps them `nil`; see `NutritionService.upsertFood`.
+                    food.proteinPer100g = template.proteinPer100g ?? 0
+                    food.carbsPer100g = template.carbsPer100g ?? 0
+                    food.fatPer100g = template.fatPer100g ?? 0
                     food.fiberPer100g = template.fiberPer100g ?? 0
                     food.brand = template.brand
                     food.servingSize = template.servingSize ?? 100

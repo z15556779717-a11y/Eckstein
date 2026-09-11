@@ -151,8 +151,8 @@ class CustomFoodManager: ObservableObject {
     /// before the nutrition values existed up to date.
     func seedDefaultFoodsIfNeeded() {
         do {
-            let existing = try context.fetch(CDEcksteinFood.fetchRequest()).map {
-                ($0.name ?? "", $0.category ?? "")
+            let existing: [(name: String, category: String)] = try context.fetch(CDEcksteinFood.fetchRequest()).map {
+                (name: $0.name ?? "", category: $0.category ?? "")
             }
             seedDefaultFoods(skipping: existing)
         } catch {
