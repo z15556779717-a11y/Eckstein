@@ -1,0 +1,66 @@
+name: iOS Release Check
+
+# Compiles the app in the Release configuration on a GitHub-hosted macOS runner.
+#
+# Why this exists: ios.yml builds Debug, and Debug is not what ships. A Release
+# build compiles the same source with whole-module optimization and without any
+# `#if DEBUG` block, so a compile error that only exists in Release — a symbol
+# used only outside a DEBUG guard, an `-O` exclusivity diagnostic — would
+# otherwise not surface until the first Archive, which needs a signing
+# certificate this repo does not have.
+#
+# Deliberately narrow:
+#   * No code signing and no secrets. This is a compile check, not a
+#     distribution build: there is no Archive and no TestFlight upload.
+#   * No tests. ios.yml runs them in Debug; repeating them here would double
+#     the wait for no new signal.
+#   * No simulator boot. A generic iOS Simulator destination is enough to
+#     compile and link.
+
+on:
+  push:
+    branches:
+      - main
+      - 'develop/**'
+  pull_request:
+    branches:
+      - main
+      - 'develop/**'
+
+concurrency:
+  group: ios-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-build:
+    name: Release build (iOS Simulator, no code signing)
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    env:
+      PROJECT: Eckstein/Eckstein.xcodeproj
+      SCHEME: Eckstein
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: xcodebuild -version
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$SCHEME"
+
+      - name: Build app in Release (no code signing)
+        run: |
+          xcodebuild build \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
