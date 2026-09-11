@@ -80,31 +80,19 @@ class WorkoutRepository: ObservableObject {
         }
     }
     
+    /// Brings the exercise library up to date with the app's built-in
+    /// movements.
+    ///
+    /// Safe to call on every launch: it adds only what is missing and returns
+    /// `0` once the library is complete. See `ExerciseCatalogSeed`.
     func seedExercisesIfNeeded() {
-        // No longer seeding default exercises - users will create their own
-        // This function is kept for compatibility but does nothing
-        removeBuiltInExercises()
-    }
-    
-    func removeBuiltInExercises() {
-        // One-time migration to remove any built-in exercises
-        let request: NSFetchRequest<CDExercise> = CDExercise.fetchRequest()
-        request.predicate = NSPredicate(format: "isCustom == NO")
-        
         do {
-            let builtInExercises = try context.fetch(request)
-            for exercise in builtInExercises {
-                context.delete(exercise)
-            }
-            if !builtInExercises.isEmpty {
-                save()
-                print("Removed \(builtInExercises.count) built-in exercises")
-            }
+            try ExerciseCatalogSeed.seedIfNeeded(context: context)
         } catch {
-            print("Error removing built-in exercises: \(error)")
+            print("Error seeding exercises: \(error)")
         }
     }
-    
+
     func fetchAllExercises() -> [CDExercise] {
         let request: NSFetchRequest<CDExercise> = CDExercise.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExercise.name, ascending: true)]

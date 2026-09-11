@@ -13,6 +13,15 @@ struct WorkoutListView: View {
     @State private var showConfetti = false
     @State private var completedWorkoutId: UUID?
     @State private var justCompletedWorkout = false
+
+    /// Set while the create sheet is open and a workout was created in it.
+    ///
+    /// The push waits for `onDismiss` rather than happening inside the sheet's
+    /// callback: pushing a stack that is still covered by a sheet tends not to
+    /// animate, and the sheet is the thing that has to leave first.
+    @State private var createdWorkoutAwaitingOpen = false
+    @State private var showCreatedWorkout = false
+
     @ObservedObject private var themeManager = ThemeManager.shared
     
     var body: some View {
@@ -83,15 +92,7 @@ struct WorkoutListView: View {
                     .padding(.horizontal)
                     
                     if let activeWorkout = viewModel.activeWorkout {
-                        NavigationLink(destination: WorkoutDetailView(
-                            workout: activeWorkout,
-                            startTime: viewModel.activeWorkoutStartTime,
-                            onWorkoutCompleted: {
-                                justCompletedWorkout = true
-                                completedWorkoutId = activeWorkout.id
-                                viewModel.clearActiveWorkout()
-                            }
-                        )) {
+                        NavigationLink(destination: workoutDetail(for: activeWorkout)) {
                             ActiveWorkoutCard(workout: activeWorkout, startTime: viewModel.activeWorkoutStartTime)
                         }
                         .padding(.horizontal)
@@ -193,8 +194,19 @@ struct WorkoutListView: View {
                 }
             }
         }
-        .sheet(isPresented: $showCreateWorkout) {
-            CreateWorkoutView(viewModel: viewModel)
+        .sheet(isPresented: $showCreateWorkout, onDismiss: openCreatedWorkout) {
+            CreateWorkoutView(
+                viewModel: viewModel,
+                onCreate: { workout in
+                    viewModel.setActiveWorkout(workout)
+                    createdWorkoutAwaitingOpen = true
+                }
+            )
+        }
+        .navigationDestination(isPresented: $showCreatedWorkout) {
+            if let activeWorkout = viewModel.activeWorkout {
+                workoutDetail(for: activeWorkout)
+            }
         }
         .onAppear {
             viewModel.fetchWorkouts()
@@ -203,6 +215,36 @@ struct WorkoutListView: View {
                 justCompletedWorkout = false
             }
         }
+    }
+
+    // MARK: - Navigation
+
+    /// The detail screen for a workout, with the completion bookkeeping the list
+    /// needs.
+    ///
+    /// Built in one place because the screen is now reachable two ways — from
+    /// the active-workout card, and from a push straight after creating one —
+    /// and the two must not drift apart.
+    private func workoutDetail(for workout: CDWorkout) -> some View {
+        WorkoutDetailView(
+            workout: workout,
+            startTime: viewModel.activeWorkoutStartTime,
+            onWorkoutCompleted: {
+                justCompletedWorkout = true
+                completedWorkoutId = workout.id
+                viewModel.clearActiveWorkout()
+            }
+        )
+    }
+
+    /// Opens the workout the create sheet just made, if it made one.
+    ///
+    /// A cancel leaves the flag clear, so the sheet closing by itself never
+    /// navigates.
+    private func openCreatedWorkout() {
+        guard createdWorkoutAwaitingOpen else { return }
+        createdWorkoutAwaitingOpen = false
+        showCreatedWorkout = true
     }
 }
 

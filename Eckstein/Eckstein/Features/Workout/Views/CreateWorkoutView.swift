@@ -9,6 +9,17 @@ import SwiftUI
 
 struct CreateWorkoutView: View {
     @ObservedObject var viewModel: WorkoutViewModel
+
+    /// Called with the workout that was just created, so the presenter can open
+    /// it.
+    ///
+    /// This used to be a `NotificationCenter` post under the name
+    /// `NavigateToWorkout`, which nothing in the app ever observed — picking a
+    /// type dismissed the sheet and went nowhere. A callback keeps the
+    /// navigation in the view that owns the stack, and a `@escaping` closure
+    /// cannot go stale the way a stringly-typed notification can.
+    var onCreate: (CDWorkout) -> Void = { _ in }
+
     @StateObject private var typeManager = WorkoutTypeManager.shared
     @Environment(\.dismiss) var dismiss
     @State private var showCreateWorkoutType = false
@@ -52,14 +63,8 @@ struct CreateWorkoutView: View {
                                     onSelect: {
                                         if let workout = typeManager.createWorkoutFromType(workoutType) {
                                             viewModel.fetchWorkouts()
+                                            onCreate(workout)
                                             dismiss()
-                                            // Navigate to workout detail
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                                NotificationCenter.default.post(
-                                                    name: Notification.Name("NavigateToWorkout"),
-                                                    object: workout
-                                                )
-                                            }
                                         }
                                     }
                                 )
