@@ -22,6 +22,7 @@
 //  no-op, and an export interrupted half way resumes rather than restarting.
 //
 
+import Combine
 import Foundation
 import HealthKit
 
