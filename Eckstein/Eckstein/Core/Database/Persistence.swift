@@ -6,9 +6,20 @@
 //
 
 import CoreData
+import os
 
 struct PersistenceController {
     static let shared = PersistenceController()
+
+    /// The store error that stopped the app from opening its database, if any.
+    ///
+    /// Set once by the store-load callback and never cleared: a store that
+    /// failed to open stays failed for the life of the process. Exposed so a
+    /// screen can explain the empty state, and so the failure is a value the
+    /// app owns rather than a crash it cannot report.
+    private(set) static var storeLoadFailure: NSError?
+
+    private static let logger = Logger(subsystem: "com.eliosdigital.Eckstein", category: "persistence")
 
     /// The one `NSManagedObjectModel` instance every container shares.
     ///
@@ -98,7 +109,13 @@ struct PersistenceController {
         
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                // A store that will not open is a data problem, not a reason to
+                // kill the app on launch. Record it so a future screen can say
+                // so, log it for the device console, and let the app come up:
+                // an empty app the user can still use beats an instant crash
+                // they cannot report.
+                Self.storeLoadFailure = error
+                Self.logger.error("Core Data store failed to load: \(error.domain) \(error.code)")
             }
         }
         
@@ -115,7 +132,10 @@ struct PersistenceController {
                 try context.save()
             } catch {
                 let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                // Logged rather than fatal: a save can fail because the device
+                // is out of space, which is neither the user's fault nor a
+                // reason to take the whole app down with it.
+                Self.logger.error("Core Data save failed: \(nsError.domain) \(nsError.code)")
             }
         }
     }
