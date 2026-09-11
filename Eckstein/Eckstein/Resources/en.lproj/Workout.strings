@@ -257,3 +257,30 @@
 "tap_checkmark_complete_set" = "Tap the checkmark to complete a set";
 "select_weight" = "Select Weight";
 "select_reps" = "Select Reps";
+
+
+/* Phase 5: training metrics and exercise history. */
+"metric" = "Metric";
+"metric_volume" = "Volume";
+"metric_max_weight" = "Max Weight";
+"metric_one_rm" = "Est. 1RM";
+"metric_total_sets" = "Total Sets";
+"time_range" = "Time Range";
+"time_range_all" = "All";
+"no_data_available" = "No data available";
+"complete_more_workouts_for_progress" = "Complete more workouts to see progress";
+"recent_sets" = "Recent Sets";
+"workout_pr" = "PR";
+"estimated_1rm" = "Est. 1RM";
+
+
+/* Phase 5: training metrics and exercise history. */
+"reps_count" = "%d reps";
+"pr_heaviest" = "Heaviest";
+"pr_most_reps" = "Most Reps";
+"pr_best_volume" = "Best Volume";
+"add_exercise_image" = "Add Exercise Image";
+"exercise_image" = "Exercise Image";
+"video_tutorial" = "Video Tutorial";
+"watch_on_youtube" = "Watch on YouTube";
+"added_on" = "Added on %@";

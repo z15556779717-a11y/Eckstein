@@ -275,6 +275,19 @@ struct WorkoutHistoryRow: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+
+            // Total volume. The list showed how long a session ran and how many
+            // sets it held but not how much was moved, which is the number that
+            // says whether it was a hard one.
+            let volume = WorkoutMetrics.workoutVolume(workout)
+            if volume > 0 {
+                Label(
+                    "\( "total_volume".localized) \(WorkoutFormat.weight(volume))",
+                    systemImage: "scalemass"
+                )
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
         }
     }
 }

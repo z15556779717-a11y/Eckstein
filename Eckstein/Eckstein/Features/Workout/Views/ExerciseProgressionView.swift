@@ -19,6 +19,19 @@ struct ExerciseProgressionView: View {
         case maxWeight = "Max Weight"
         case oneRM = "Est. 1RM"
         case totalSets = "Total Sets"
+
+        /// The picker label.
+        ///
+        /// `rawValue` stays in English because it is also the chart's series
+        /// name; only what is on screen is translated.
+        var titleKey: String {
+            switch self {
+            case .volume: return "metric_volume"
+            case .maxWeight: return "metric_max_weight"
+            case .oneRM: return "metric_one_rm"
+            case .totalSets: return "metric_total_sets"
+            }
+        }
     }
     
     enum TimeRange: String, CaseIterable {
@@ -27,6 +40,12 @@ struct ExerciseProgressionView: View {
         case threeMonths = "3M"
         case year = "1Y"
         case all = "All"
+
+        /// The four numeric cases are abbreviations that read the same in every
+        /// language this ships in; "All" is an English word and is not.
+        var title: String {
+            self == .all ? "time_range_all".localized : rawValue
+        }
     }
     
     init(exercise: CDExercise, repository: WorkoutRepository) {
@@ -74,29 +93,29 @@ struct ExerciseProgressionView: View {
     @ViewBuilder
     private var personalRecordsSection: some View {
         VStack(spacing: 16) {
-            Text("Personal Records")
+            Text("personal_records".localized)
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack(spacing: 16) {
                 PRCard(
-                    title: "Heaviest",
-                    value: "\(Int(viewModel.maxWeight)) kg",
+                    title: "pr_heaviest".localized,
+                    value: WorkoutFormat.weight(viewModel.maxWeight),
                     date: viewModel.maxWeightDate,
                     icon: "scalemass.fill"
                 )
                 
                 PRCard(
-                    title: "Most Reps",
-                    value: "\(viewModel.maxReps) reps",
-                    subtitle: "@ \(Int(viewModel.maxRepsWeight)) kg",
+                    title: "pr_most_reps".localized,
+                    value: "reps_count".localized(viewModel.maxReps),
+                    subtitle: "@ \(WorkoutFormat.weight(viewModel.maxRepsWeight))",
                     date: viewModel.maxRepsDate,
                     icon: "number.circle.fill"
                 )
                 
                 PRCard(
-                    title: "Best Volume",
-                    value: "\(Int(viewModel.maxVolume)) kg",
+                    title: "pr_best_volume".localized,
+                    value: WorkoutFormat.weight(viewModel.maxVolume),
                     date: viewModel.maxVolumeDate,
                     icon: "chart.bar.fill"
                 )
@@ -109,16 +128,16 @@ struct ExerciseProgressionView: View {
     private var chartControlsSection: some View {
         VStack(spacing: 16) {
             // Metric Selector
-            Picker("Metric", selection: $selectedMetric) {
+            Picker("metric".localized, selection: $selectedMetric) {
                 ForEach(MetricType.allCases, id: \.self) { metric in
-                    Text(metric.rawValue).tag(metric)
+                    Text(metric.titleKey.localized).tag(metric)
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
             
             // Time Range Selector
             HStack {
-                Text("Time Range")
+                Text("time_range".localized)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -129,7 +148,7 @@ struct ExerciseProgressionView: View {
                         Button {
                             selectedTimeRange = range
                         } label: {
-                            Text(range.rawValue)
+                            Text(range.title)
                                 .font(.caption)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
@@ -151,9 +170,9 @@ struct ExerciseProgressionView: View {
                 Image(systemName: "chart.line.uptrend.xyaxis")
                     .font(.system(size: 48))
                     .foregroundColor(.secondary)
-                Text("No data available")
+                Text("no_data_available".localized)
                     .font(.headline)
-                Text("Complete more workouts to see progress")
+                Text("complete_more_workouts_for_progress".localized)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -177,17 +196,38 @@ struct ExerciseProgressionView: View {
         }
     }
     
+    /// "80 kg × 8" — the weight and the reps of one set.
+    private func progressionSummary(for set: CDWorkoutSet) -> String {
+        "\(WorkoutFormat.weight(set.weightKg)) × \(set.reps) \("reps".localized)"
+    }
+
+    /// "Total Volume 640 kg · Est. 1RM 101 kg". The second half is appended
+    /// only when the set can have an estimate at all.
+    private func progressionMetrics(for set: CDWorkoutSet) -> String {
+        var parts = [
+            "\("total_volume".localized) \(WorkoutFormat.weight(WorkoutMetrics.setVolume(set)))"
+        ]
+        if let oneRM = WorkoutMetrics.estimatedOneRepMax(set) {
+            parts.append("\("estimated_1rm".localized) \(WorkoutFormat.weight(oneRM))")
+        }
+        return parts.joined(separator: " · ")
+    }
+
     @ViewBuilder
     private var recentSetsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Recent Sets")
+            Text("recent_sets".localized)
                 .font(.headline)
             
             ForEach(viewModel.recentSets.prefix(10)) { set in
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\(Int(set.weightKg)) kg × \(set.reps) reps")
+                        Text(progressionSummary(for: set))
                             .font(.headline)
+
+                        Text(progressionMetrics(for: set))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                         
                         if let date = set.workout?.date {
                             Text(date, style: .date)
@@ -199,7 +239,7 @@ struct ExerciseProgressionView: View {
                     Spacer()
                     
                     if viewModel.isPersonalRecord(set) {
-                        Label("PR", systemImage: "star.fill")
+                        Label("workout_pr".localized, systemImage: "star.fill")
                             .font(.caption)
                             .foregroundColor(.yellow)
                     }
@@ -317,7 +357,7 @@ class ExerciseProgressionViewModel: ObservableObject {
             }
             
             // Max Volume (single set)
-            let volume = set.weightKg * Double(set.reps)
+            let volume = WorkoutMetrics.setVolume(set)
             if volume > maxVolume {
                 maxVolume = volume
                 maxVolumeDate = set.workout?.date
@@ -336,10 +376,10 @@ class ExerciseProgressionViewModel: ObservableObject {
             guard !sets.isEmpty else { return [] }
             
             // Calculate metrics for each date
-            let volume = sets.reduce(0) { $0 + ($1.weightKg * Double($1.reps)) }
+            let volume = WorkoutMetrics.volume(of: sets)
             let maxWeight = sets.map { $0.weightKg }.max() ?? 0
             let totalSets = Double(sets.count)
-            let oneRM = calculateOneRM(from: sets)
+            let oneRM = WorkoutMetrics.bestEstimatedOneRepMax(in: sets) ?? 0
             
             return [
                 ChartDataPoint(date: date, value: volume, metric: .volume),
@@ -350,14 +390,15 @@ class ExerciseProgressionViewModel: ObservableObject {
         }
     }
     
-    private func calculateOneRM(from sets: [CDWorkoutSet]) -> Double {
-        // Epley Formula: 1RM = weight × (1 + reps/30)
-        return sets.compactMap { set in
-            guard set.reps > 0 else { return nil }
-            return set.weightKg * (1 + Double(set.reps) / 30)
-        }.max() ?? 0
+    func isPersonalRecord(_ set: CDWorkoutSet) -> Bool {
+        // The `maxVolume > 0` guard is the point of this line as much as the
+        // comparison is: without it, a workout where nothing has been logged yet
+        // has `maxVolume == 0`, and every empty row would match `0 == 0` and be
+        // badged a personal record.
+        return set.weightKg == maxWeight ||
+               (set.reps == maxReps && set.weightKg == maxRepsWeight) ||
+               (maxVolume > 0 && WorkoutMetrics.setVolume(set) == maxVolume)
     }
-    
     func filteredChartData(for metric: ExerciseProgressionView.MetricType, timeRange: ExerciseProgressionView.TimeRange) -> [ChartDataPoint] {
         let filtered = chartData.filter { $0.metric == metric }
         
@@ -382,9 +423,4 @@ class ExerciseProgressionViewModel: ObservableObject {
         return filtered.filter { $0.date >= cutoffDate }.sorted { $0.date < $1.date }
     }
     
-    func isPersonalRecord(_ set: CDWorkoutSet) -> Bool {
-        return set.weightKg == maxWeight ||
-               (set.reps == maxReps && set.weightKg == maxRepsWeight) ||
-               (set.weightKg * Double(set.reps) == maxVolume)
-    }
 }

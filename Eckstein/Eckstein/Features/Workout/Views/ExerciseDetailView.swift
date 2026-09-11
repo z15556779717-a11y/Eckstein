@@ -41,7 +41,7 @@ struct ExerciseDetailView: View {
                     if let imageData = exercise.imageData,
                        let uiImage = UIImage(data: imageData) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Exercise Image")
+                            Text("exercise_image".localized)
                                 .font(.headline)
                                 .padding(.horizontal)
                             
@@ -57,7 +57,7 @@ struct ExerciseDetailView: View {
                     // YouTube Link
                     if let youtubeLink = exercise.youtubeLink, !youtubeLink.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Video Tutorial")
+                            Text("video_tutorial".localized)
                                 .font(.headline)
                                 .padding(.horizontal)
                             
@@ -72,7 +72,7 @@ struct ExerciseDetailView: View {
                                         .foregroundColor(.red)
                                     
                                     VStack(alignment: .leading) {
-                                        Text("Watch on YouTube")
+                                        Text("watch_on_youtube".localized)
                                             .font(.headline)
                                             .foregroundColor(.primary)
                                         
@@ -101,7 +101,7 @@ struct ExerciseDetailView: View {
                         HStack {
                             Image(systemName: "calendar")
                                 .foregroundColor(.secondary)
-                            Text("Added on \(createdAt, formatter: DateFormatter.mediumDate)")
+                            Text("added_on".localized(DateFormatter.mediumDate.string(from: createdAt)))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

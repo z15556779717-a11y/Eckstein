@@ -248,7 +248,7 @@ struct AnalyticsView: View {
             
             progressData = grouped.map { (date, sets) in
                 let maxWeight = sets.map { $0.weightKg }.max() ?? 0
-                let totalVolume = sets.reduce(0) { $0 + ($1.weightKg * Double($1.reps)) }
+                let totalVolume = WorkoutMetrics.volume(of: sets)
                 let averageAchievement = calculateAverageAchievement(sets: sets)
                 
                 return ExerciseProgress(

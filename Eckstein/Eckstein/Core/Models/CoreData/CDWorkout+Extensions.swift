@@ -15,10 +15,13 @@ extension CDWorkout {
         return set.sorted { $0.setNumber < $1.setNumber }
     }
     
+    /// Total volume, via the one implementation in `WorkoutMetrics`.
+    ///
+    /// Kept as a property because callers already read it as one; the formula
+    /// itself lives in the business layer so the chart, the AI summary and the
+    /// tests cannot drift apart.
     var totalVolume: Double {
-        setsArray.reduce(0) { total, set in
-            total + (Double(set.reps) * set.weightKg)
-        }
+        WorkoutMetrics.workoutVolume(self)
     }
     
     var isToday: Bool {

@@ -85,7 +85,7 @@ struct CreateCustomExerciseView: View {
                                     .frame(height: 100)
                                     .cornerRadius(8)
                             } else {
-                                Text("Add Exercise Image")
+                                Text("add_exercise_image".localized)
                                     .foregroundColor(themeManager.accentColor.color)
                             }
                             

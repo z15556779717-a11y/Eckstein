@@ -228,3 +228,26 @@
 
 // MARK: - Phase 4 validation
 "invalid_fields_named" = "%@：请输入有效数值";
+
+
+/* Phase 5: keys that were referenced in code but never defined. */
+"body_composition" = "身体成分";
+"change" = "变化";
+"daily_progress" = "每日趋势";
+"date" = "日期";
+"days_to_target" = "距目标天数";
+"estimated_completion" = "预计达成";
+"highest" = "最高";
+"insights" = "分析";
+"last_entry" = "最近一条";
+"lowest" = "最低";
+"milestones" = "里程碑";
+"no_meals_logged_today" = "今天还没有记录饮食";
+"progress_preview" = "趋势预览";
+"remove" = "移除";
+"remove_goal_confirmation" = "确定要移除这个目标吗？";
+"reorder" = "重新排序";
+"select_meal_type" = "选择餐次";
+"todays_meals" = "今日饮食";
+"total_entries" = "总记录数";
+"weight_entry" = "体重记录";

@@ -257,3 +257,30 @@
 "tap_checkmark_complete_set" = "点击对勾完成一组";
 "select_weight" = "选择重量";
 "select_reps" = "选择次数";
+
+
+/* Phase 5: training metrics and exercise history. */
+"metric" = "指标";
+"metric_volume" = "训练容量";
+"metric_max_weight" = "最大重量";
+"metric_one_rm" = "预计 1RM";
+"metric_total_sets" = "总组数";
+"time_range" = "时间范围";
+"time_range_all" = "全部";
+"no_data_available" = "暂无数据";
+"complete_more_workouts_for_progress" = "完成更多训练后即可查看趋势";
+"recent_sets" = "最近记录";
+"workout_pr" = "个人纪录";
+"estimated_1rm" = "预计 1RM";
+
+
+/* Phase 5: training metrics and exercise history. */
+"reps_count" = "%d 次";
+"pr_heaviest" = "最重";
+"pr_most_reps" = "最多次数";
+"pr_best_volume" = "最大容量";
+"add_exercise_image" = "添加动作图片";
+"exercise_image" = "动作图片";
+"video_tutorial" = "视频教程";
+"watch_on_youtube" = "在 YouTube 上观看";
+"added_on" = "添加于 %@";

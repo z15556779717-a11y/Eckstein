@@ -227,3 +227,26 @@
 
 // MARK: - Phase 4 validation
 "invalid_fields_named" = "%@: enter a valid value";
+
+
+/* Phase 5: keys that were referenced in code but never defined. */
+"body_composition" = "Body Composition";
+"change" = "Change";
+"daily_progress" = "Daily Progress";
+"date" = "Date";
+"days_to_target" = "Days to Target";
+"estimated_completion" = "Estimated Completion";
+"highest" = "Highest";
+"insights" = "Insights";
+"last_entry" = "Last Entry";
+"lowest" = "Lowest";
+"milestones" = "Milestones";
+"no_meals_logged_today" = "No meals logged today";
+"progress_preview" = "Progress Preview";
+"remove" = "Remove";
+"remove_goal_confirmation" = "Remove this goal?";
+"reorder" = "Reorder";
+"select_meal_type" = "Select Meal Type";
+"todays_meals" = "Today's Meals";
+"total_entries" = "Total Entries";
+"weight_entry" = "Weight Entry";

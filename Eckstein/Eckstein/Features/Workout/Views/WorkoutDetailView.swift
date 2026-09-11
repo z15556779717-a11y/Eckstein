@@ -85,6 +85,18 @@ struct WorkoutDetailView: View {
                         }
                     }
                     
+                    // The session's total volume, from the same business-layer
+                    // formula the history list and the AI summary use. It grows
+                    // as sets are completed, so it is worth showing live rather
+                    // than only at the end.
+                    HStack {
+                        Image(systemName: "scalemass")
+                            .foregroundColor(.secondary)
+                        Text("\("total_volume".localized) \(WorkoutFormat.weight(WorkoutMetrics.workoutVolume(workout))))")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+
                     if let notes = workout.notes, !notes.isEmpty {
                         HStack(alignment: .top) {
                             Image(systemName: "note.text")
