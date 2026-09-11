@@ -864,3 +864,173 @@ applied from the real Xcode log rather than guessed at:
    deliberately changed. None was deleted; each was repointed at the new data
    path, which also proves the legacy `FoodData.seedFoodsIfNeeded` path still
    works for the stores that hold rows it wrote.
+
+---
+
+## 18. Phase 3 — wiring the architecture into the real app path
+
+Phase 2 built the nutrition layer. Phase 3 makes the shipping app actually use
+it, and fixes what the audit found on the way. Eight changes, one per deliverable
+in the phase brief.
+
+### 18.1 The default food catalog has nutrition
+
+`NutritionCatalogSeed.seedIfNeeded` already copied `FoodData`'s 34 templates
+into `CDEcksteinFood`, but the *diet-rule* foods — the ones the official Diet
+screen logs — had no per-100 g values at all, and the ten carb-load dishes had no
+catalog row either. `DietRuleNutrition` (new) is a static fixture holding a
+documented per-100 g value for 27 diet rules. Where the repository already
+shipped an equivalent food in `FoodData`, that value is reused verbatim rather
+than a second number being introduced for the same food (Salmon, Lean Ground
+Beef, Eggs, Chicken Breast, Tuna, Cottage Cheese, White Rice, Pasta, Whole Wheat
+Bread, Oatmeal). Values for composite dishes with no generic USDA composition are
+rounded on purpose and marked `isApproximate`. `Approved Snack 1` and
+`Approved Snack 2` are deliberately absent — they stand for a snack the user
+picks, so any number would be invented, and their entries keep a `nil` snapshot.
+
+`NutritionCatalogSeed.backfillDietRuleNutrition` fills the rows a pre-Phase-3
+store already holds with every nutrition column `NULL`. It is idempotent and
+non-destructive: a row is touched only when it has no per-100 g values at all, so
+a value the user corrected, a scanned product or a food the user typed is never
+overwritten.
+
+Provenance is recorded as a `NutritionSource` raw value in
+`CDEcksteinFood.source`; an unrecognised or absent stored string decodes to `nil`
+("provenance unrecorded") rather than to a guess.
+
+### 18.2 Every logged entry carries a snapshot
+
+`NutritionService.applyNutrition` writes `per100g × grams / 100` into the entry's
+own columns. Two things changed:
+
+* The snapshot is *denormalised onto the entry*, not read through `food`, so a
+  later catalog correction cannot rewrite history. `updateGrams` and
+  `updateEntry` recompute from the new grams or the new food; `updateMealType`
+  deliberately does not.
+* When no catalog row exists, `applyNutrition` falls back to
+  `DietRuleNutrition` by name and category. This is what stops a diet-rule meal
+  reading as zero calories — the diet rules are gram allowances, not food records,
+  and the ten carb-load dishes have no `CDEcksteinFood` row at all.
+
+Nothing was computed in a `View` body; the arithmetic lives in
+`NutritionSnapshot` and the service.
+
+### 18.3 Two write paths that bypassed the service now go through it
+
+`EcksteinDietViewModel.saveFoodEntry` and `DietDayEditView.saveFoodEntryForDate`
+both wrote `CDEcksteinMealEntry` directly, and `removeFoodEntryFromCoreData`
+re-implemented the lookup. All three now call `NutritionService` — the entry
+write through a new `record(food:grams:mealNumber:on:)`, the delete through
+`entries(on:)` + `delete(_:)`, which also fixes stale meal totals after a delete.
+
+### 18.4 Daily summary and goals
+
+`NutritionService.dailySummary(for:calendar:)` (with `summary(on:)` as the long
+spelling) and `mealTypeSummary(for:calendar:)` are the single entry point for a
+day's totals and its per-slot breakdown. Days are decided by `Calendar` and
+half-open `startOfDay` bounds; no code compares two `Date`s for equality.
+
+`goalProgress(on:calendar:)` returns `NutritionGoalProgress`: per component a
+current value, a target, a remaining and a progress. `remaining` is **not**
+clamped — 2200 target with 2450 consumed is `-250` — and a component with no
+target is `nil` throughout rather than zero, because "no goal" and "a goal of
+zero" are different states. Only the display projection (`displayProgress`) is
+clamped to `0...1`.
+
+### 18.5 Supabase sync
+
+The audit found the nutrition branches of `SyncManager.encodeEntity` had drifted
+from the schema: `eckstein_meal_entries` was sent `name` / `quantity_grams` /
+`meal_type` where the table has `food_name` / `grams_consumed` / `category`,
+`CDEcksteinFood` fell through to a generic branch that emitted Core Data
+attribute names verbatim (`dailyGrams`, `isCustom`, …), both nutrition totals on
+a meal were hard-coded to zero, the fat and fiber goals were dropped, and
+`syncCreate` injected `user_id` into every row regardless of whether the table
+has the column.
+
+`NutritionSyncDTO` (new) replaces that with one explicit `Codable` DTO per table,
+every `CodingKey` a real column name from `FINAL_VERSION_APP_DB.sql` plus the
+migration below. `NutritionSyncTable.requireUserID` lists the tables that do have
+a `user_id` column, read off the schema rather than guessed;
+`eckstein_meal_entries` (owned through its meal) and `eckstein_foods` (a shared
+catalog) are deliberately not in it.
+
+One finding is **reported, not silently changed**: `CDEcksteinFood` does not
+conform to `SyncableEntity`, so a food row is never enqueued for sync at all.
+The DTO is correct, but nothing currently reaches it for that entity. Adding
+conformance would change what the app uploads, which is outside this phase.
+
+### 18.6 Migration SQL
+
+`supabase/migrations/20260910120000_nutrition_fields.sql` is unchanged in shape
+and still **prepared, not applied**. Phase 3 added one statement: the four
+`eckstein_meal_entries` snapshot columns were created `NOT NULL DEFAULT 0`, which
+cannot express "unknown" — the Core Data attributes are nullable for exactly that
+reason, and the DTO omits the key when the value is `nil`. Dropping `NOT NULL` is
+non-destructive and lets the remote side carry the same distinction
+(`grams_consumed` stays `NOT NULL`: `0` is a real weight there). The file's
+header now records that the camelCase caveat it described is fixed.
+
+No key, token or credential appears in it, and it was not run against any
+database from this machine.
+
+### 18.7 Barcode
+
+`BarcodeFoodResolver` remains the single seam: local catalog first (no network at
+all for a known barcode), then Open Food Facts, then a write through
+`NutritionService.upsertFood`. `FoodAPIService.createFoodFromAPIResponse` no
+longer substitutes `?? 0` for an undeclared macro — a label that omits
+`proteins_100g` states nothing about protein, and recording a zero would be a
+claim the product never made. `FoodTemplate`'s three macro fields became
+`Double?` to carry that.
+
+The network lookup is now a closure the initialiser takes, so the failure,
+not-found and partial-label paths have tests without a network. `FoodAPIService`
+has a private initialiser and is not subclassable, so there was no other seam.
+A network failure propagates rather than being reported as "unknown product".
+
+### 18.8 HealthKit
+
+New, and App → Health only. `NutritionHealthKitExport` holds the pure logic —
+nutrient→`HKQuantityTypeIdentifier` mapping, metadata, the dedupe rule, the
+sample plan — with no `HKHealthStore` anywhere in it;
+`NutritionHealthKitService` drives it over a `NutritionHealthKitStore` protocol;
+`HealthKitNutritionStore` is the only type that touches HealthKit's API. That
+split is what makes the logic testable in CI, where the simulator has HealthKit
+but no user data and cannot grant write permission. The real store is untouched
+and remains the only implementation the app uses.
+
+Every sample carries the entry's own `UUID` under `EcksteinMealEntryUUID`, and
+the service asks HealthKit what an entry already has before writing, so
+re-exporting is a no-op and an interrupted export resumes. Zero-valued nutrients
+are not written (a written zero is indistinguishable from a real measurement of
+zero). Nothing is written at launch, nothing writes history in bulk, and nothing
+is ever deleted — the export runs only from the button the user taps on the
+Diet screen.
+
+### 18.9 Tests
+
+`NutritionIntegrationTests` (new, 48 cases) covers the twenty-five the brief
+lists, including the per-100 g maths, every snapshot component, the recompute on
+edit-grams and edit-food, the no-recompute on a metadata edit, duplicate
+identity, the daily and per-slot summaries, goals and negative remaining,
+`NutritionSource` mapping, snake_case column mapping, DTO round trips, the
+barcode paths, the HealthKit identifier/dedupe logic and the export against a
+stand-in store, and a legacy `NULL`-nutrition row staying readable.
+
+Existing tests were neither deleted nor weakened.
+
+### 18.10 Findings to carry forward
+
+* `CDEcksteinFood` is not `SyncableEntity`, so food rows never enqueue (§18.5).
+* `CDEcksteinMealEntry` and `CDEcksteinMeal` have no `createdAt` column, so a
+  duplicate gets a new `UUID`, `objectID` and `updatedAt` but no new creation
+  timestamp.
+* A meal entry has no `notes` column; `MealDetailView`'s notes box is local view
+  state. `updateMealType` is therefore the whole of the display-metadata edit
+  path, and the "editing notes must not recompute" rule is tested through it.
+* `SyncManager.testSyncWithCoreData` and `SyncDebugView` still create
+  `CDEcksteinMeal` directly. Debug-only paths, left as they are.
+* `CDFood` / `CDMeal` / `CDMealItem` remain in the model and unreachable from the
+  official path (`MealDetailView`, `QuickAddView`, `DietRepository`). Physical
+  deletion is deferred.
