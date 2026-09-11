@@ -581,13 +581,13 @@ class NutritionTests: XCTestCase {
             servingUnit: nil
         )
 
-        let first = try service.upsertFood(from: template, source: "barcode")
-        let second = try service.upsertFood(from: template, source: "barcode")
+        let first = try service.upsertFood(from: template, source: .barcode)
+        let second = try service.upsertFood(from: template, source: .barcode)
 
         XCTAssertEqual(first.objectID, second.objectID, "scanning twice must not duplicate the row")
         XCTAssertEqual(try context.count(for: CDEcksteinFood.fetchRequest()), 1)
         XCTAssertEqual(first.barcode, "7290000000001")
-        XCTAssertEqual(first.source, "barcode")
+        XCTAssertEqual(first.source, NutritionSource.barcode.storedValue)
 
         // Catalog rows carry an empty `category`, so they never surface in the
         // Eckstein diet-rule pickers.

@@ -21,6 +21,9 @@ class EcksteinDietViewModel: ObservableObject {
     @Published var combineMealsForCarbLoad: Bool = false
     
     internal let context = PersistenceController.shared.container.viewContext
+    /// The one official nutrition write path. `lazy` because it is built from
+    /// `context`, which is itself a stored property.
+    internal lazy var nutritionService = NutritionService(context: context)
     private let customFoodManager = CustomFoodManager.shared
     private let fatMealManager = FatMealManager.shared
     private let carbLoadManager = CarbLoadManager.shared
@@ -388,48 +391,30 @@ class EcksteinDietViewModel: ObservableObject {
     }
     
     private func saveFoodEntry(mealNumber: Int, food: DietRule, gramsConsumed: Int) {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        
-        // Find or create meal
-        let request: NSFetchRequest<CDEcksteinMeal> = CDEcksteinMeal.fetchRequest()
-        request.predicate = NSPredicate(format: "date >= %@ AND date < %@ AND mealNumber == %d", 
-                                       today as NSDate, 
-                                       calendar.date(byAdding: .day, value: 1, to: today)! as NSDate,
-                                       mealNumber)
-        
+        record(food: food, grams: gramsConsumed, mealNumber: mealNumber, on: Date())
+    }
+
+    /// Records a diet-rule entry through the official nutrition path.
+    ///
+    /// This used to build `CDEcksteinMeal` and `CDEcksteinMealEntry` by hand and
+    /// wrote no nutrition at all, so a logged meal contributed nothing and the
+    /// day's calories read zero. `NutritionService.logEntry` is now the only
+    /// write into the day's log: it owns the find-or-create meal, the merge into
+    /// an existing row for the same food, and the snapshot.
+    ///
+    /// No `mealType` is passed. This screen's two-meal partition is `mealNumber`
+    /// (with `0` for snacks); it has no breakfast/lunch/dinner slot to offer, and
+    /// guessing one would file the entry under a meal the user never chose.
+    internal func record(food: DietRule, grams: Int, mealNumber: Int, on date: Date) {
+        guard grams > 0 else { return }
         do {
-            let meals = try context.fetch(request)
-            let meal: CDEcksteinMeal
-            
-            if let existingMeal = meals.first {
-                meal = existingMeal
-            } else {
-                meal = CDEcksteinMeal(context: context)
-                meal.id = UUID()
-                meal.date = Date()
-                meal.mealNumber = Int32(mealNumber)
-                meal.user = getCurrentUser()
-            }
-            
-            // Check if entry for this food already exists
-            let existingEntries = (meal.entries as? Set<CDEcksteinMealEntry>) ?? []
-            if let existingEntry = existingEntries.first(where: { 
-                $0.foodName == food.foodName && $0.category == food.category.rawValue 
-            }) {
-                // Update existing entry by adding to current amount
-                existingEntry.gramsConsumed += Int32(gramsConsumed)
-            } else {
-                // Create new entry
-                let entry = CDEcksteinMealEntry(context: context)
-                entry.id = UUID()
-                entry.foodName = food.foodName
-                entry.category = food.category.rawValue
-                entry.gramsConsumed = Int32(gramsConsumed)
-                entry.meal = meal
-            }
-            
-            try context.save()
+            try nutritionService.logEntry(
+                foodName: food.foodName,
+                category: food.category.rawValue,
+                grams: Double(grams),
+                mealNumber: Int32(mealNumber),
+                date: date
+            )
         } catch {
             print("Error saving meal entry: \(error)")
         }
@@ -889,24 +874,17 @@ class EcksteinDietViewModel: ObservableObject {
     }
     
     private func removeFoodEntryFromCoreData(mealNumber: Int, foodName: String, date: Date? = nil) {
-        let calendar = Calendar.current
-        let targetDate = date != nil ? calendar.startOfDay(for: date!) : calendar.startOfDay(for: Date())
-        
-        let request: NSFetchRequest<CDEcksteinMealEntry> = CDEcksteinMealEntry.fetchRequest()
-        request.predicate = NSPredicate(
-            format: "meal.date >= %@ AND meal.date < %@ AND meal.mealNumber == %d AND foodName == %@",
-            targetDate as NSDate,
-            calendar.date(byAdding: .day, value: 1, to: targetDate)! as NSDate,
-            mealNumber,
-            foodName
-        )
-        
+        // Deletes through `NutritionService` rather than by hand: the service
+        // refreshes the meal's cached totals as part of the delete, which the
+        // hand-rolled fetch-and-delete here did not — leaving a meal's totals
+        // describing an entry that no longer existed.
         do {
-            let entries = try context.fetch(request)
-            for entry in entries {
-                context.delete(entry)
+            let matches = try nutritionService.entries(on: date ?? Date()).filter {
+                $0.meal?.mealNumber == Int32(mealNumber) && $0.foodName == foodName
             }
-            try context.save()
+            for entry in matches {
+                try nutritionService.delete(entry)
+            }
         } catch {
             print("Error removing food entry: \(error)")
         }

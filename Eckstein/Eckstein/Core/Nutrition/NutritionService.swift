@@ -64,12 +64,37 @@ final class NutritionService {
     }
 
     /// One day's nutrition totals, against the user's current goals.
+    ///
+    /// Everything a dashboard or the AI Coach shows for a day comes from here:
+    /// the five totals, the per-slot breakdown, and the targets they are read
+    /// against. The day is decided by `Calendar`, never by comparing `Date`s.
     func summary(on date: Date, calendar: Calendar = .current) throws -> DailyNutritionSummary {
         NutritionAggregator.summary(
             for: try nutritionEntries(on: date, calendar: calendar),
             on: date,
             calendar: calendar,
             goals: try goals()
+        )
+    }
+
+    /// One day's nutrition totals — the brief's name for `summary(on:)`.
+    ///
+    /// Kept as a second spelling so the "one daily summary" entry point is
+    /// greppable by the name the project refers to it by.
+    func dailySummary(for date: Date = Date(), calendar: Calendar = .current) throws -> DailyNutritionSummary {
+        try summary(on: date, calendar: calendar)
+    }
+
+    /// One day's totals per meal slot, in `MealType` order with `.unspecified`
+    /// last. Empty slots are omitted.
+    func mealTypeSummary(
+        for date: Date = Date(),
+        calendar: Calendar = .current
+    ) throws -> [NutritionMealSummary] {
+        NutritionAggregator.meals(
+            for: try nutritionEntries(on: date, calendar: calendar),
+            on: date,
+            calendar: calendar
         )
     }
 
@@ -193,6 +218,17 @@ final class NutritionService {
         try context.save()
     }
 
+    /// The day's totals read against the day's goals.
+    ///
+    /// Built from `summary(on:)`, so the numbers are the same ones the aggregates
+    /// report — this adds the comparison, not a second sum.
+    func goalProgress(
+        on date: Date = Date(),
+        calendar: Calendar = .current
+    ) throws -> NutritionGoalProgress {
+        NutritionGoalProgress(summary: try summary(on: date, calendar: calendar))
+    }
+
     // MARK: - Writing
 
     /// Records `grams` of a food against a meal, and returns the entry.
@@ -277,6 +313,139 @@ final class NutritionService {
             recalculateTotals(for: meal)
         }
         try context.save()
+    }
+
+    // MARK: - Editing an entry
+
+    /// Replaces the grams on an entry and recomputes its snapshot.
+    ///
+    /// The recompute is the point: the snapshot holds amounts scaled from the
+    /// food's per-100 g values, so a corrected weight with the old snapshot left
+    /// in place would report the previous meal.
+    @discardableResult
+    func updateGrams(_ grams: Double, for entry: CDEcksteinMealEntry) throws -> CDEcksteinMealEntry {
+        entry.gramsConsumed = Self.gramsToInt32(grams)
+        applyNutrition(to: entry, from: entry.food, grams: Double(entry.gramsConsumed))
+        entry.updatedAt = Date()
+        if let meal = entry.meal { recalculateTotals(for: meal) }
+        try context.save()
+        return entry
+    }
+
+    /// Points an entry at a different food, recomputing its snapshot.
+    ///
+    /// `food` is the catalog row when the caller has one. When it does not, the
+    /// name and category are still recorded and the lookup — or, failing that,
+    /// the `DietRuleNutrition` fixture — supplies the values.
+    @discardableResult
+    func updateEntry(
+        _ entry: CDEcksteinMealEntry,
+        foodName: String,
+        category: String?,
+        grams: Double,
+        food: CDEcksteinFood? = nil
+    ) throws -> CDEcksteinMealEntry {
+        entry.foodName = foodName
+        entry.category = category
+        entry.gramsConsumed = Self.gramsToInt32(grams)
+
+        // `self.` disambiguates the `food` parameter from the same-named lookup,
+        // and the `try` has to cover the whole `??` — its right side is an
+        // autoclosure, so a `try` inside the parentheses would not compile.
+        entry.food = try food ?? self.food(named: foodName, category: category)
+
+        applyNutrition(to: entry, from: entry.food, grams: Double(entry.gramsConsumed))
+        entry.updatedAt = Date()
+        if let meal = entry.meal { recalculateTotals(for: meal) }
+        try context.save()
+        return entry
+    }
+
+    /// Files an entry's meal under a different slot.
+    ///
+    /// Deliberately does **not** recompute the entry's snapshot. Which slot a
+    /// meal is filed under says nothing about what was eaten, so a recompute here
+    /// could only ever produce a value change caused by a bug — and the brief
+    /// requires the opposite, that a metadata edit leave the recorded amounts
+    /// alone.
+    ///
+    /// A meal entry has no notes column in this schema — `MealDetailView`'s notes
+    /// box is local view state, by its own comment — so the slot is the whole of
+    /// the display metadata this phase can record.
+    func updateMealType(_ mealType: MealType?, for entry: CDEcksteinMealEntry) throws {
+        guard let meal = entry.meal else { return }
+        meal.mealType = mealType?.storedValue
+        meal.updatedAt = Date()
+        try context.save()
+    }
+
+    /// Copies an entry into a new row.
+    ///
+    /// The copy is a new identity throughout: a fresh `UUID`, an `objectID` Core
+    /// Data gives the inserted row, and a fresh `updatedAt`. Reusing any of them
+    /// would make the copy indistinguishable from its source to the sync layer
+    /// and to the HealthKit dedupe key, which is exactly the bug worth avoiding.
+    /// (The model has no `createdAt` on an entry, so there is no fourth field to
+    /// set.)
+    ///
+    /// The snapshot is recomputed from the copy's own grams rather than copied
+    /// across, so a copy taken after a food's values were corrected carries the
+    /// corrected figure — while the original keeps the amounts it was logged
+    /// with, which is what the brief requires of history.
+    @discardableResult
+    func duplicate(
+        _ entry: CDEcksteinMealEntry,
+        grams: Double? = nil,
+        date: Date? = nil,
+        mealNumber: Int32? = nil,
+        mealType: MealType? = nil,
+        calendar: Calendar = .current
+    ) throws -> CDEcksteinMealEntry {
+        let meal = try findOrCreateMeal(
+            on: date ?? entry.meal?.date ?? Date(),
+            mealNumber: mealNumber ?? entry.meal?.mealNumber ?? 1,
+            mealType: mealType,
+            calendar: calendar
+        )
+
+        let copy = CDEcksteinMealEntry(context: context)
+        copy.id = UUID()
+        copy.foodName = entry.foodName
+        copy.category = entry.category
+        copy.gramsConsumed = grams.map(Self.gramsToInt32) ?? entry.gramsConsumed
+        copy.meal = meal
+        copy.food = entry.food
+        copy.updatedAt = Date()
+        applyNutrition(to: copy, from: copy.food, grams: Double(copy.gramsConsumed))
+
+        recalculateTotals(for: meal)
+        try context.save()
+        return copy
+    }
+
+    /// Logs the same food again — the "add again" action on a history row.
+    ///
+    /// This is the ordinary log path, not a copy: it merges into an entry that
+    /// already exists for the same food on the target day, exactly as tapping the
+    /// food in the picker would. `logEntry` remains the one implementation of
+    /// that rule.
+    @discardableResult
+    func logAgain(
+        _ entry: CDEcksteinMealEntry,
+        grams: Double? = nil,
+        on date: Date? = nil,
+        calendar: Calendar = .current
+    ) throws -> CDEcksteinMealEntry {
+        try logEntry(
+            foodName: entry.foodName ?? "",
+            category: entry.category,
+            grams: grams ?? Double(entry.gramsConsumed),
+            mealNumber: entry.meal?.mealNumber ?? 1,
+            mealType: MealType(storedValue: entry.meal?.mealType),
+            date: date ?? Date(),
+            food: entry.food,
+            calendar: calendar
+        )
     }
 
     /// Recomputes a meal's denormalised totals from its entries.
@@ -434,7 +603,7 @@ final class NutritionService {
     /// creating two. This is the adapter that lets the existing Open Food Facts
     /// scanner serve the official entity without a second scanner.
     @discardableResult
-    func upsertFood(from template: FoodTemplate, source: String) throws -> CDEcksteinFood {
+    func upsertFood(from template: FoodTemplate, source: NutritionSource) throws -> CDEcksteinFood {
         let food = try existingFood(for: template) ?? {
             let created = CDEcksteinFood(context: context)
             created.id = UUID()
@@ -452,15 +621,18 @@ final class NutritionService {
         food.barcode = template.barcode
         food.brand = template.brand
         food.caloriesPer100g = NSNumber(value: Double(template.caloriesPer100g))
-        food.proteinPer100g = NSNumber(value: template.proteinPer100g)
-        food.carbsPer100g = NSNumber(value: template.carbsPer100g)
-        food.fatPer100g = NSNumber(value: template.fatPer100g)
+        // `map` rather than `?? 0`: a product that does not declare a macro
+        // leaves the column NULL, so "unknown" stays distinguishable from a
+        // declared zero.
+        food.proteinPer100g = template.proteinPer100g.map { NSNumber(value: $0) }
+        food.carbsPer100g = template.carbsPer100g.map { NSNumber(value: $0) }
+        food.fatPer100g = template.fatPer100g.map { NSNumber(value: $0) }
         food.fiberPer100g = template.fiberPer100g.map { NSNumber(value: $0) }
         food.servingSize = template.servingSize.map { NSNumber(value: $0) }
         food.servingUnit = template.servingUnit
         food.isVerified = true
         food.updatedAt = Date()
-        food.source = source
+        food.source = source.storedValue
 
         try context.save()
         return food
@@ -485,12 +657,28 @@ final class NutritionService {
     ///
     /// When nothing is known, the snapshot is cleared to `nil` rather than
     /// written as zeros, so "unknown" stays distinguishable from "zero".
+    ///
+    /// The resolved catalog row wins. It is not the only source though: the
+    /// Eckstein diet rules are logged by name and category, and a row for one
+    /// exists only once the Diet screen has seeded it — while the ten carb-load
+    /// dishes have no row at all. Falling back to the shipped
+    /// `DietRuleNutrition` fixture is what makes a diet-rule meal contribute
+    /// calories instead of silently reading zero.
     private func applyNutrition(
         to entry: CDEcksteinMealEntry,
         from food: CDEcksteinFood?,
         grams: Double
     ) {
-        guard let food = food, let snapshot = nutrition(for: food, grams: grams) else {
+        // `??` here binds tighter than the `let`, so the fallback is evaluated
+        // only when the row is missing or carries no values.
+        let snapshot = food.flatMap { nutrition(for: $0, grams: grams) }
+            ?? DietRuleNutrition.snapshot(
+                foodName: entry.foodName ?? "",
+                category: entry.category,
+                grams: grams
+            )
+
+        guard let snapshot = snapshot else {
             entry.calories = nil
             entry.protein = nil
             entry.carbs = nil

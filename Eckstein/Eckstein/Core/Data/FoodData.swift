@@ -23,9 +23,15 @@ struct FoodTemplate {
     let category: String
     let barcode: String?
     let caloriesPer100g: Int
-    let proteinPer100g: Double
-    let carbsPer100g: Double
-    let fatPer100g: Double
+
+    /// Optional so a product that declares energy but omits a macro keeps it
+    /// **unknown** rather than being recorded as zero — the same distinction the
+    /// store makes with `NSNumber?`. A missing `protein_100g` on Open Food Facts
+    /// is a gap in the label, not a claim of 0 g of protein. Every `FoodData`
+    /// template supplies all three, so a shipped food is unaffected.
+    let proteinPer100g: Double?
+    let carbsPer100g: Double?
+    let fatPer100g: Double?
     let fiberPer100g: Double?
     let brand: String?
     let servingSize: Double? // in grams

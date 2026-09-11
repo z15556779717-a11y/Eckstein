@@ -1409,53 +1409,13 @@ extension EcksteinDietViewModel {
     
     // Override save methods to use specific date
     func saveFoodEntryForDate(date: Date, mealNumber: Int, food: DietRule, gramsConsumed: Int) {
-        let calendar = Calendar.current
-        let localDate = calendar.startOfDay(for: date)
-        
-        // Find or create meal
-        let request: NSFetchRequest<CDEcksteinMeal> = CDEcksteinMeal.fetchRequest()
-        request.predicate = NSPredicate(format: "date >= %@ AND date < %@ AND mealNumber == %d", 
-                                       localDate as NSDate, 
-                                       calendar.date(byAdding: .day, value: 1, to: localDate)! as NSDate,
-                                       mealNumber)
-        
-        do {
-            let meals = try context.fetch(request)
-            let meal: CDEcksteinMeal
-            
-            if let existingMeal = meals.first {
-                meal = existingMeal
-            } else {
-                meal = CDEcksteinMeal(context: context)
-                meal.id = UUID()
-                meal.date = localDate
-                meal.mealNumber = Int32(mealNumber)
-                meal.user = getCurrentUser()
-            }
-            
-            // Check if entry for this food already exists
-            let existingEntries = (meal.entries as? Set<CDEcksteinMealEntry>) ?? []
-            if let existingEntry = existingEntries.first(where: { 
-                $0.foodName == food.foodName && $0.category == food.category.rawValue 
-            }) {
-                // Update existing entry by adding to current amount
-                existingEntry.gramsConsumed += Int32(gramsConsumed)
-            } else {
-                // Create new entry
-                let entry = CDEcksteinMealEntry(context: context)
-                entry.id = UUID()
-                entry.foodName = food.foodName
-                entry.category = food.category.rawValue
-                entry.gramsConsumed = Int32(gramsConsumed)
-                entry.meal = meal
-            }
-            
-            try context.save()
-            
-            // Reload data after saving
-            loadMealsForDate(date)
-        } catch {
-            print("Error saving meal entry for date: \(error)")
-        }
+        // Same official write path as the live day: `record` forwards to
+        // `NutritionService.logEntry`, which owns the find-or-create meal, the
+        // merge rule and the nutrition snapshot. This used to be a second,
+        // hand-rolled copy of that logic which wrote no nutrition.
+        record(food: food, grams: gramsConsumed, mealNumber: mealNumber, on: date)
+
+        // Reload data after saving
+        loadMealsForDate(date)
     }
 }
