@@ -368,8 +368,14 @@ class SyncManager: ObservableObject {
             mutableData["id"] = operation.entityId
         }
         
-        // Add user_id if not present (for user-specific tables)
-        if mutableData["user_id"] == nil {
+        // Add user_id only for the tables that actually have the column.
+        //
+        // This used to run for every row regardless of table. `eckstein_meal_entries`
+        // is owned through its `meal_id` and `eckstein_foods` is shared catalog
+        // data — neither table has a `user_id` column, so injecting one made
+        // PostgREST reject the row ("column user_id does not exist") and the
+        // record never synced.
+        if NutritionSyncTable.requiresUserID(tableName), mutableData["user_id"] == nil {
             do {
                 if let user = try await supabaseService.getCurrentUser() {
                     mutableData["user_id"] = user.id.uuidString
@@ -634,55 +640,31 @@ class SyncManager: ObservableObject {
             }
             
         case "CDUserPreferences":
+            // Explicit DTO rather than a hand-built dictionary: the keys come
+            // from the table definition, including `daily_fat_goal` and
+            // `daily_fiber_goal`, which this branch used to drop entirely.
             if let prefs = entity as? CDUserPreferences {
-                dict["id"] = prefs.id?.uuidString
-                dict["user_id"] = prefs.user?.id?.uuidString
-                dict["daily_calorie_goal"] = prefs.dailyCalorieGoal
-                dict["daily_protein_goal"] = prefs.dailyProteinGoal
-                dict["daily_carb_goal"] = prefs.dailyCarbGoal
-                dict["weight_unit"] = prefs.weightUnit ?? "kg"
-                dict["height_cm"] = prefs.heightCm
-                dict["activity_level"] = prefs.activityLevel ?? "moderate"
+                return NutritionSyncCoding.encode(NutritionPreferencesDTO(preferences: prefs))
             }
-            
+
+        case "CDEcksteinFood":
+            // Previously fell through to `default:`, which emits the Core Data
+            // attribute names verbatim (`dailyGrams`, `isCustom`, `createdAt`, …)
+            // where the table has `daily_grams`, `is_custom`, `created_at`.
+            if let food = entity as? CDEcksteinFood {
+                return NutritionSyncCoding.encode(NutritionFoodDTO(food: food))
+            }
+
         case "CDEcksteinMeal":
             if let meal = entity as? CDEcksteinMeal {
-                dict["id"] = meal.id?.uuidString
-                dict["user_id"] = meal.user?.id?.uuidString ?? "00000000-0000-0000-0000-000000000001"
-                // For DATE columns in Postgres, we need YYYY-MM-DD format
-                if let date = meal.date {
-                    let dateOnlyFormatter = DateFormatter()
-                    dateOnlyFormatter.dateFormat = "yyyy-MM-dd"
-                    dateOnlyFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-                    dict["date"] = dateOnlyFormatter.string(from: date)
-                } else {
-                    dict["date"] = nil
-                }
-                dict["meal_number"] = Int(meal.mealNumber)
-                // CDEcksteinMeal doesn't have nutrition totals, so calculate them from entries
-                dict["total_calories"] = 0
-                dict["total_protein"] = 0.0
-                dict["total_carbs"] = 0.0
-                dict["total_fat"] = 0.0
-                dict["created_at"] = meal.date != nil ? dateFormatter.string(from: meal.date!) : dateFormatter.string(from: Date())
-                dict["updated_at"] = dateFormatter.string(from: Date())
+                return NutritionSyncCoding.encode(NutritionMealDTO(meal: meal))
             }
-            
+
         case "CDEcksteinMealEntry":
             if let entry = entity as? CDEcksteinMealEntry {
-                dict["id"] = entry.id?.uuidString
-                dict["meal_id"] = entry.meal?.id?.uuidString
-                dict["name"] = entry.foodName ?? ""
-                // For now, we'll use placeholder values since the model doesn't have nutrition info
-                dict["calories"] = 0
-                dict["protein"] = 0.0
-                dict["carbs"] = 0.0
-                dict["fat"] = 0.0
-                dict["quantity_grams"] = Double(entry.gramsConsumed)
-                dict["meal_type"] = entry.category ?? "snack"
-                dict["created_at"] = dateFormatter.string(from: Date())
+                return NutritionSyncCoding.encode(NutritionMealEntryDTO(entry: entry))
             }
-            
+
         case "CDWeightEntry":
             if let weight = entity as? CDWeightEntry {
                 dict["id"] = weight.id?.uuidString

@@ -22,14 +22,15 @@
 --
 --   supabase db diff --linked
 --
--- and note the caveat recorded in §12: `SyncManager.encodeEntity` writes
--- `CDEcksteinFood` through its generic branch, which sends the *Core Data
--- attribute names* verbatim (`dailyGrams`, `isCustom`, `createdAt`, …) while the
--- documented schema uses snake_case (`daily_grams`, `is_custom`, `created_at`,
--- …). That mismatch predates phase 2 and is not fixed here. The column names
--- below follow the documented schema, which is the only schema description in
--- the repository. Reconcile encoder and schema together, as one change, before
--- relying on nutrition syncing.
+-- The caveat §12 recorded — `SyncManager.encodeEntity` writing `CDEcksteinFood`
+-- through its generic branch, which sent the *Core Data attribute names* verbatim
+-- (`dailyGrams`, `isCustom`, `createdAt`, …) while the schema uses snake_case
+-- (`daily_grams`, `is_custom`, `created_at`, …) — is fixed in phase 3: that
+-- branch now encodes `NutritionFoodDTO`, whose `CodingKeys` are the column names
+-- below. The same change gave `eckstein_meal_entries` its real column names
+-- (`food_name` / `grams_consumed` / `category`, previously sent as `name` /
+-- `quantity_grams` / `meal_type`) and stopped `syncCreate` from injecting
+-- `user_id` into tables that have no such column.
 -- ============================================================================
 
 BEGIN;
@@ -99,6 +100,20 @@ END $$;
 ALTER TABLE eckstein_meal_entries
     ADD COLUMN IF NOT EXISTS fiber      DECIMAL(6,2),
     ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL;
+
+-- The four snapshot columns were created `NOT NULL DEFAULT 0`, which cannot
+-- express "unknown": a row that predates nutrition tracking would read back as a
+-- genuinely zero-calorie entry. The Core Data attributes are nullable for exactly
+-- that reason (`NUTRITION_MIGRATION_PLAN.md` §5.2), and `NutritionMealEntryDTO`
+-- omits the key when the value is `nil`. Dropping `NOT NULL` is non-destructive —
+-- existing rows keep the values they hold — and lets the remote side carry the
+-- same distinction. `grams_consumed` stays `NOT NULL`: it is a non-optional
+-- scalar locally and `0` is a real weight there, not a missing one.
+ALTER TABLE eckstein_meal_entries
+    ALTER COLUMN calories DROP NOT NULL,
+    ALTER COLUMN protein  DROP NOT NULL,
+    ALTER COLUMN carbs    DROP NOT NULL,
+    ALTER COLUMN fat      DROP NOT NULL;
 
 -- ----------------------------------------------------------------------------
 -- user_preferences — fat and fiber goals
