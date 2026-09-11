@@ -207,12 +207,47 @@ extension PhaseFourTests {
         XCTAssertEqual(progress.fiber.current, summary.dailyFiber, accuracy: 0.001)
     }
 
-    /// `displayProgress` reports `0`, not `1`, when there is nothing to divide by.
+    /// A target of zero is a goal the user is over the moment they eat
+    /// anything — not the same state as having set no goal.
+    ///
+    /// `progress` and `displayProgress` still have to stay finite, because a
+    /// ring cannot divide by zero; `remaining` stays honest and goes negative.
     func testZeroTargetIsNotTreatedAsFullyConsumed() {
-        let progress = NutrientGoalProgress(current: 100, target: 0)
-        XCTAssertNil(progress.progress)
-        XCTAssertEqual(progress.displayProgress, 0)
-        XCTAssertFalse(progress.isOverTarget)
+        let zeroTarget = NutrientGoalProgress(current: 100, target: 0)
+        XCTAssertNil(zeroTarget.progress, "a ratio against zero is not a ratio")
+        XCTAssertEqual(zeroTarget.displayProgress, 0)
+        XCTAssertEqual(zeroTarget.remaining, -100)
+        XCTAssertTrue(zeroTarget.isOverTarget)
+        XCTAssertTrue(zeroTarget.hasTarget)
+
+        // The contrast that makes the rule legible. With no target set every
+        // derived figure is nil and nothing is over.
+        let noTarget = NutrientGoalProgress(current: 100, target: nil)
+        XCTAssertNil(noTarget.progress)
+        XCTAssertEqual(noTarget.displayProgress, 0)
+        XCTAssertNil(noTarget.remaining)
+        XCTAssertFalse(noTarget.isOverTarget)
+        XCTAssertFalse(noTarget.hasTarget)
+    }
+
+    /// A cleared goal reaches `goals()` as `nil`, not as a target of zero — so
+    /// a user who has never set one is not told they are over budget.
+    func testAClearedGoalIsNotATargetOfZero() throws {
+        try nutrition.setGoals(DailyNutritionGoals(calories: 2000, protein: 150, carbs: 250, fat: 70, fiber: 30))
+        try nutrition.setGoals(DailyNutritionGoals())
+
+        let goals = try nutrition.goals()
+        XCTAssertNil(goals.calories)
+        XCTAssertNil(goals.protein)
+        XCTAssertNil(goals.carbs)
+
+        let progress = NutritionGoalProgress(
+            date: Date(),
+            consumed: NutritionSnapshot(calories: 500, protein: 40, carbs: 60, fat: 20, fiber: 5),
+            goals: goals
+        )
+        XCTAssertFalse(progress.calories.isOverTarget)
+        XCTAssertNil(progress.calories.progress)
     }
 }
 
@@ -233,14 +268,29 @@ extension PhaseFourTests {
 
     /// A weigh-in with no date cannot be placed on a time axis, so it is not
     /// allowed to become "current".
-    func testCurrentWeightIgnoresAnUndatedReading() throws {
-        _ = repository.createWeightEntry(weight: 70.0, date: day(5), source: "manual")
-        let undated = repository.createWeightEntry(weight: 99.0, date: day(0), source: "manual")
-        undated.date = nil
-        try context.save()
-        repository.refresh()
+    /// A reading with no date cannot be placed in time, so it is left out
+    /// rather than being treated as the newest.
+    ///
+    /// The two rows are built and not saved, and that is the point: `date` is a
+    /// required attribute in the model, so `save()` rejects a row without one
+    /// and no stored entry can ever lack a date. The guard being tested is in
+    /// `WeightMetrics`, which reads whichever entries it is handed — including
+    /// ones that have not been through validation.
+    func testCurrentWeightIgnoresAnUndatedReading() {
+        let dated = CDWeightEntry(context: context)
+        dated.id = UUID()
+        dated.weightKg = 70.0
+        dated.date = day(5)
 
-        XCTAssertEqual(WeightMetrics.currentWeight(from: repository.weightEntries), 70.0)
+        let undated = CDWeightEntry(context: context)
+        undated.id = UUID()
+        undated.weightKg = 99.0
+        undated.date = nil
+
+        XCTAssertEqual(WeightMetrics.currentWeight(from: [dated, undated]), 70.0)
+        XCTAssertNil(WeightMetrics.currentWeight(from: [undated]))
+
+        context.rollback()
     }
 
     func testCurrentWeightIsNilWithNoEntries() {
@@ -1331,10 +1381,19 @@ extension PhaseFourTests {
     }
 
     /// An entry whose food has no known values is "unknown", not zero.
+    /// A food the app can resolve nothing for reads as unknown, not as zero.
+    ///
+    /// The category is a name nothing matches rather than `nil`: the model
+    /// makes `category` a required attribute, so an entry with no category
+    /// cannot be saved. The state worth pinning is the one a user reaches by
+    /// typing an unfamiliar name — recognised by nothing, so its macros are
+    /// unknown and must not be counted as nothing eaten.
     func testAnEntryWithNoKnownValuesReadsAsUnknown() throws {
+        let unrecognised = "No Such Category"
+
         try nutrition.logEntry(
             foodName: "Unheard Of",
-            category: nil,
+            category: unrecognised,
             grams: 100,
             date: day(400),
             calendar: calendar
@@ -1342,8 +1401,12 @@ extension PhaseFourTests {
 
         let entry = try XCTUnwrap(try nutrition.entries(on: day(400), calendar: calendar).first)
 
+        XCTAssertEqual(entry.category, unrecognised)
         XCTAssertNil(entry.calories)
         XCTAssertNil(entry.protein)
+        XCTAssertNil(entry.carbs)
+        XCTAssertNil(entry.fat)
+        XCTAssertNil(entry.fiber)
     }
 
     func testThePreviewMatchesWhatTheWriteStores() throws {
