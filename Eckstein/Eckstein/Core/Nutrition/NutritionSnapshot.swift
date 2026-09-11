@@ -95,4 +95,21 @@ extension NutritionSnapshot {
             fiber: (fiber ?? 0) * multiplier
         )
     }
+
+    /// These per-100 g values scaled to `grams`.
+    ///
+    /// The inverse of `per100g(calories:protein:carbs:fat:fiber:grams:)`: that
+    /// builds a snapshot from optional per-100 g inputs, this rescales a snapshot
+    /// that is already per-100 g. Used for the diet-rule fixture, whose values
+    /// are known per 100 g and are not optional.
+    func scaled(toGrams grams: Double) -> NutritionSnapshot {
+        let multiplier = grams / 100.0
+        return NutritionSnapshot(
+            calories: calories * multiplier,
+            protein: protein * multiplier,
+            carbs: carbs * multiplier,
+            fat: fat * multiplier,
+            fiber: fiber * multiplier
+        )
+    }
 }

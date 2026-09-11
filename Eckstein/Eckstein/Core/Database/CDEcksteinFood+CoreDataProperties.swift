@@ -59,7 +59,10 @@ extension CDEcksteinFood {
 
     @NSManaged public var updatedAt: Date?
 
-    /// Provenance: `"seed"`, `"user"`, `"openfoodfacts"`, …
+    /// Provenance, as a `NutritionSource` raw value (`"seed"`, `"manual"`,
+    /// `"barcode"`, …). Read and written through `nutritionSource`, which decodes
+    /// an unrecognised stored string to `nil` rather than to a guess. A row
+    /// written before this field existed has `nil`.
     @NSManaged public var source: String?
 
     @NSManaged public var entries: NSSet?

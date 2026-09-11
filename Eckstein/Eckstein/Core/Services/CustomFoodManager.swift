@@ -47,7 +47,25 @@ class CustomFoodManager: ObservableObject {
     
     // MARK: - Create Methods
     
-    func createCustomFood(name: String, category: DietRule.DietCategory, dailyGrams: Int, isFat: Bool = false) -> CDEcksteinFood? {
+    /// Creates a diet-rule food.
+    ///
+    /// `source` defaults to `.manual` because the only other caller is the user's
+    /// own "add custom food" screen. `seedDefaultFoodsIfNeeded` passes `.seed`
+    /// instead, so a shipped default stays distinguishable from a food the user
+    /// typed.
+    ///
+    /// Per-100 g values are filled in from `DietRuleNutrition` when the name and
+    /// category have a documented value, and left `nil` otherwise. Nothing is
+    /// invented for a food the fixture does not know — see DietRuleNutrition.swift
+    /// for the provenance of each entry.
+    @discardableResult
+    func createCustomFood(
+        name: String,
+        category: DietRule.DietCategory,
+        dailyGrams: Int,
+        isFat: Bool = false,
+        source: NutritionSource = .manual
+    ) -> CDEcksteinFood? {
         let food = CDEcksteinFood(context: context)
         food.id = UUID()
         food.name = name
@@ -55,8 +73,14 @@ class CustomFoodManager: ObservableObject {
         food.dailyGrams = Int32(dailyGrams)
         food.isFat = isFat
         food.createdAt = Date()
+        food.updatedAt = Date()
         food.isCustom = true
-        
+        food.nutritionSource = source
+
+        if let reference = DietRuleNutrition.reference(foodName: name, category: category.rawValue) {
+            NutritionCatalogSeed.apply(reference.per100g, to: food)
+        }
+
         do {
             try context.save()
             fetchCustomFoods()
@@ -117,20 +141,32 @@ class CustomFoodManager: ObservableObject {
     
     // MARK: - Default Foods
     
+    /// Inserts any diet-rule default the store does not hold yet.
+    ///
+    /// This used to seed only when the whole `CDEcksteinFood` table was empty.
+    /// That guard stopped holding once `NutritionCatalogSeed` began populating
+    /// the same table from the shipped `FoodData` templates, so a store could end
+    /// up with the catalog and no diet rules at all. The check is per food now,
+    /// which is idempotent for the same reason, and it also brings a store seeded
+    /// before the nutrition values existed up to date.
     func seedDefaultFoodsIfNeeded() {
-        let request: NSFetchRequest<CDEcksteinFood> = CDEcksteinFood.fetchRequest()
-        
         do {
-            let count = try context.count(for: request)
-            if count == 0 {
-                seedDefaultFoods()
+            let existing = try context.fetch(CDEcksteinFood.fetchRequest()).map {
+                ($0.name ?? "", $0.category ?? "")
             }
+            seedDefaultFoods(skipping: existing)
         } catch {
-            print("Error checking food count: \(error)")
+            print("Error checking existing foods: \(error)")
         }
     }
     
-    private func seedDefaultFoods() {
+    private func seedDefaultFoods(skipping existing: [(name: String, category: String)]) {
+        /// Whether the store already holds this food, keyed on name and category —
+        /// the pair the diet pickers identify a food by.
+        func isKnown(_ name: String, _ category: DietRule.DietCategory) -> Bool {
+            existing.contains { $0.name == name && $0.category == category.rawValue }
+        }
+
         // Seed protein fat foods
         let proteinFatFoods = [
             ("Fish (Fat)", 240),
@@ -140,8 +176,8 @@ class CustomFoodManager: ObservableObject {
             ("Eggs", 400)
         ]
         
-        for (name, grams) in proteinFatFoods {
-            _ = createCustomFood(name: name, category: .proteinFat, dailyGrams: grams, isFat: true)
+        for (name, grams) in proteinFatFoods where !isKnown(name, .proteinFat) {
+            _ = createCustomFood(name: name, category: .proteinFat, dailyGrams: grams, isFat: true, source: .seed)
         }
         
         // Seed protein non-fat foods
@@ -153,8 +189,8 @@ class CustomFoodManager: ObservableObject {
             ("Cottage Cheese (Low Fat)", 480)
         ]
         
-        for (name, grams) in proteinNonFatFoods {
-            _ = createCustomFood(name: name, category: .proteinNonFat, dailyGrams: grams, isFat: false)
+        for (name, grams) in proteinNonFatFoods where !isKnown(name, .proteinNonFat) {
+            _ = createCustomFood(name: name, category: .proteinNonFat, dailyGrams: grams, isFat: false, source: .seed)
         }
         
         // Seed carb foods
@@ -166,8 +202,8 @@ class CustomFoodManager: ObservableObject {
             ("Oatmeal", 80)
         ]
         
-        for (name, grams) in carbFoods {
-            _ = createCustomFood(name: name, category: .carbs, dailyGrams: grams)
+        for (name, grams) in carbFoods where !isKnown(name, .carbs) {
+            _ = createCustomFood(name: name, category: .carbs, dailyGrams: grams, source: .seed)
         }
         
         // Seed snack foods
@@ -176,8 +212,8 @@ class CustomFoodManager: ObservableObject {
             ("Approved Snack 2", 100)
         ]
         
-        for (name, grams) in snackFoods {
-            _ = createCustomFood(name: name, category: .snack, dailyGrams: grams)
+        for (name, grams) in snackFoods where !isKnown(name, .snack) {
+            _ = createCustomFood(name: name, category: .snack, dailyGrams: grams, source: .seed)
         }
     }
 }

@@ -38,6 +38,16 @@ extension EcksteinApp {
         do {
             let seeded = try NutritionCatalogSeed.seedIfNeeded(context: context)
             print("Nutrition catalog seeding completed (\(seeded) rows)")
+
+            // A store seeded before this phase already holds the diet-rule foods
+            // with every nutrition column NULL, and the per-food seeding in
+            // `CustomFoodManager` skips a row it can already see. This fills
+            // those rows in once; it writes nothing on a fresh install, where
+            // the rows do not exist yet, or on any later launch.
+            let backfilled = try NutritionCatalogSeed.backfillDietRuleNutrition(context: context)
+            if backfilled > 0 {
+                print("Nutrition backfill completed (\(backfilled) rows)")
+            }
         } catch {
             print("Error seeding the nutrition catalog: \(error)")
         }
