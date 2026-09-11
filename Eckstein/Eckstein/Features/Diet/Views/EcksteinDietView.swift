@@ -13,6 +13,14 @@ struct FoodPickerInfo: Identifiable {
     let mealNumber: Int
 }
 
+/// Retained deliberately. Nothing instantiates this view, but the file is
+/// not self-contained: `EcksteinDailySummaryCard` below is used by
+/// `DietDayEditView`, and `DietDayEditView.swift` hosts the
+/// `EcksteinDietViewModel` extension whose `loadMealsForDate` and
+/// `saveFoodEntryForDate` the live view model calls. Deleting this struct
+/// would take serving code with it. Phase 5 removed only
+/// `EcksteinBankView.swift`, which references nothing and is referenced by
+/// nothing.
 struct EcksteinDietView: View {
     @StateObject private var viewModel = EcksteinDietViewModel()
     @StateObject private var bankManager = CalorieBankManager.shared
