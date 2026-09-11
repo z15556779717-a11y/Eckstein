@@ -4,6 +4,17 @@
 //
 //  Created by Assistant on 23/07/2025.
 //
+//  Reworked in phase 4: the current weight, the target weight, and the distance
+//  between them.
+//
+//  Two things changed. The weight shown is `WeightMetrics.currentWeight` — the
+//  newest weigh-in by date — rather than `latestEntry`, so Profile, Dashboard and
+//  the Progress screen are reading one definition instead of three that agree
+//  until they don't. And the distance is rendered through
+//  `WeightTargetProgress`, which resolves the direction itself: the old row took
+//  `abs(difference)` and always appended "to go", so a user 3 kg *below* their
+//  target was told they had 3 kg left to lose.
+//
 
 import SwiftUI
 
@@ -12,72 +23,131 @@ struct ProfileWeightGoalSection: View {
     @ObservedObject var weightRepository: WeightRepository
     @ObservedObject private var localizationManager = LocalizationManager.shared
     @State private var showingGoalSettings = false
-    
-    private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: UserDefaults.standard.string(forKey: "weightUnit") ?? "kg") ?? .kg
+
+    private var unit: WeightUnit { .preferred }
+
+    /// Read through `WeightMetrics` rather than `latestEntry` so the value here
+    /// is the newest weigh-in by date, not by whatever order the fetch returned.
+    private var currentWeightKg: Double? {
+        WeightMetrics.currentWeight(from: weightRepository.weightEntries)
     }
-    
-    private var currentWeight: Double? {
-        weightRepository.latestEntry?.weightKg
+
+    private var targetWeightKg: Double? {
+        weightRepository.goalWeight
     }
-    
-    private var goalWeight: Double? {
-        UserDefaults.standard.object(forKey: "goalWeight") as? Double
+
+    private var targetProgress: WeightTargetProgress? {
+        WeightMetrics.targetProgress(currentKg: currentWeightKg, targetKg: targetWeightKg)
     }
-    
+
     private var goalDate: Date? {
-        UserDefaults.standard.object(forKey: "goalDate") as? Date
+        weightRepository.getGoalDate()
     }
-    
+
     @ViewBuilder
     var body: some View {
         Section {
-            if let goal = goalWeight, let current = currentWeight {
-                HStack {
-                    Label("goal_weight".localized, systemImage: "target")
-                        .themedForegroundColor(themeManager.accentColor, context: .general)
-                    Spacer()
-                    let displayGoal = weightUnit == .lbs ? goal * 2.20462 : goal
-                    Text("\(displayGoal, specifier: "%.1f") \(weightUnit.rawValue)")
-                        .font(.headline)
-                }
-                
-                HStack {
-                    Label("progress".localized, systemImage: "chart.line.uptrend.xyaxis")
-                        .themedForegroundColor(themeManager.accentColor, context: .general)
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        let difference = goal - current
-                        let displayDiff = weightUnit == .lbs ? abs(difference) * 2.20462 : abs(difference)
-                        Text("\(displayDiff, specifier: "%.1f") \(weightUnit.rawValue) \("to_go".localized)")
-                            .font(.headline)
-                            .foregroundColor(difference > 0 ? .orange : .green)
-                        
-                        if let targetDate = goalDate {
-                            let daysRemaining = Calendar.current.dateComponents([.day], from: Date(), to: targetDate).day ?? 0
-                            Text("\(daysRemaining) \("days".localized)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
+            valueRow(
+                titleKey: "current_weight",
+                systemImage: "scalemass",
+                value: unit.formatted(kilograms: currentWeightKg),
+                fallbackKey: "weight_empty_state"
+            )
+
+            valueRow(
+                titleKey: "goal_weight",
+                systemImage: "target",
+                value: unit.formatted(kilograms: targetWeightKg),
+                fallbackKey: "weight_no_target_set"
+            )
+
+            if let targetProgress {
+                progressRow(targetProgress)
             }
-            
-            Button(action: {
+
+            Button {
                 showingGoalSettings = true
-            }) {
+            } label: {
                 HStack {
                     Image(systemName: "target")
-                    Text(goalWeight == nil ? "set_goal".localized : "update_goal".localized)
+                    Text(targetWeightKg == nil ? "set_goal".localized : "update_goal".localized)
                 }
                 .themedForegroundColor(themeManager.accentColor)
             }
         } header: {
             Text("weight_goal".localized)
+                .textCase(nil)
         }
+        .onAppear { weightRepository.refresh() }
         .sheet(isPresented: $showingGoalSettings) {
             WeightGoalView(viewModel: WeightViewModel())
         }
         .id(localizationManager.currentLanguage)
+    }
+
+    // MARK: - Rows
+
+    private func valueRow(
+        titleKey: String,
+        systemImage: String,
+        value: String?,
+        fallbackKey: String
+    ) -> some View {
+        HStack {
+            Label(titleKey.localized, systemImage: systemImage)
+                .themedForegroundColor(themeManager.accentColor, context: .general)
+
+            Spacer()
+
+            if let value {
+                Text(value)
+                    .font(.headline)
+            } else {
+                Text(fallbackKey.localized)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private func progressRow(_ progress: WeightTargetProgress) -> some View {
+        HStack {
+            Label("weight_to_goal".localized, systemImage: "chart.line.uptrend.xyaxis")
+                .themedForegroundColor(themeManager.accentColor, context: .general)
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 2) {
+                // The sentence carries the direction; the number is an
+                // unsigned distance. A minus sign in front of someone's distance
+                // to their own goal is never the right rendering.
+                Text(
+                    progress.descriptionKey.localized(
+                        unit.formattedDistance(kilograms: progress.remainingKg) ?? "0"
+                    )
+                )
+                .font(.headline)
+                .multilineTextAlignment(.trailing)
+
+                if let goalDate, !progress.isAtTarget {
+                    let days = Calendar.current.dateComponents(
+                        [.day], from: Calendar.current.startOfDay(for: Date()),
+                        to: Calendar.current.startOfDay(for: goalDate)
+                    ).day ?? 0
+                    Text(daysRemainingText(days))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    /// A target date in the past is not "−12 days". Past the date the plan is
+    /// simply unfinished, and the count of days is not the useful fact any more.
+    private func daysRemainingText(_ days: Int) -> String {
+        guard days > 0 else { return "days_overdue".localized }
+        return "\(days) \("days".localized)"
     }
 }

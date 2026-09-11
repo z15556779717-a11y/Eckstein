@@ -11,7 +11,7 @@ import PhotosUI
 struct ProfileView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
     @StateObject private var themeManager = ThemeManager.shared
-    @StateObject private var weightRepository = WeightRepository.shared
+    @StateObject private var weightRepository: WeightRepository
     @StateObject private var tipManager = TipManager.shared
     @StateObject private var localizationManager = LocalizationManager.shared
     @State private var showingSignOutAlert = false
@@ -20,6 +20,12 @@ struct ProfileView: View {
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var profileImage: Image?
     @State private var showingAppGuide = false
+
+    /// The repository is injectable so a preview can point the body-metrics and
+    /// weight-goal sections at an in-memory store. The default is the app's.
+    init(weightRepository: WeightRepository = .shared) {
+        _weightRepository = StateObject(wrappedValue: weightRepository)
+    }
     
     var body: some View {
         NavigationView {
@@ -54,7 +60,17 @@ struct ProfileView: View {
                         themeManager: themeManager,
                         weightRepository: weightRepository
                     )
-                    
+
+                    // Height / BMI / Fitness Goal
+                    ProfileBodyMetricsSection(
+                        themeManager: themeManager,
+                        weightRepository: weightRepository
+                    )
+
+                    // Daily nutrition targets — the write path for the goals the
+                    // Dashboard and the AI Coach read against.
+                    ProfileNutritionGoalsSection(themeManager: themeManager)
+
                     // Meeting Section
                     ProfileMeetingSection(themeManager: themeManager)
                     
@@ -183,7 +199,14 @@ struct ProfileView: View {
     }
 }
 
+/// Rendered against an in-memory store, so the sample weigh-ins the body-metrics
+/// section reads cannot reach the store on disk.
+///
+/// `#if DEBUG` because `PreviewSupport` is DEBUG-only: an unguarded preview
+/// would not compile in a Release build.
+#if DEBUG
 #Preview {
-    ProfileView()
+    ProfileView(weightRepository: PreviewSupport.weightRepository())
         .environmentObject(AppCoordinator())
 }
+#endif
