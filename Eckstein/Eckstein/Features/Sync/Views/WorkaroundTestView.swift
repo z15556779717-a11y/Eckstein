@@ -25,7 +25,7 @@ struct WorkaroundTestView: View {
                         .foregroundColor(.secondary)
                     
                     VStack(spacing: 12) {
-                        Button("Test 1: Direct HTTP with Service Key") {
+                        Button("Test 1: Direct HTTP with Publishable Key") {
                             testDirectHTTP()
                         }
                         .buttonStyle(.borderedProminent)
@@ -67,12 +67,12 @@ struct WorkaroundTestView: View {
     
     private func testDirectHTTP() {
         isLoading = true
-        testResult = "=== Test 1: Direct HTTP with Service Key ===\n"
+        testResult = "=== Test 1: Direct HTTP with Publishable Key ===\n"
         
         Task {
             // SECURITY: this previously embedded a Supabase service_role key in the
             // client bundle (full RLS bypass). It was removed in the phase-1 audit.
-            let serviceKey = AppEnvironment.supabaseAnonKey
+            let publishableKey = AppEnvironment.supabasePublishableKey
             
             // Try different request configurations
             let configurations = [
@@ -91,11 +91,11 @@ struct WorkaroundTestView: View {
                 let session = URLSession(configuration: config)
                 
                 do {
-                    let url = URL(string: "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/eckstein_meals?limit=1")!
+                    let url = URL(string: "rest/v1/eckstein_meals?limit=1", relativeTo: AppEnvironment.supabaseURL)!
                     var request = URLRequest(url: url)
                     request.httpMethod = "GET"
-                    request.setValue("Bearer \(serviceKey)", forHTTPHeaderField: "Authorization")
-                    request.setValue(serviceKey, forHTTPHeaderField: "apikey")
+                    request.setValue("Bearer \(publishableKey)", forHTTPHeaderField: "Authorization")
+                    request.setValue(publishableKey, forHTTPHeaderField: "apikey")
                     
                     let (data, response) = try await session.data(for: request)
                     
@@ -127,8 +127,8 @@ struct WorkaroundTestView: View {
             let session = URLSession(configuration: config)
             
             let client = SupabaseClient(
-                supabaseURL: URL(string: "https://zyuqxuuosmiiezjsrasb.supabase.co")!,
-                supabaseKey: AppEnvironment.supabaseAnonKey
+                supabaseURL: AppEnvironment.supabaseURL,
+                supabaseKey: AppEnvironment.supabasePublishableKey
             )
             
             do {
@@ -161,10 +161,11 @@ struct WorkaroundTestView: View {
         testResult = "=== Test 3: Different URL Formats ===\n"
         
         Task {
+            let base = AppEnvironment.supabaseURL.absoluteString
             let urls = [
-                "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/",
-                "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/eckstein_meals",
-                "https://zyuqxuuosmiiezjsrasb.supabase.co",
+                base + "/rest/v1/",
+                base + "/rest/v1/eckstein_meals",
+                base,
             ]
             
             for urlString in urls {
@@ -178,7 +179,7 @@ struct WorkaroundTestView: View {
                     
                     var request = URLRequest(url: url)
                     request.httpMethod = "GET"
-                    request.setValue(AppEnvironment.supabaseAnonKey, forHTTPHeaderField: "apikey")
+                    request.setValue(AppEnvironment.supabasePublishableKey, forHTTPHeaderField: "apikey")
                     request.timeoutInterval = 30
                     
                     let (_, response) = try await URLSession.shared.data(for: request)

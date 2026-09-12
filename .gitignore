@@ -137,3 +137,7 @@ supabase/.branches/
 # IDE specific
 .swiftpm/
 .build/ 
+
+# The template documents which keys exist and holds only placeholders, so it
+# is safe to commit. The `.env` you fill in from it stays ignored above.
+!.env.example
