@@ -131,7 +131,10 @@ struct NetworkDiagnosticsView: View {
     }
     
     private func testDNSResolution() async {
-        let host = "zyuqxuuosmiiezjsrasb.supabase.co"
+        // The host the app is actually configured with, not a fixed one:
+        // a diagnostic that resolves the wrong project reports success for a
+        // project this build cannot reach.
+        let host = AppEnvironment.supabaseURL.host ?? "unconfigured.invalid"
         diagnosticResults += "Resolving \(host)...\n"
         
         let hostRef = CFHostCreateWithName(nil, host as CFString).takeRetainedValue()

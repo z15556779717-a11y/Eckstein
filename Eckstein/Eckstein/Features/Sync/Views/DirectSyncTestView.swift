@@ -55,16 +55,16 @@ struct DirectSyncTestView: View {
             // client bundle (full RLS bypass). It was removed in the phase-1 audit.
             // Use the anon/publishable key only; privileged work belongs in a
             // server-side Supabase Edge Function.
-            let serviceKey = AppEnvironment.supabaseAnonKey
+            let publishableKey = AppEnvironment.supabasePublishableKey
             
             // Test 1: List meals with service role
             testResult += "=== Test 1: List Meals (Service Role) ===\n"
             do {
-                let url = URL(string: "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/eckstein_meals?limit=5")!
+                let url = URL(string: "rest/v1/eckstein_meals?limit=5", relativeTo: AppEnvironment.supabaseURL)!
                 var request = URLRequest(url: url)
                 request.httpMethod = "GET"
-                request.setValue("Bearer \(serviceKey)", forHTTPHeaderField: "Authorization")
-                request.setValue(serviceKey, forHTTPHeaderField: "apikey")
+                request.setValue("Bearer \(publishableKey)", forHTTPHeaderField: "Authorization")
+                request.setValue(publishableKey, forHTTPHeaderField: "apikey")
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.timeoutInterval = 30
                 
@@ -84,11 +84,11 @@ struct DirectSyncTestView: View {
             // Test 2: Insert a meal with service role
             testResult += "=== Test 2: Insert Meal (Service Role) ===\n"
             do {
-                let url = URL(string: "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/eckstein_meals")!
+                let url = URL(string: "rest/v1/eckstein_meals", relativeTo: AppEnvironment.supabaseURL)!
                 var request = URLRequest(url: url)
                 request.httpMethod = "POST"
-                request.setValue("Bearer \(serviceKey)", forHTTPHeaderField: "Authorization")
-                request.setValue(serviceKey, forHTTPHeaderField: "apikey")
+                request.setValue("Bearer \(publishableKey)", forHTTPHeaderField: "Authorization")
+                request.setValue(publishableKey, forHTTPHeaderField: "apikey")
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.setValue("return=representation", forHTTPHeaderField: "Prefer")
                 
@@ -123,11 +123,11 @@ struct DirectSyncTestView: View {
             // Test 3: Test with anon key (should fail due to RLS)
             testResult += "=== Test 3: List Meals (Anon Key) ===\n"
             do {
-                let url = URL(string: "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/eckstein_meals?limit=5")!
+                let url = URL(string: "rest/v1/eckstein_meals?limit=5", relativeTo: AppEnvironment.supabaseURL)!
                 var request = URLRequest(url: url)
                 request.httpMethod = "GET"
-                request.setValue("Bearer \(AppEnvironment.supabaseAnonKey)", forHTTPHeaderField: "Authorization")
-                request.setValue(AppEnvironment.supabaseAnonKey, forHTTPHeaderField: "apikey")
+                request.setValue("Bearer \(AppEnvironment.supabasePublishableKey)", forHTTPHeaderField: "Authorization")
+                request.setValue(AppEnvironment.supabasePublishableKey, forHTTPHeaderField: "apikey")
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
                 let (data, response) = try await URLSession.shared.data(for: request)

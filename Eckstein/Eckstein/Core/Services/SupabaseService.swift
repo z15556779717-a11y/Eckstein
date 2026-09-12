@@ -21,7 +21,7 @@ class SupabaseService {
 
         client = SupabaseClient(
             supabaseURL: AppEnvironment.supabaseURL,
-            supabaseKey: AppEnvironment.supabaseAnonKey
+            supabaseKey: AppEnvironment.supabasePublishableKey
         )
         print("✅ Supabase client initialized")
     }

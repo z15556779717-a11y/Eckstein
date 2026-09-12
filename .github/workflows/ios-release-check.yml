@@ -54,8 +54,40 @@ jobs:
             -project "$PROJECT" \
             -scheme "$SCHEME"
 
-      - name: Build app in Release (no code signing)
+      - name: Resolve Supabase configuration
+        id: supabase
+        env:
+          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
+          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
         run: |
+          # The publishable key is a public credential, but it still does not
+          # belong in a build log. Mask it before anything can print it, and
+          # refer to it below only through shell variables -- `run` blocks are
+          # echoed with `${{ }}` expanded but `$VAR` left alone.
+          if [ -n "$CONFIGURED_KEY" ]; then
+            echo "::add-mask::$CONFIGURED_KEY"
+          fi
+
+          # Repository variables are optional. Without them the build stays
+          # unconfigured, which is a supported state: `isSupabaseConfigured`
+          # gates every network path off rather than attempting a call against
+          # a placeholder host.
+          if [ -n "$CONFIGURED_URL" ] && [ -n "$CONFIGURED_KEY" ]; then
+            echo "Supabase configuration found; the build will carry it."
+          else
+            echo "No Supabase repository variables; building unconfigured."
+          fi
+
+      - name: Build app in Release (no code signing)
+        env:
+          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
+          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          # `INFOPLIST_KEY_*` is how a value reaches the built Info.plist, which
+          # is the only configuration source that exists on a real device. When
+          # the variables are unset these become empty strings, which
+          # `EnvironmentLoader.infoPlistValues` discards -- so an unset variable
+          # leaves the build unconfigured rather than half-configured.
           xcodebuild build \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
@@ -63,4 +95,28 @@ jobs:
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY=""
+            CODE_SIGN_IDENTITY="" \
+            INFOPLIST_KEY_SUPABASE_URL="$CONFIGURED_URL" \
+            INFOPLIST_KEY_SUPABASE_PUBLISHABLE_KEY="$CONFIGURED_KEY"
+
+      - name: Confirm the configuration reached the built Info.plist
+        env:
+          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          # Reports whether the key is present, never what it is. A build that
+          # silently drops the setting is the failure this step exists to catch.
+          PLIST=$(find "$HOME/Library/Developer/Xcode/DerivedData" \
+                    -name "Info.plist" -path "*Eckstein.app*" 2>/dev/null | head -1)
+          if [ -z "$PLIST" ]; then
+            echo "::error::no built Info.plist found"
+            exit 1
+          fi
+
+          for KEY in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY; do
+            VALUE=$(/usr/libexec/PlistBuddy -c "Print :$KEY" "$PLIST" 2>/dev/null || true)
+            if [ -n "$VALUE" ]; then
+              echo "$KEY: present"
+            else
+              echo "$KEY: absent (repository variable not set)"
+            fi
+          done

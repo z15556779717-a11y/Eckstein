@@ -161,11 +161,11 @@ struct SyncDebugView: View {
                     debugOutput += "\nAttempting to insert record...\n"
                     
                     // Use raw HTTP request to see actual error
-                    let url = URL(string: "https://zyuqxuuosmiiezjsrasb.supabase.co/rest/v1/eckstein_meals")!
+                    let url = URL(string: "rest/v1/eckstein_meals", relativeTo: AppEnvironment.supabaseURL)!
                     var request = URLRequest(url: url)
                     request.httpMethod = "POST"
-                    request.setValue("Bearer \(AppEnvironment.supabaseAnonKey)", forHTTPHeaderField: "Authorization")
-                    request.setValue(AppEnvironment.supabaseAnonKey, forHTTPHeaderField: "apikey")
+                    request.setValue("Bearer \(AppEnvironment.supabasePublishableKey)", forHTTPHeaderField: "Authorization")
+                    request.setValue(AppEnvironment.supabasePublishableKey, forHTTPHeaderField: "apikey")
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     request.setValue("return=representation", forHTTPHeaderField: "Prefer")
                     request.httpBody = jsonData
