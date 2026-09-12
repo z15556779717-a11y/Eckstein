@@ -15,11 +15,21 @@ name: iOS Unsigned IPA
 # never runs. That is what lets a project with HealthKit and CloudKit
 # entitlements build without any provisioning profile at all.
 #
-# Run it from the Actions tab, or:
-#   gh workflow run ios-unsigned-ipa.yml --ref <branch>
+# Run it by tagging the commit you want built:
+#
+#   git tag ipa-1.0.0-1
+#   git push origin ipa-1.0.0-1
+#
+# A tag is the trigger because `workflow_dispatch` would require this file to
+# exist on the default branch, and it deliberately does not: it lives on
+# `develop/my-fitness-app` only. Tag pushes have no such requirement, so this
+# builds the exact commit it is pointed at and nothing else. An ordinary push to
+# `develop/**` does not produce an IPA.
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'ipa-*'
 
 concurrency:
   group: ios-unsigned-ipa-${{ github.ref }}
