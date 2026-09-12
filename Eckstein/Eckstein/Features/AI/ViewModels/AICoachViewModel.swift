@@ -63,27 +63,27 @@ class AICoachViewModel: ObservableObject {
     /// of them asks the coach to change anything, because it cannot: see
     /// `OpenAIService.systemPrompt`.
     ///
-    /// The first two titles are the ones the phase-4 tests assert on, so they
-    /// stay as they are; only the prompts behind them changed.
+    /// `title` is what the button shows and is localized; `prompt` is what is
+    /// sent to the backend and stays English.
     private func setupSuggestedActions() {
         suggestedActions = [
             SuggestedAction(
-                title: "Plan Meal",
+                title: "ai_chat_action_plan_meal".localized,
                 icon: "fork.knife",
                 prompt: "What should I eat today? Use my recent meals and my goals."
             ),
             SuggestedAction(
-                title: "Workout Plan",
+                title: "ai_chat_action_workout_plan".localized,
                 icon: "figure.strengthtraining.traditional",
                 prompt: "What should I train today? Use my recent training."
             ),
             SuggestedAction(
-                title: "Week Summary",
+                title: "ai_chat_action_week_summary".localized,
                 icon: "calendar",
                 prompt: "Summarize how my last 7 days of eating and training went."
             ),
             SuggestedAction(
-                title: "Progress",
+                title: "ai_chat_action_progress".localized,
                 icon: "chart.line.uptrend.xyaxis",
                 prompt: "How is my progress towards my goal?"
             )
@@ -270,7 +270,7 @@ class AICoachViewModel: ObservableObject {
 
 struct SuggestedAction: Identifiable {
     let id = UUID()
-    /// The button's label, as written. `prompt` is what gets sent.
+    /// The button's label, localized for display. `prompt` is what gets sent.
     let title: String
     let icon: String
     let prompt: String

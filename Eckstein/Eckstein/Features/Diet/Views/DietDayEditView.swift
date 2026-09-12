@@ -66,7 +66,7 @@ struct DietDayEditView: View {
                         .cornerRadius(10)
                         .padding(.horizontal)
                 } else {
-                    Picker("Meal", selection: $selectedMeal) {
+                    Picker("diet_entry_meal".localized, selection: $selectedMeal) {
                         Text("meal_1".localized).tag(1)
                         if viewModel.dietViewModel.isCarbLoadDay && viewModel.dietViewModel.carbLoadMealNumber == 2 {
                             Text("carb_load".localized).tag(2)
@@ -106,11 +106,11 @@ struct DietDayEditView: View {
             }
             .padding()
         }
-        .navigationTitle("Edit Diet History")
+        .navigationTitle("diet_day_edit_title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Done") {
+                Button("done".localized) {
                     dismiss()
                 }
             }
@@ -240,7 +240,7 @@ struct HistoricalMealCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text(viewModel.isCarbLoadDay && mealNumber == viewModel.carbLoadMealNumber ? "Carb Load Meal" : "Meal \(mealNumber)")
+                Text(viewModel.isCarbLoadDay && mealNumber == viewModel.carbLoadMealNumber ? "carb_load_meal".localized : "meal_number".localized(mealNumber))
                     .font(.title3)
                     .fontWeight(.semibold)
                 
@@ -252,7 +252,7 @@ struct HistoricalMealCard: View {
                     let carbsUsed = meal?.totalPercentage(for: .carbs) ?? 0
                     
                     if proteinUsed > 100 || carbsUsed > 100 {
-                        Text("Borrowing from meal 2")
+                        Text("borrowing_from_meal_2".localized)
                             .font(.caption)
                             .foregroundColor(.orange)
                             .padding(.horizontal, 8)
@@ -263,7 +263,7 @@ struct HistoricalMealCard: View {
                 } else if let carryOver = viewModel.getCarryOverFromPreviousMeal(for: mealNumber),
                    carryOver.proteinPercentage != 0 || carryOver.carbPercentage != 0 {
                     let hasBorrowing = carryOver.proteinPercentage < 0 || carryOver.carbPercentage < 0
-                    Text(hasBorrowing ? "Borrowing to meal 1" : "Has carry-over")
+                    Text(hasBorrowing ? "borrowing_to_meal_1".localized : "has_carry_over".localized)
                         .font(.caption)
                         .foregroundColor(hasBorrowing ? .orange : .green)
                         .padding(.horizontal, 8)
@@ -276,7 +276,7 @@ struct HistoricalMealCard: View {
             if viewModel.isCarbLoadDay && mealNumber == viewModel.carbLoadMealNumber {
                 // Carb Load Section
                 HistoricalFoodSection(
-                    title: "Carb Load Foods",
+                    title: "carb_load_foods".localized,
                     category: .carbLoad,
                     entries: meal?.carbFoods ?? [],
                     totalPercentage: 0, // No percentage limits for carb load
@@ -357,7 +357,7 @@ struct HistoricalCarbLoadTrackerCard: View {
                         .background(Color.orange)
                         .cornerRadius(8)
                 } else {
-                    Text(hasUsedCarbLoad ? "Used" : "Available")
+                    Text(hasUsedCarbLoad ? "used".localized : "available".localized)
                         .font(.caption)
                         .fontWeight(.bold)
                         .foregroundColor(hasUsedCarbLoad ? .gray : .green)
@@ -378,7 +378,7 @@ struct HistoricalCarbLoadTrackerCard: View {
                     .fill(Color.gray.opacity(0.3))
                     .frame(height: 2)
                 
-                Text("1 / week")
+                Text("one_per_week".localized)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -404,7 +404,7 @@ struct HistoricalCarbLoadTrackerCard: View {
                             HStack {
                                 Image(systemName: viewModel.dietViewModel.combineMealsForCarbLoad ? "rectangle.on.rectangle.slash" : "rectangle.on.rectangle")
                                     .font(.caption)
-                                Text(viewModel.dietViewModel.combineMealsForCarbLoad ? "Separate Meals" : "Combine Meals")
+                                Text(viewModel.dietViewModel.combineMealsForCarbLoad ? "separate_meals".localized : "combine_meals".localized)
                                     .font(.caption)
                             }
                             .padding(.horizontal, 12)
@@ -418,7 +418,7 @@ struct HistoricalCarbLoadTrackerCard: View {
                             HStack {
                                 Image(systemName: "xmark.circle")
                                     .font(.caption)
-                                Text("Cancel")
+                                Text("cancel".localized)
                                     .font(.caption)
                             }
                             .padding(.horizontal, 12)
@@ -450,7 +450,7 @@ struct HistoricalCarbLoadTrackerCard: View {
                         .foregroundColor(.secondary)
                     
                     if let date = carbLoadDate {
-                        Text("Used on \(date, format: .dateTime.weekday(.abbreviated).month().day())")
+                        Text(LocalizedStringKey("\("used_on".localized) \(date, format: .dateTime.weekday(.abbreviated).month().day())"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -493,7 +493,7 @@ struct HistoricalFatMealTrackerCard: View {
                     .font(.title2)
                     .foregroundColor(.orange)
                 
-                Text("Fat Meals This Week")
+                Text("fat_meals_this_week".localized)
                     .font(.title3)
                     .fontWeight(.semibold)
                 
@@ -524,12 +524,12 @@ struct HistoricalFatMealTrackerCard: View {
             
             HStack {
                 if remaining > 0 {
-                    Label("\(remaining) fat meal\(remaining == 1 ? "" : "s") remaining", 
+                    Label(remaining == 1 ? "fat_meal_remaining_singular".localized : "fat_meals_remaining".localized(remaining), 
                           systemImage: "checkmark.circle")
                         .font(.caption)
                         .foregroundColor(.green)
                 } else {
-                    Label("Fat meal limit reached for this week", 
+                    Label("fat_meal_limit_reached".localized, 
                           systemImage: "exclamationmark.triangle.fill")
                         .font(.caption)
                         .foregroundColor(.red)
@@ -580,18 +580,18 @@ struct HistoricalFoodSection: View {
                     // For meal 1, show if borrowing
                     let percentage = totalPercentage
                     if percentage > 100 {
-                        Text("+\(Int(percentage - 100))% borrowed")
+                        Text(LocalizedStringKey("+\(Int(percentage - 100))% \("borrowed".localized)"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     }
                 } else if let carryOver = carryOver, carryOver != 0 {
                     // For meal 2, show carry-over or borrowed
                     if carryOver > 0 {
-                        Text("+\(Int(carryOver))% carry-over")
+                        Text(LocalizedStringKey("+\(Int(carryOver))% \("carry_over".localized)"))
                             .font(.caption)
                             .foregroundColor(.green)
                     } else {
-                        Text("\(Int(carryOver))% borrowed")
+                        Text(LocalizedStringKey("\(Int(carryOver))% \("borrowed".localized)"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     }
@@ -617,7 +617,7 @@ struct HistoricalFoodSection: View {
                                 
                                 // Show percentage contribution to daily total
                                 let contribution = Double(entry.gramsConsumed) / Double(entry.food.dailyGrams) * 100
-                                Text("\(Int(contribution))% of daily")
+                                Text(LocalizedStringKey("\(Int(contribution))% \("of_daily".localized)"))
                                     .font(.caption)
                                     .fontWeight(.semibold)
                                     .foregroundColor(contribution >= 100 ? .green : themeManager.accentColor.color)
@@ -648,13 +648,13 @@ struct HistoricalFoodSection: View {
                 
                 // Total consumed info
                 HStack {
-                    Text("Total Progress")
+                    Text("total_progress".localized)
                         .font(.caption)
                         .fontWeight(.medium)
-                    
+
                     Spacer()
-                    
-                    Text("\(Int(totalPercentage))% \(carryOver != nil && carryOver! != 0 ? (carryOver! > 0 ? "(incl. carry-over)" : "(incl. borrowing)") : "")")
+
+                    Text("\(Int(totalPercentage))% \(carryOver != nil && carryOver! != 0 ? (carryOver! > 0 ? " (\("incl_carry_over".localized))" : " (\("incl_borrowing".localized))") : "")")
                         .font(.caption)
                         .fontWeight(.semibold)
                         .foregroundColor(totalPercentage >= 100 ? .green : .orange)
@@ -700,7 +700,7 @@ struct HistoricalFoodSection: View {
                 } else {
                     // Carb load - no restrictions
                     HStack {
-                        Text("No quantity limits for carb load!")
+                        Text("no_quantity_limits_carb_load".localized)
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.orange)
@@ -770,7 +770,7 @@ struct HistoricalSnacksCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Snacks")
+                Text("snacks".localized)
                     .font(.headline)
                 
                 Spacer()
@@ -784,7 +784,7 @@ struct HistoricalSnacksCard: View {
             }
             
             if viewModel.todaySnacks.isEmpty {
-                Text("No snacks logged today")
+                Text("no_snacks_logged_today".localized)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -850,7 +850,7 @@ struct CalorieBankDayCard: View {
                     .font(.title3)
                     .foregroundColor(themeManager.accentColor.color)
                 
-                Text("Calorie Bank Activity")
+                Text("diet_day_edit_calorie_bank_activity".localized)
                     .font(.headline)
                 
                 Spacer()
@@ -862,7 +862,7 @@ struct CalorieBankDayCard: View {
             }
             
             if viewModel.dayBankTransactions.isEmpty {
-                Text("No calorie bank activity for this day")
+                Text("diet_day_edit_no_bank_activity".localized)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -871,7 +871,7 @@ struct CalorieBankDayCard: View {
                 ForEach(viewModel.dayBankTransactions) { transaction in
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(transaction.foodName ?? "Manual Entry")
+                            Text(transaction.foodName ?? "manual_entry".localized)
                                 .font(.subheadline)
                             
                             Text("\(transaction.amount) calories")
@@ -906,7 +906,7 @@ struct CalorieBankDayCard: View {
             // Total used
             if !viewModel.dayBankTransactions.isEmpty {
                 HStack {
-                    Text("Total Used")
+                    Text("diet_day_edit_total_used".localized)
                         .font(.caption)
                         .fontWeight(.medium)
                     
@@ -941,27 +941,27 @@ struct CalorieBankHistoryWithdrawalView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("Log Past Calorie Consumption")
+                Text("diet_day_edit_log_past_consumption".localized)
                     .font(.title2)
                     .fontWeight(.bold)
                     .padding(.top)
-                
-                Text("Recording for: \(date, formatter: DateFormatter.mediumDateFormatter)")
+
+                Text("diet_day_edit_recording_for".localized(DateFormatter.mediumDateFormatter.string(from: date)))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Food Item")
+                    Text("food_item".localized)
                         .font(.headline)
-                    
-                    TextField("e.g., Soy sauce, Oil, Dressing", text: $foodName)
+
+                    TextField("food_item_placeholder".localized, text: $foodName)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    Text("Calories")
+
+                    Text("calories".localized)
                         .font(.headline)
-                    
+
                     HStack {
-                        TextField("Enter calories", text: $calories)
+                        TextField("enter_calories".localized, text: $calories)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .keyboardType(.numberPad)
                         
@@ -974,7 +974,7 @@ struct CalorieBankHistoryWithdrawalView: View {
                 // Common items section
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Common Items")
+                        Text("common_items".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                         
@@ -1007,7 +1007,7 @@ struct CalorieBankHistoryWithdrawalView: View {
                 Button(action: performWithdrawal) {
                     HStack {
                         Image(systemName: "fork.knife")
-                        Text("Log Consumption")
+                        Text("log_consumption".localized)
                             .fontWeight(.semibold)
                     }
                     .frame(maxWidth: .infinity)
@@ -1022,15 +1022,15 @@ struct CalorieBankHistoryWithdrawalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         isPresented = false
                     }
                 }
             }
-            .alert("Invalid Entry", isPresented: $showError) {
-                Button("OK") { }
+            .alert("diet_day_edit_invalid_entry".localized, isPresented: $showError) {
+                Button("ok".localized) { }
             } message: {
-                Text("Please enter a valid amount.")
+                Text("diet_day_edit_invalid_amount_message".localized)
             }
             .sheet(isPresented: $showingManageItems) {
                 ManageCommonItemsView()

@@ -36,11 +36,11 @@ struct DailyGoalsView: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Daily Goals")
+                    Text("daily_goals_title".localized)
                         .font(.title2)
                         .fontWeight(.bold)
-                    
-                    Text("Track your nutrition targets")
+
+                    Text("daily_goals_subtitle".localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -99,7 +99,7 @@ struct DailyGoalsView: View {
             if viewModel.todayCalories < viewModel.dailyCalorieGoal {
                 let unusedCalories = viewModel.dailyCalorieGoal - viewModel.todayCalories
                 VStack(spacing: 8) {
-                    Text("Unused Calories Today")
+                    Text("daily_goals_unused_calories".localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
@@ -108,7 +108,7 @@ struct DailyGoalsView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.green)
                     
-                    Text("Will be deposited to your calorie bank")
+                    Text("daily_goals_deposit_hint".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

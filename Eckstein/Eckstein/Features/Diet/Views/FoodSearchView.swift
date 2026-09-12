@@ -44,7 +44,7 @@ struct FoodSearchView: View {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
                     
-                    TextField("Search foods...", text: $viewModel.searchText)
+                    TextField("search_foods".localized, text: $viewModel.searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
                     Button(action: handleScanTap) {
@@ -104,12 +104,12 @@ struct FoodSearchView: View {
                                 .padding()
                             } else if viewModel.searchResults.isEmpty {
                                 VStack(spacing: 16) {
-                                    Text("No foods found")
+                                    Text("no_foods_found".localized)
                                         .font(.headline)
                                         .foregroundColor(.secondary)
-                                    
+
                                     Button(action: { showAddFood = true }) {
-                                        Label("Create Custom Food", systemImage: "plus.circle.fill")
+                                        Label("create_custom_food".localized, systemImage: "plus.circle.fill")
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
@@ -147,11 +147,11 @@ struct FoodSearchView: View {
                     .padding(.horizontal)
                 }
             }
-            .navigationTitle("Add Food")
+            .navigationTitle("add_food".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
@@ -224,7 +224,7 @@ struct FoodRowView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(food.name ?? "Unknown")
+                        Text(food.name ?? "unknown".localized)
                             .font(.body)
                             .foregroundColor(.primary)
                         

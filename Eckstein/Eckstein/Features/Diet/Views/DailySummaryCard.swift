@@ -16,7 +16,7 @@ struct DailySummaryCard: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Text("Today's Summary")
+            Text("daily_summary_card_title".localized)
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -46,7 +46,7 @@ struct DailySummaryCard: View {
             Divider()
             
             HStack {
-                Label("Calorie Bank", systemImage: "banknote")
+                Label("calorie_bank".localized, systemImage: "banknote")
                     .font(.subheadline)
                 
                 Spacer()

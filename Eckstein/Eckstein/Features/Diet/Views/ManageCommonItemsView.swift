@@ -34,34 +34,34 @@ struct ManageCommonItemsView: View {
                     }
                     .onDelete(perform: deleteItems)
                 } header: {
-                    Text("Common Food Items")
+                    Text("manage_common_items_title".localized)
                 }
-                
+
                 Section {
                     Button(action: { showingAddItem = true }) {
                         HStack {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(.green)
-                            Text("Add New Item")
+                            Text("manage_common_items_add_new".localized)
                                 .foregroundColor(.primary)
                         }
                     }
-                    
+
                     Button(action: resetToDefaults) {
                         HStack {
                             Image(systemName: "arrow.clockwise")
                                 .foregroundColor(.orange)
-                            Text("Reset to Defaults")
+                            Text("manage_common_items_reset_defaults".localized)
                                 .foregroundColor(.primary)
                         }
                     }
                 }
             }
-            .navigationTitle("Manage Items")
+            .navigationTitle("manage_common_items_nav_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }
@@ -97,11 +97,11 @@ struct AddCommonItemView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Item Details")) {
-                    TextField("Item Name", text: $name)
-                    
+                Section(header: Text("manage_common_items_item_details".localized)) {
+                    TextField("manage_common_items_item_name".localized, text: $name)
+
                     HStack {
-                        TextField("Calories", text: $calories)
+                        TextField("calories".localized, text: $calories)
                             .keyboardType(.numberPad)
                         Text("cal")
                             .foregroundColor(.secondary)
@@ -109,31 +109,31 @@ struct AddCommonItemView: View {
                 }
                 
                 Section {
-                    Text("Examples: Olive Oil (1 tbsp), Jam (1 tsp), Cream (1 tbsp)")
+                    Text("manage_common_items_examples".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            .navigationTitle("Add Item")
+            .navigationTitle("manage_common_items_add_item".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("save".localized) {
                         saveItem()
                     }
                     .disabled(name.isEmpty || calories.isEmpty)
                 }
             }
-            .alert("Invalid Input", isPresented: $showError) {
-                Button("OK") { }
+            .alert("manage_common_items_invalid_input".localized, isPresented: $showError) {
+                Button("ok".localized) { }
             } message: {
-                Text("Please enter a valid name and calorie amount.")
+                Text("manage_common_items_invalid_message".localized)
             }
         }
     }

@@ -89,9 +89,9 @@ class AuthViewModel: ObservableObject {
         var text: String {
             switch self {
             case .none: return ""
-            case .weak: return "Weak"
-            case .medium: return "Medium"
-            case .strong: return "Strong"
+            case .weak: return "login_password_strength_weak".localized
+            case .medium: return "login_password_strength_medium".localized
+            case .strong: return "login_password_strength_strong".localized
             }
         }
     }
@@ -161,15 +161,15 @@ class AuthViewModel: ObservableObject {
         let errorString = error.localizedDescription
         
         if errorString.contains("Email not confirmed") {
-            return "Please check your email to confirm your account"
+            return "auth_error_email_not_confirmed".localized
         } else if errorString.contains("Invalid login credentials") {
-            return "Invalid email or password"
+            return "invalid_credentials".localized
         } else if errorString.contains("User already registered") {
-            return "An account with this email already exists"
+            return "account_exists".localized
         } else if errorString.contains("Password should be at least") {
-            return "Password must be at least 6 characters"
+            return "auth_error_password_min_length".localized
         } else {
-            return "An error occurred. Please try again."
+            return "auth_error_generic".localized
         }
     }
 }

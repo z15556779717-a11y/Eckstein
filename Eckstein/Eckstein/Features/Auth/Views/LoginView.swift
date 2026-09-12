@@ -45,7 +45,7 @@ struct LoginView: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         
-                        Text("Your Personal Fitness Companion")
+                        Text("auth_tagline".localized)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -72,7 +72,7 @@ struct LoginView: View {
                             .fill(Color.gray.opacity(0.3))
                             .frame(height: 1)
                         
-                        Text("OR")
+                        Text("login_or".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.horizontal)
@@ -87,7 +87,7 @@ struct LoginView: View {
                     VStack(spacing: 16) {
                         // Email field
                         VStack(alignment: .leading, spacing: 8) {
-                            TextField("Email", text: $viewModel.email)
+                            TextField("email".localized, text: $viewModel.email)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
@@ -98,7 +98,7 @@ struct LoginView: View {
                                 }
                             
                             if !viewModel.email.isEmpty && !viewModel.isEmailValid {
-                                Text("Please enter a valid email")
+                                Text("login_invalid_email".localized)
                                     .font(.caption)
                                     .foregroundColor(.red)
                             }
@@ -106,7 +106,7 @@ struct LoginView: View {
                         
                         // Password field
                         VStack(alignment: .leading, spacing: 8) {
-                            SecureField("Password", text: $viewModel.password)
+                            SecureField("password".localized, text: $viewModel.password)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .focused($focusedField, equals: .password)
                                 .onSubmit {
@@ -121,7 +121,7 @@ struct LoginView: View {
                             
                             if viewModel.isSignUpMode && !viewModel.password.isEmpty {
                                 HStack {
-                                    Text("Password strength:")
+                                    Text("login_password_strength".localized)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     
@@ -136,7 +136,7 @@ struct LoginView: View {
                         // Confirm password (sign up only)
                         if viewModel.isSignUpMode {
                             VStack(alignment: .leading, spacing: 8) {
-                                SecureField("Confirm Password", text: $viewModel.confirmPassword)
+                                SecureField("confirm_password".localized, text: $viewModel.confirmPassword)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .focused($focusedField, equals: .confirmPassword)
                                     .onSubmit {
@@ -144,14 +144,14 @@ struct LoginView: View {
                                     }
                                 
                                 if !viewModel.confirmPassword.isEmpty && !viewModel.passwordsMatch {
-                                    Text("Passwords don't match")
+                                    Text("passwords_dont_match".localized)
                                         .font(.caption)
                                         .foregroundColor(.red)
                                 }
                             }
                             
                             // Full Name field
-                            TextField("Full Name", text: $viewModel.fullName)
+                            TextField("full_name".localized, text: $viewModel.fullName)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .focused($focusedField, equals: .fullName)
                                 .onSubmit {
@@ -166,12 +166,12 @@ struct LoginView: View {
 
                             // Gender toggle
                             HStack {
-                                Text("Gender:")
+                                Text("login_gender_label".localized)
                                     .foregroundColor(.secondary)
                                 Spacer()
-                                Picker("Gender", selection: $viewModel.isMale) {
-                                    Text("Male").tag(true)
-                                    Text("Female").tag(false)
+                                Picker("gender".localized, selection: $viewModel.isMale) {
+                                    Text("male".localized).tag(true)
+                                    Text("female".localized).tag(false)
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
                                 .frame(width: 150)
@@ -203,7 +203,7 @@ struct LoginView: View {
                                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                         .scaleEffect(0.8)
                                 } else {
-                                    Text(viewModel.isSignUpMode ? "Create Account" : "Sign In")
+                                    Text(viewModel.isSignUpMode ? "create_account".localized : "sign_in".localized)
                                 }
                             }
                             .frame(maxWidth: .infinity)
@@ -219,10 +219,10 @@ struct LoginView: View {
                             viewModel.toggleMode()
                         }) {
                             HStack {
-                                Text(viewModel.isSignUpMode ? "Already have an account?" : "Don't have an account?")
+                                Text(viewModel.isSignUpMode ? "already_have_account".localized : "dont_have_account".localized)
                                     .foregroundColor(.secondary)
                                 
-                                Text(viewModel.isSignUpMode ? "Sign In" : "Sign Up")
+                                Text(viewModel.isSignUpMode ? "sign_in".localized : "sign_up".localized)
                                     .fontWeight(.semibold)
                                     .foregroundColor(themeManager.accentColor.color)
                             }

@@ -67,7 +67,7 @@ struct SyncStatusView: View {
                     if syncManager.isSyncing {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Text("Syncing...")
+                                Text("syncing".localized)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 
@@ -86,7 +86,7 @@ struct SyncStatusView: View {
                     // Quick Stats
                     HStack(spacing: 20) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Last Sync")
+                            Text("sync_last_sync".localized)
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                             Text(lastSyncText)
@@ -98,10 +98,10 @@ struct SyncStatusView: View {
                             .frame(height: 30)
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Pending")
+                            Text("sync_pending".localized)
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
-                            Text("\(syncManager.pendingChangesCount) changes")
+                            Text("sync_pending_changes".localized(syncManager.pendingChangesCount))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(syncManager.pendingChangesCount > 0 ? .orange : .primary)
@@ -116,7 +116,7 @@ struct SyncStatusView: View {
                         Button {
                             syncManager.triggerManualSync()
                         } label: {
-                            Label("Sync Now", systemImage: "arrow.triangle.2.circlepath")
+                            Label("sync_now".localized, systemImage: "arrow.triangle.2.circlepath")
                                 .font(.caption)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 8)
@@ -130,7 +130,7 @@ struct SyncStatusView: View {
                         Button {
                             showingSyncHistory = true
                         } label: {
-                            Label("History", systemImage: "clock")
+                            Label("history".localized, systemImage: "clock")
                                 .font(.caption)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 8)
@@ -143,13 +143,13 @@ struct SyncStatusView: View {
                     // Settings
                     VStack(spacing: 12) {
                         Toggle(isOn: $syncManager.automaticSync) {
-                            Label("Automatic Sync", systemImage: "arrow.triangle.2.circlepath.circle")
+                            Label("sync_automatic".localized, systemImage: "arrow.triangle.2.circlepath.circle")
                                 .font(.caption)
                         }
                         .tint(.green)
                         
                         Toggle(isOn: $syncManager.syncOnWiFiOnly) {
-                            Label("WiFi Only", systemImage: "wifi")
+                            Label("sync_wifi_only".localized, systemImage: "wifi")
                                 .font(.caption)
                         }
                         .tint(.blue)
@@ -322,7 +322,7 @@ struct SyncStatusView: View {
             formatter.unitsStyle = .abbreviated
             return formatter.localizedString(for: lastSync, relativeTo: Date())
         } else {
-            return "Never"
+            return "never".localized
         }
     }
 }

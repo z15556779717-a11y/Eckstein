@@ -121,5 +121,18 @@ struct SyncHistoryEntry: Identifiable {
         case upload = "Upload"
         case download = "Download"
         case bidirectional = "Bidirectional"
+
+        /// The label the sync history shows. The raw values stay as they are:
+        /// they are the spelling this type is built from, not display text.
+        var displayName: String {
+            switch self {
+            case .upload:
+                return "sync_direction_upload".localized
+            case .download:
+                return "sync_direction_download".localized
+            case .bidirectional:
+                return "sync_direction_bidirectional".localized
+            }
+        }
     }
 }

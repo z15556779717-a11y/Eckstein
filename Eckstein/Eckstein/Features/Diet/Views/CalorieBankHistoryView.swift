@@ -48,7 +48,7 @@ struct CalorieBankHistoryView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     // Time Range Picker
-                    Picker("Time Range", selection: $selectedTimeRange) {
+                    Picker("time_range".localized, selection: $selectedTimeRange) {
                         ForEach(TimeRange.allCases, id: \.self) { range in
                             Text(range.rawValue).tag(range)
                         }
@@ -59,7 +59,7 @@ struct CalorieBankHistoryView: View {
                     // Balance Chart
                     if !chartData.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Balance Over Time")
+                            Text("calorie_bank_history_balance_over_time".localized)
                                 .font(.headline)
                             
                             Chart(chartData, id: \.date) { item in
@@ -99,12 +99,12 @@ struct CalorieBankHistoryView: View {
                     
                     // Transaction List
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Transaction History")
+                        Text("calorie_bank_history_transactions".localized)
                             .font(.headline)
                             .padding(.horizontal)
                         
                         if filteredTransactions.isEmpty {
-                            Text("No transactions yet")
+                            Text("calorie_bank_history_no_transactions".localized)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity)
@@ -123,11 +123,11 @@ struct CalorieBankHistoryView: View {
                 }
                 .padding(.vertical)
             }
-            .navigationTitle("Bank History")
+            .navigationTitle("calorie_bank_history_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }
@@ -176,7 +176,7 @@ struct TransactionRow: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(transaction.foodName ?? (transaction.type == .deposit ? "Daily Deposit" : "Withdrawal"))
+                    Text(transaction.foodName ?? (transaction.type == .deposit ? "calorie_bank_daily_deposit".localized : "calorie_bank_withdrawal".localized))
                         .font(.body)
                         .fontWeight(.medium)
                     

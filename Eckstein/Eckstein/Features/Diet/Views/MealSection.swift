@@ -26,7 +26,7 @@ struct MealSection: View {
             }
             
             if meals.isEmpty {
-                Text("No items added")
+                Text("meal_section_no_items".localized)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .padding(.vertical, 8)
@@ -48,10 +48,10 @@ struct MealItemRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Meal items will be displayed here")
+            Text("meal_section_placeholder".localized)
                 .font(.subheadline)
-            
-            Text("0 calories")
+
+            Text("meal_section_zero_calories".localized)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

@@ -37,11 +37,11 @@ struct CalorieBankView: View {
                 VStack(spacing: 20) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Calorie Bank")
+                            Text("calorie_bank".localized)
                                 .font(.title2)
                                 .fontWeight(.bold)
-                            
-                            Text("Save calories for special occasions")
+
+                            Text("calorie_bank_subtitle".localized)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -72,7 +72,7 @@ struct CalorieBankView: View {
                                     .font(.system(size: 48, weight: .bold, design: .rounded))
                                     .foregroundColor(balanceColor)
                                 
-                                Text("saved balance")
+                                Text("saved_balance".localized)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
@@ -80,7 +80,7 @@ struct CalorieBankView: View {
                                     .frame(width: 100)
                                 
                                 VStack(spacing: 4) {
-                                    Text("Available Today")
+                                    Text("calorie_bank_available_today".localized)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     
@@ -102,7 +102,7 @@ struct CalorieBankView: View {
                                         .font(.headline)
                                         .foregroundColor(themeManager.accentColor.color)
                                 }
-                                Text("Today's")
+                                Text("calorie_bank_todays".localized)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -115,7 +115,7 @@ struct CalorieBankView: View {
                                         .font(.headline)
                                         .foregroundColor(.red)
                                 }
-                                Text("Used")
+                                Text("used".localized)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -130,7 +130,7 @@ struct CalorieBankView: View {
                 VStack(spacing: 12) {
                     HStack(spacing: 8) {
                         Button(action: { showWithdrawSheet = true }) {
-                            Label("Withdraw", systemImage: "minus.circle")
+                            Label("calorie_bank_withdraw".localized, systemImage: "minus.circle")
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(Color.red.opacity(0.1))
@@ -140,7 +140,7 @@ struct CalorieBankView: View {
                         .disabled(bankManager.currentBalance + bankManager.todayAvailable == 0)
                         
                         Button(action: { showHistory = true }) {
-                            Label("History", systemImage: "clock")
+                            Label("history".localized, systemImage: "clock")
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(themeManager.accentColor.color.opacity(0.1))
@@ -150,7 +150,7 @@ struct CalorieBankView: View {
                     }
                     
                     Button(action: { showResetSheet = true }) {
-                        Label("Reset Start Date", systemImage: "calendar.badge.clock")
+                        Label("calorie_bank_reset_start_date".localized, systemImage: "calendar.badge.clock")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.orange.opacity(0.1))
@@ -162,13 +162,13 @@ struct CalorieBankView: View {
                 // Today's Transactions
                 if !bankManager.getTodayTransactions().isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Today's Activity")
+                        Text("calorie_bank_todays_activity".localized)
                             .font(.headline)
                         
                         ForEach(bankManager.getTodayTransactions()) { transaction in
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(transaction.foodName ?? "Manual Entry")
+                                    Text(transaction.foodName ?? "manual_entry".localized)
                                         .font(.subheadline)
                                     Text("\(transaction.amount) calories")
                                         .font(.caption)
@@ -203,7 +203,7 @@ struct CalorieBankView: View {
                 
                 // How It Works
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("How It Works")
+                    Text("calorie_bank_how_it_works".localized)
                         .font(.headline)
                     
                     VStack(alignment: .leading, spacing: 8) {
@@ -239,7 +239,7 @@ struct CalorieBankView: View {
                 // Weekly Stats
                 let stats = bankManager.getWeeklyStats()
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("This Week")
+                    Text("this_week".localized)
                         .font(.headline)
                     
                     HStack(spacing: 20) {
@@ -268,7 +268,7 @@ struct CalorieBankView: View {
             }
             .padding()
         }
-        .navigationTitle("Calorie Bank")
+        .navigationTitle("calorie_bank".localized)
         .sheet(isPresented: $showHistory) {
             CalorieBankHistoryView()
         }
@@ -354,7 +354,7 @@ struct CalorieBankResetView: View {
             VStack(spacing: 12) {
                 // Header
                 HStack {
-                    Text("Reset Calorie Bank")
+                    Text("calorie_bank_reset_title".localized)
                         .font(.headline)
                         .fontWeight(.bold)
                     Spacer()
@@ -387,9 +387,9 @@ struct CalorieBankResetView: View {
                     
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Days accumulated:")
-                            Text("Saved balance:")
-                            Text("Today's allowance:")
+                            Text("calorie_bank_days_accumulated".localized)
+                            Text("calorie_bank_saved_balance".localized)
+                            Text("calorie_bank_todays_allowance".localized)
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -409,7 +409,7 @@ struct CalorieBankResetView: View {
                         .padding(.vertical, 4)
                     
                     HStack {
-                        Text("Total available:")
+                        Text("calorie_bank_total_available".localized)
                             .font(.caption)
                             .fontWeight(.semibold)
                         Spacer()
@@ -420,7 +420,7 @@ struct CalorieBankResetView: View {
                     }
                     
                     if calendar.isDateInToday(selectedDate) {
-                        Text("Starting fresh from today")
+                        Text("calorie_bank_starting_fresh".localized)
                             .font(.caption2)
                             .foregroundColor(.orange)
                             .padding(.top, 4)
@@ -437,7 +437,7 @@ struct CalorieBankResetView: View {
                 Button(action: { showConfirmation = true }) {
                     HStack {
                         Image(systemName: "arrow.clockwise")
-                        Text("Reset from This Date")
+                        Text("calorie_bank_reset_from_date".localized)
                             .fontWeight(.semibold)
                     }
                     .frame(maxWidth: .infinity)
@@ -452,19 +452,19 @@ struct CalorieBankResetView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         isPresented = false
                     }
                 }
             }
-            .alert("Confirm Reset", isPresented: $showConfirmation) {
-                Button("Cancel", role: .cancel) { }
-                Button("Reset", role: .destructive) {
+            .alert("calorie_bank_confirm_reset".localized, isPresented: $showConfirmation) {
+                Button("cancel".localized, role: .cancel) { }
+                Button("reset".localized, role: .destructive) {
                     bankManager.resetFromDate(selectedDate)
                     isPresented = false
                 }
             } message: {
-                Text("This will recalculate your calorie bank starting from \(selectedDate.formatted(date: .abbreviated, time: .omitted)). This action cannot be undone.")
+                Text("calorie_bank_reset_message".localized(selectedDate.formatted(date: .abbreviated, time: .omitted)))
             }
         }
     }

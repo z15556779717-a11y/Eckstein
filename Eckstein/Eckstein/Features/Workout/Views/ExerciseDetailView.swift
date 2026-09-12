@@ -21,7 +21,7 @@ struct ExerciseDetailView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Exercise Info
                     VStack(alignment: .leading, spacing: 12) {
-                        Text(exercise.name ?? "Unknown Exercise")
+                        Text(exercise.name ?? "unknown_exercise".localized)
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         
@@ -110,17 +110,17 @@ struct ExerciseDetailView: View {
                 }
                 .padding(.vertical)
             }
-            .navigationTitle("Exercise Details")
+            .navigationTitle("exercise_details".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Edit") {
+                    Button("edit".localized) {
                         showingEditView = true
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }

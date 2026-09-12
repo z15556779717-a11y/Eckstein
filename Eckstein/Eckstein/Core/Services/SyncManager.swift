@@ -18,7 +18,7 @@ class SyncManager: ObservableObject {
     @Published private(set) var lastSyncDate: Date?
     @Published private(set) var pendingChangesCount = 0
     @Published private(set) var syncProgress: Double = 0.0
-    @Published private(set) var syncStatus: String = "Ready"
+    @Published private(set) var syncStatus: String = "sync_status_ready".localized
     
     // Core components
     private let networkMonitor = NetworkMonitor.shared
@@ -213,7 +213,7 @@ class SyncManager: ObservableObject {
         
         print("Checking network status...")
         guard networkMonitor.shouldSync(wifiOnly: syncOnWiFiOnly) else {
-            syncStatus = "Waiting for network..."
+            syncStatus = "sync_waiting_for_network".localized
             print("Network not available or WiFi-only mode enabled")
             return
         }
@@ -225,7 +225,7 @@ class SyncManager: ObservableObject {
         // Sync only needs Supabase. It previously required a configured OpenAI key
         // too, which silently disabled sync whenever the AI coach was unset.
         guard AppEnvironment.isSupabaseConfigured else {
-            syncStatus = "Sync not configured"
+            syncStatus = "sync_not_configured".localized
             print("Sync skipped: Supabase not configured")
             return
         }
@@ -233,7 +233,7 @@ class SyncManager: ObservableObject {
         print("Starting sync - Pending changes: \(pendingChangesCount)")
         
         isSyncing = true
-        syncStatus = "Syncing..."
+        syncStatus = "syncing".localized
         syncProgress = 0.0
         
         let startTime = Date()
@@ -320,13 +320,13 @@ class SyncManager: ObservableObject {
         updatePendingChangesCount()
         
         if result.successful > 0 && result.failed == 0 {
-            syncStatus = "Last sync: \(formatDate(lastSyncDate!))"
+            syncStatus = "sync_last_sync_at".localized(formatDate(lastSyncDate!))
         } else if result.failed > 0 {
-            syncStatus = "Sync failed (\(result.failed) errors)"
+            syncStatus = "sync_failed_with_errors".localized(result.failed)
         } else if !AppEnvironment.isSupabaseConfigured {
-            syncStatus = "Sync not configured"
+            syncStatus = "sync_not_configured".localized
         } else {
-            syncStatus = "Ready to sync"
+            syncStatus = "sync_ready_to_sync".localized
         }
         
         // Schedule next sync
@@ -875,11 +875,11 @@ enum SyncManagerError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidData:
-            return "Invalid data format"
+            return "sync_error_invalid_data".localized
         case .networkUnavailable:
-            return "Network connection unavailable"
+            return "sync_error_network_unavailable".localized
         case .syncInProgress:
-            return "Sync already in progress"
+            return "sync_error_in_progress".localized
         }
     }
 }

@@ -105,11 +105,11 @@ struct WeeklyAnalyticsView: View {
             VStack(spacing: 20) {
                 // Header
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Weekly Analytics")
+                    Text("weekly_analytics_title".localized)
                         .font(.title2)
                         .fontWeight(.bold)
-                    
-                    Text("Track your nutrition trends over the past week")
+
+                    Text("weekly_analytics_subtitle".localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -117,7 +117,7 @@ struct WeeklyAnalyticsView: View {
                 .padding(.horizontal)
                 
                 // Metric Picker
-                Picker("Metric", selection: $selectedMetric) {
+                Picker("metric".localized, selection: $selectedMetric) {
                     ForEach(NutritionMetric.allCases, id: \.self) { metric in
                         Text(metric.rawValue).tag(metric)
                     }
@@ -146,7 +146,7 @@ struct WeeklyAnalyticsView: View {
                 // Chart
                 if !chartData.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Daily Trend")
+                        Text("weekly_analytics_daily_trend".localized)
                             .font(.headline)
                         
                         Chart(chartData, id: \.date) { item in
@@ -203,7 +203,7 @@ struct WeeklyAnalyticsView: View {
                 
                 // Daily Breakdown
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Daily Breakdown")
+                    Text("weekly_analytics_daily_breakdown".localized)
                         .font(.headline)
                         .padding(.horizontal)
                     

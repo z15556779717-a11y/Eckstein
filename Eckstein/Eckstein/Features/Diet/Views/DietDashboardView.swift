@@ -103,19 +103,19 @@ struct DietDashboardView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button(action: { showFoodSearch = true }) {
-                        Label("Add Food", systemImage: "plus.circle")
+                        Label("add_food".localized, systemImage: "plus.circle")
                     }
-                    
+
                     Button(action: { showBarcodeScanner = true }) {
-                        Label("Scan Barcode", systemImage: "barcode.viewfinder")
+                        Label("scan_barcode".localized, systemImage: "barcode.viewfinder")
                     }
-                    
+
                     Button(action: { showCalorieBank = true }) {
-                        Label("Calorie Bank", systemImage: "building.columns")
+                        Label("calorie_bank".localized, systemImage: "building.columns")
                     }
-                    
+
                     Button(action: { showAnalytics = true }) {
-                        Label("Analytics", systemImage: "chart.line.uptrend.xyaxis")
+                        Label("analytics".localized, systemImage: "chart.line.uptrend.xyaxis")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -228,7 +228,7 @@ struct DailyProgressCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("daily_progress".localized)
                         .font(.headline)
-                    Text("\(viewModel.todayCalories) / \(viewModel.dailyCalorieGoal) cal")
+                    Text("diet_dashboard_calorie_progress".localized(viewModel.todayCalories, viewModel.dailyCalorieGoal))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -322,15 +322,15 @@ struct CalorieBankSummaryCard: View {
         Button(action: onTap) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Label("Calorie Bank", systemImage: "building.columns.fill")
+                    Label("calorie_bank".localized, systemImage: "building.columns.fill")
                         .font(.headline)
                         .foregroundColor(.orange)
-                    
-                    Text("Balance: \(balance) cal")
+
+                    Text("diet_dashboard_balance_line".localized(balance))
                         .font(.subheadline)
-                    
+
                     if todayDeposit > 0 {
-                        Text("+\(todayDeposit) to be deposited")
+                        Text("diet_dashboard_deposit".localized(todayDeposit))
                             .font(.caption)
                             .foregroundColor(.green)
                     }
@@ -362,7 +362,7 @@ struct EmptyMealsCard: View {
                 .font(.headline)
                 .foregroundColor(.secondary)
             
-            Button("Add Your First Meal") {
+            Button("diet_dashboard_add_first_meal".localized) {
                 onAddMeal()
             }
             .buttonStyle(.borderedProminent)
@@ -387,7 +387,7 @@ struct MealCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(meal.mealType?.capitalized ?? "Meal")
+                    Text(meal.mealType?.capitalized ?? "diet_entry_meal".localized)
                         .font(.headline)
                     
                     if let date = meal.date {
@@ -424,7 +424,7 @@ struct MealCard: View {
             }
             
             Button(action: onAddFood) {
-                Label("Add Food", systemImage: "plus.circle")
+                Label("add_food".localized, systemImage: "plus.circle")
                     .font(.subheadline)
                     .foregroundColor(.blue)
             }
@@ -449,7 +449,7 @@ struct DashboardMealItemRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(item.food?.name ?? "Unknown Food")
+                Text(item.food?.name ?? "diet_unknown_food_title".localized)
                     .font(.subheadline)
                 
                 Text("\(Int(item.quantityGrams))g")
@@ -539,13 +539,13 @@ struct NutritionInsightsCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Label("Nutrition Insights", systemImage: "lightbulb.fill")
+                Label("diet_dashboard_nutrition_insights".localized, systemImage: "lightbulb.fill")
                     .font(.headline)
                     .foregroundColor(.yellow)
-                
+
                 Spacer()
-                
-                Button("View All") {
+
+                Button("view_all".localized) {
                     onViewAnalytics()
                 }
                 .font(.caption)
@@ -591,9 +591,9 @@ struct AnalyticsTabView: View {
     var body: some View {
         VStack {
             Picker("analytics".localized, selection: $selectedTab) {
-                Text("Goals").tag(0)
-                Text("Weekly").tag(1)
-                Text("Macros").tag(2)
+                Text("diet_dashboard_goals".localized).tag(0)
+                Text("weekly".localized).tag(1)
+                Text("diet_dashboard_macros".localized).tag(2)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()

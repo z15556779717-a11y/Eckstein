@@ -47,7 +47,7 @@ struct WeightSummaryWidget: View {
                 
                 // Weight Info
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Current Weight")
+                    Text("current_weight".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -74,7 +74,7 @@ struct WeightSummaryWidget: View {
                     }
                     .foregroundColor(viewModel.weeklyChange < 0 ? .green : viewModel.weeklyChange > 0 ? .red : .secondary)
                     
-                    Text("per week")
+                    Text("per_week".localized)
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -145,7 +145,7 @@ struct WeightGoalProgressWidget: View {
         if viewModel.goalWeight != nil {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Label("Weight Goal", systemImage: "target")
+                    Label("weight_goal".localized, systemImage: "target")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
@@ -187,7 +187,7 @@ struct WeightGoalProgressWidget: View {
                 .frame(height: 8)
                 
                 if let days = viewModel.daysToGoal {
-                    Text("\(days) days remaining")
+                    Text("days_remaining".localized(days))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

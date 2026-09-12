@@ -284,3 +284,18 @@
 "video_tutorial" = "视频教程";
 "watch_on_youtube" = "在 YouTube 上观看";
 "added_on" = "添加于 %@";
+
+// MARK: - Localization sweep (user-visible English)
+"compound_exercise" = "复合动作";
+"create_exercise_notes_optional" = "备注（可选）";
+"create_exercise_title" = "创建动作";
+"empty_exercise_card_add_first" = "添加第一个动作";
+"empty_exercise_card_hint" = "添加动作，开始记录你的组数";
+"empty_exercise_card_no_exercises" = "尚未添加动作";
+"exercise_name" = "动作名称";
+"media_optional" = "媒体（可选）";
+"muscle_group" = "目标肌群";
+"youtube_link" = "YouTube 链接";
+
+// MARK: - Localization sweep (user-visible English)
+"exercise_progression_title" = "进展";

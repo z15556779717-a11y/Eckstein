@@ -85,3 +85,26 @@
 "next" = "下一步";
 "get_started" = "开始使用";
 "skip" = "跳过";
+
+// MARK: - Localization sweep (user-visible English)
+"auth_tagline" = "你的专属健身伙伴";
+"introduction_feature_ai_body" = "获取个性化健身建议";
+"introduction_feature_nutrition_body" = "记录热量并追踪营养素";
+"introduction_feature_nutrition_title" = "监控饮食";
+"introduction_feature_weight_body" = "长期追踪体重变化";
+"introduction_feature_weight_title" = "体重管理";
+"introduction_feature_workouts_body" = "记录动作、组数和进展";
+"introduction_feature_workouts_title" = "记录训练";
+"introduction_welcome_title" = "欢迎使用 Eckstein";
+"login_gender_label" = "性别：";
+"login_invalid_email" = "请输入有效的邮箱地址";
+"login_or" = "或";
+"login_password_strength" = "密码强度：";
+
+// MARK: - Localization sweep (user-visible English)
+"auth_error_email_not_confirmed" = "请查收邮件以确认你的账号";
+"auth_error_generic" = "发生错误，请重试。";
+"auth_error_password_min_length" = "密码至少需要 6 个字符";
+"login_password_strength_medium" = "中";
+"login_password_strength_strong" = "强";
+"login_password_strength_weak" = "弱";

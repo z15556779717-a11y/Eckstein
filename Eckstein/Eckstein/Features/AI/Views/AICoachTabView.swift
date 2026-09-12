@@ -87,6 +87,6 @@ struct AICoachTabView: View {
                 .padding(.horizontal)
         }
         .padding()
-        .navigationTitle("AI Coach")
+        .navigationTitle("tab_ai_coach".localized)
     }
 }

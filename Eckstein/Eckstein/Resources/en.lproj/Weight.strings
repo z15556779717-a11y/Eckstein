@@ -334,3 +334,7 @@
 "import_data" = "Import Data";
 "delete_all_data" = "Delete All Data";
 "weight_goal" = "Weight Goal";
+
+// MARK: - Localization sweep (user-visible English)
+"xiaomi_scale_connect" = "Connect";
+"xiaomi_scale_not_connected" = "Not Connected";

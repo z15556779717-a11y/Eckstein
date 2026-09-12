@@ -258,3 +258,63 @@
 "ai_error_unavailable" = "The AI coach can't respond right now. Please try again later.";
 "ai_error_rate_limited" = "Too many requests. Please wait a moment and try again.";
 "ai_error_empty" = "The AI coach sent an empty reply. Please try again.";
+
+// MARK: - Localization sweep (user-visible English)
+"ai_chat_clear" = "Clear Chat";
+"ai_chat_input_placeholder" = "Ask your AI coach...";
+"ai_disclaimer_accept" = "I Understand and Accept";
+"ai_disclaimer_acknowledgement" = "By using the AI Coach, you acknowledge that you have read and understood this disclaimer.";
+"ai_disclaimer_emergency_body" = "In case of injury or medical emergency, stop exercising immediately and seek professional medical help. Do not rely on AI advice for urgent health matters.";
+"ai_disclaimer_emergency_title" = "Emergency Situations";
+"ai_disclaimer_fitness_body" = "Exercise recommendations are general in nature. Consider your individual fitness level, health conditions, and limitations. Stop immediately if you experience pain, dizziness, or discomfort.";
+"ai_disclaimer_fitness_title" = "Fitness Guidance";
+"ai_disclaimer_limitations_body" = "AI responses are generated based on patterns in data and may not always be accurate or appropriate for your specific situation. Use your judgment and verify important information.";
+"ai_disclaimer_limitations_title" = "AI Limitations";
+"ai_disclaimer_medical_body" = "The AI Coach is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with qualified healthcare providers before beginning any fitness or nutrition program.";
+"ai_disclaimer_medical_title" = "Medical Disclaimer";
+"ai_disclaimer_nutrition_body" = "Dietary suggestions are for informational purposes only. Individual nutritional needs vary. Consult a registered dietitian for personalized meal planning, especially if you have allergies or medical conditions.";
+"ai_disclaimer_nutrition_title" = "Nutrition Advice";
+"ai_disclaimer_title" = "AI Coach Disclaimer";
+"ai_settings_backend" = "Backend";
+"ai_settings_configured" = "Configured";
+"ai_settings_key_footer" = "The provider key is held by the Supabase Edge Function. It is never sent to this device, stored on it, or configurable from it.";
+"ai_settings_not_available" = "Not Available";
+"ai_settings_provider" = "Provider";
+"ai_settings_service_header" = "Service";
+"ai_settings_service_row" = "AI Service";
+"ai_settings_status_header" = "Status";
+"ai_settings_title" = "AI Settings";
+"ai_settings_total_tokens" = "Total Tokens Used";
+"ai_settings_usage_header" = "Usage";
+"sync_automatic" = "Automatic Sync";
+"sync_errors" = "Errors";
+"sync_failed_with_errors" = "Sync failed (%d errors)";
+"sync_history_empty_message" = "Sync history will appear here after your first sync";
+"sync_history_empty_title" = "No Sync History";
+"sync_history_title" = "Sync History";
+"sync_last_sync" = "Last Sync";
+"sync_last_sync_at" = "Last sync: %@";
+"sync_not_configured" = "Sync not configured";
+"sync_pending" = "Pending";
+"sync_pending_changes" = "%d changes";
+"sync_ready_to_sync" = "Ready to sync";
+"sync_stat_conflicts" = "Conflicts";
+"sync_stat_failed" = "Failed";
+"sync_stat_successful" = "Successful";
+"sync_status_ready" = "Ready";
+"sync_waiting_for_network" = "Waiting for network...";
+"sync_wifi_only" = "WiFi Only";
+
+// MARK: - Localization sweep (user-visible English)
+"ai_chat_action_plan_meal" = "Plan Meal";
+"ai_chat_action_progress" = "Progress";
+"ai_chat_action_week_summary" = "Week Summary";
+"ai_chat_action_workout_plan" = "Workout Plan";
+
+// MARK: - Localization sweep (user-visible English)
+"sync_direction_bidirectional" = "Bidirectional";
+"sync_direction_download" = "Download";
+"sync_direction_upload" = "Upload";
+"sync_error_in_progress" = "Sync already in progress";
+"sync_error_invalid_data" = "Invalid data format";
+"sync_error_network_unavailable" = "Network connection unavailable";

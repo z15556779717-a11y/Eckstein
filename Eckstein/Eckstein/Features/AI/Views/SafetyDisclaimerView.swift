@@ -21,7 +21,7 @@ struct SafetyDisclaimerView: View {
                             .font(.system(size: 50))
                             .foregroundColor(.orange)
                         
-                        Text("AI Coach Disclaimer")
+                        Text("ai_disclaimer_title".localized)
                             .font(.title)
                             .fontWeight(.bold)
                     }
@@ -31,34 +31,34 @@ struct SafetyDisclaimerView: View {
                     // Disclaimer Text
                     VStack(alignment: .leading, spacing: 16) {
                         DisclaimerSection(
-                            title: "Medical Disclaimer",
-                            content: "The AI Coach is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with qualified healthcare providers before beginning any fitness or nutrition program."
+                            title: "ai_disclaimer_medical_title".localized,
+                            content: "ai_disclaimer_medical_body".localized
                         )
-                        
+
                         DisclaimerSection(
-                            title: "Fitness Guidance",
-                            content: "Exercise recommendations are general in nature. Consider your individual fitness level, health conditions, and limitations. Stop immediately if you experience pain, dizziness, or discomfort."
+                            title: "ai_disclaimer_fitness_title".localized,
+                            content: "ai_disclaimer_fitness_body".localized
                         )
-                        
+
                         DisclaimerSection(
-                            title: "Nutrition Advice",
-                            content: "Dietary suggestions are for informational purposes only. Individual nutritional needs vary. Consult a registered dietitian for personalized meal planning, especially if you have allergies or medical conditions."
+                            title: "ai_disclaimer_nutrition_title".localized,
+                            content: "ai_disclaimer_nutrition_body".localized
                         )
-                        
+
                         DisclaimerSection(
-                            title: "AI Limitations",
-                            content: "AI responses are generated based on patterns in data and may not always be accurate or appropriate for your specific situation. Use your judgment and verify important information."
+                            title: "ai_disclaimer_limitations_title".localized,
+                            content: "ai_disclaimer_limitations_body".localized
                         )
-                        
+
                         DisclaimerSection(
-                            title: "Emergency Situations",
-                            content: "In case of injury or medical emergency, stop exercising immediately and seek professional medical help. Do not rely on AI advice for urgent health matters."
+                            title: "ai_disclaimer_emergency_title".localized,
+                            content: "ai_disclaimer_emergency_body".localized
                         )
                     }
                     
                     // Acceptance
                     VStack(spacing: 16) {
-                        Text("By using the AI Coach, you acknowledge that you have read and understood this disclaimer.")
+                        Text("ai_disclaimer_acknowledgement".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -67,7 +67,7 @@ struct SafetyDisclaimerView: View {
                             hasAccepted = true
                             isPresented = false
                         } label: {
-                            Text("I Understand and Accept")
+                            Text("ai_disclaimer_accept".localized)
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -79,7 +79,7 @@ struct SafetyDisclaimerView: View {
                         Button {
                             isPresented = false
                         } label: {
-                            Text("Cancel")
+                            Text("cancel".localized)
                                 .foregroundColor(.red)
                         }
                     }

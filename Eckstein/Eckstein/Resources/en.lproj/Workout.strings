@@ -284,3 +284,18 @@
 "video_tutorial" = "Video Tutorial";
 "watch_on_youtube" = "Watch on YouTube";
 "added_on" = "Added on %@";
+
+// MARK: - Localization sweep (user-visible English)
+"compound_exercise" = "Compound Exercise";
+"create_exercise_notes_optional" = "Notes (optional)";
+"create_exercise_title" = "Create Exercise";
+"empty_exercise_card_add_first" = "Add First Exercise";
+"empty_exercise_card_hint" = "Add exercises to start tracking your sets";
+"empty_exercise_card_no_exercises" = "No exercises added yet";
+"exercise_name" = "Exercise Name";
+"media_optional" = "Media (Optional)";
+"muscle_group" = "Muscle Group";
+"youtube_link" = "YouTube Link";
+
+// MARK: - Localization sweep (user-visible English)
+"exercise_progression_title" = "Progress";

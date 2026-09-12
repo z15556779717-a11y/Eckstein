@@ -23,11 +23,11 @@ struct AllAchievementsView: View {
                 }
                 .padding()
             }
-            .navigationTitle("All Achievements")
+            .navigationTitle("all_achievements_title".localized)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }
@@ -59,7 +59,7 @@ struct AllAchievementsView: View {
     private var progressSummaryCard: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("Total Progress")
+                Text("total_progress".localized)
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Text("\(earnedCount) of \(totalCount)")

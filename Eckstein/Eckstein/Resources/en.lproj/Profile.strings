@@ -113,3 +113,6 @@
 "settings_saved" = "Settings saved";
 "password_changed" = "Password changed successfully";
 "data_exported" = "Data exported successfully";
+
+// MARK: - Localization sweep (user-visible English)
+"profile_user_info_member_since" = "Member since %@";

@@ -47,11 +47,11 @@ struct MacroBreakdownView: View {
             VStack(spacing: 20) {
                 // Header
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Macro Breakdown")
+                    Text("macro_breakdown_title".localized)
                         .font(.title2)
                         .fontWeight(.bold)
-                    
-                    Text("Analyze your macronutrient distribution")
+
+                    Text("macro_breakdown_subtitle".localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -59,7 +59,7 @@ struct MacroBreakdownView: View {
                 .padding(.horizontal)
                 
                 // Time Range Picker
-                Picker("Time Range", selection: $selectedTimeRange) {
+                Picker("time_range".localized, selection: $selectedTimeRange) {
                     ForEach(TimeRange.allCases, id: \.self) { range in
                         Text(range.rawValue).tag(range)
                     }
@@ -129,7 +129,7 @@ struct MacroBreakdownView: View {
                 }
                 
                 // Toggle View
-                Toggle("Show Percentages", isOn: $showPercentages)
+                Toggle("macro_breakdown_show_percentages".localized, isOn: $showPercentages)
                     .padding(.horizontal)
                 
                 // Macro Details
@@ -246,11 +246,11 @@ struct MacroDetailRow: View {
                         .font(.headline)
                     
                     if showPercentages {
-                        Text("\(Int(percentage))% of total calories")
+                        Text("macro_breakdown_percent_of_total_calories".localized(Int(percentage)))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(Int(grams))g • \(Int(calories)) cal")
+                        Text("macro_breakdown_grams_and_calories".localized(Int(grams), Int(calories)))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -264,7 +264,7 @@ struct MacroDetailRow: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                 
-                Text("\(Int(calories)) cal")
+                Text("macro_breakdown_calories".localized(Int(calories)))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -292,7 +292,7 @@ struct RecommendationsCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Recommendation", systemImage: "lightbulb.fill")
+            Label("macro_breakdown_recommendation".localized, systemImage: "lightbulb.fill")
                 .font(.headline)
                 .foregroundColor(.orange)
             

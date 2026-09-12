@@ -114,9 +114,11 @@ class AICoachTests: XCTestCase {
 
     func testSuggestedActionsGeneration() {
         XCTAssertFalse(viewModel.suggestedActions.isEmpty)
-        // Actions are `SuggestedAction` values with a title + prompt.
-        XCTAssertTrue(viewModel.suggestedActions.contains { $0.title == "Workout Plan" })
-        XCTAssertTrue(viewModel.suggestedActions.contains { $0.title == "Plan Meal" })
+        // Actions are `SuggestedAction` values with a title + prompt. The title
+        // is a localization key resolved for display, so the expectation is the
+        // localized value, not the English source string.
+        XCTAssertTrue(viewModel.suggestedActions.contains { $0.title == "ai_chat_action_workout_plan".localized })
+        XCTAssertTrue(viewModel.suggestedActions.contains { $0.title == "ai_chat_action_plan_meal".localized })
     }
 
     func testActionTrigger() {

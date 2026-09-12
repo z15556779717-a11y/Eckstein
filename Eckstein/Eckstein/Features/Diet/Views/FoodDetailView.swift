@@ -50,7 +50,7 @@ struct FoodDetailView: View {
                 // Food Info
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text(food.name ?? "Unknown")
+                        Text(food.name ?? "unknown".localized)
                             .font(.title2)
                             .fontWeight(.bold)
                         
@@ -79,7 +79,7 @@ struct FoodDetailView: View {
                 
                 // Serving Size Input
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Serving Size")
+                    Text("serving_size".localized)
                         .font(.headline)
                     
                     HStack {
@@ -88,7 +88,7 @@ struct FoodDetailView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .frame(width: 100)
                         
-                        Picker("Unit", selection: $selectedUnit) {
+                        Picker("food_detail_unit".localized, selection: $selectedUnit) {
                             Text("g").tag("g")
                             if let unit = food.servingUnit, unit != "g" {
                                 Text(unit).tag(unit)
@@ -109,7 +109,7 @@ struct FoodDetailView: View {
                 
                 // Nutrition Facts
                 VStack(spacing: 0) {
-                    Text("Nutrition Facts")
+                    Text("nutrition_facts".localized)
                         .font(.headline)
                         .padding(.bottom)
                     
@@ -130,7 +130,7 @@ struct FoodDetailView: View {
                 
                 // Add Button
                 Button(action: addFood) {
-                    Text("Add to Meal")
+                    Text("food_detail_add_to_meal".localized)
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -141,11 +141,11 @@ struct FoodDetailView: View {
                 .padding(.horizontal)
             }
             .padding()
-            .navigationTitle("Food Details")
+            .navigationTitle("food_details".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }

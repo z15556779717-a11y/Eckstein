@@ -113,3 +113,6 @@
 "settings_saved" = "设置已保存";
 "password_changed" = "密码修改成功";
 "data_exported" = "数据导出成功";
+
+// MARK: - Localization sweep (user-visible English)
+"profile_user_info_member_since" = "加入于 %@";

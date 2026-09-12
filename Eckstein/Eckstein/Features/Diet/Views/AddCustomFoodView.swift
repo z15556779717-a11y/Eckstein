@@ -21,50 +21,50 @@ struct AddCustomFoodView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Food Details")) {
-                    TextField("Food Name", text: $foodName)
-                    
+                Section(header: Text("food_details".localized)) {
+                    TextField("food_name".localized, text: $foodName)
+
                     HStack {
-                        TextField("Daily Grams", text: $dailyGrams)
+                        TextField("add_custom_food_daily_grams".localized, text: $dailyGrams)
                             .keyboardType(.numberPad)
                         Text("grams")
                             .foregroundColor(.secondary)
                     }
                     
                     if category == .proteinFat || category == .proteinNonFat {
-                        Toggle("Is Fat Protein", isOn: $isFat)
+                        Toggle("add_custom_food_is_fat_protein".localized, isOn: $isFat)
                     }
                 }
                 
-                Section(header: Text("Category")) {
+                Section(header: Text("diet_food_category".localized)) {
                     Text(categoryTitle)
                         .foregroundColor(.secondary)
                 }
                 
                 Section {
-                    Text("This food will be added to your personal food list and can be used for meal tracking.")
+                    Text("add_custom_food_footer".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            .navigationTitle("Add Custom Food")
+            .navigationTitle("add_custom_food_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("save".localized) {
                         saveFood()
                     }
                     .disabled(foodName.isEmpty || dailyGrams.isEmpty)
                 }
             }
-            .alert("Error", isPresented: $showError) {
-                Button("OK") { }
+            .alert("error".localized, isPresented: $showError) {
+                Button("ok".localized) { }
             } message: {
                 Text(errorMessage)
             }
@@ -72,18 +72,7 @@ struct AddCustomFoodView: View {
     }
     
     private var categoryTitle: String {
-        switch category {
-        case .proteinFat:
-            return "Protein (Fat)"
-        case .proteinNonFat:
-            return "Protein (Non-Fat)"
-        case .carbs:
-            return "Carbs"
-        case .snack:
-            return "Snack"
-        case .carbLoad:
-            return "Carb Load"
-        }
+        category.displayName
     }
     
     private func saveFood() {
