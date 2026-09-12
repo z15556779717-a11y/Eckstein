@@ -198,6 +198,17 @@ class EnvironmentLoader {
         return lowered.hasPrefix("sb_secret_") || lowered.contains("service_role")
     }
 
+    /// True when a value is a stand-in rather than a real one.
+    ///
+    /// `$(...)` is the one that matters here: the shipped `Info.plist` holds
+    /// `$(SUPABASE_URL)` and `$(SUPABASE_PUBLISHABLE_KEY)` and the build is
+    /// supposed to expand them. A build that skipped the expansion would
+    /// otherwise hand a literal build-setting reference to the network layer as
+    /// though it were a real host, so the app has to read it as unconfigured.
+    static func containsPlaceholder(_ value: String) -> Bool {
+        value.contains("YOUR_") || value.contains("your-") || value.contains("$(")
+    }
+
     func getValue(for key: String) -> String? {
         return config[key]
     }

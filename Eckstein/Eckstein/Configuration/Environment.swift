@@ -82,10 +82,7 @@ enum AppEnvironment {
         }
         let key = supabasePublishableKey
         guard !key.isEmpty else { return false }
-        return !containsPlaceholder(url) && !containsPlaceholder(key)
-    }
-
-    private static func containsPlaceholder(_ value: String) -> Bool {
-        value.contains("YOUR_") || value.contains("your-")
+        return !EnvironmentLoader.containsPlaceholder(url)
+            && !EnvironmentLoader.containsPlaceholder(key)
     }
 }

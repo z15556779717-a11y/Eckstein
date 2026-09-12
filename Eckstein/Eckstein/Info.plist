@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- The Supabase client configuration, expanded by the build from the
+	     SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY build settings. CI supplies
+	     them from the repository variables; a local build leaves them
+	     undefined, which expands to an empty string and leaves the app
+	     unconfigured rather than pointed at a placeholder host.
+
+	     They are written as build-setting references rather than literals so
+	     no real value is ever committed. `INFOPLIST_KEY_*` would be the
+	     tidier spelling, but it only carries the keys Xcode's build-settings
+	     spec enumerates, so an invented one is accepted by xcodebuild and
+	     then dropped. That is how this file came to be written this way. -->
+	<key>SUPABASE_URL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>SUPABASE_PUBLISHABLE_KEY</key>
+	<string>$(SUPABASE_PUBLISHABLE_KEY)</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

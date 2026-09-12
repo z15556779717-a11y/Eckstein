@@ -123,4 +123,25 @@ final class SupabaseConfigurationTests: XCTestCase {
         XCTAssertFalse(EnvironmentLoader.isSecretKey("sb_publishable_abc123"))
         XCTAssertFalse(EnvironmentLoader.isSecretKey("eyJhbGciOiJIUzI1NiJ9.anon.body"))
     }
+
+    // MARK: - Placeholders
+
+    func testAnUnexpandedBuildSettingIsAPlaceholder() {
+        // The shipped Info.plist holds `$(SUPABASE_URL)` and the build replaces
+        // it. If the expansion ever does not happen the app must read the
+        // literal as unconfigured, not as the host it should talk to.
+        XCTAssertTrue(EnvironmentLoader.containsPlaceholder("$(SUPABASE_URL)"))
+        XCTAssertTrue(EnvironmentLoader.containsPlaceholder("$(SUPABASE_PUBLISHABLE_KEY)"))
+    }
+
+    func testTheTemplateValuesArePlaceholders() {
+        // What `.env.example` carries.
+        XCTAssertTrue(EnvironmentLoader.containsPlaceholder("https://your-project-ref.supabase.co"))
+        XCTAssertTrue(EnvironmentLoader.containsPlaceholder("YOUR_PUBLISHABLE_KEY"))
+    }
+
+    func testRealLookingValuesAreNotPlaceholders() {
+        XCTAssertFalse(EnvironmentLoader.containsPlaceholder("https://abcdefghijklm.supabase.co"))
+        XCTAssertFalse(EnvironmentLoader.containsPlaceholder("sb_publishable_abc123"))
+    }
 }
