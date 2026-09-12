@@ -16,18 +16,12 @@ class AuthViewModel: ObservableObject {
     @Published var confirmPassword = ""
     @Published var fullName = ""
     @Published var isMale = true
-    @Published var adminPassword = ""
     @Published var isSignUpMode = false
     @Published var isLoading = false
     @Published var errorMessage: String?
-    
+
     private let authService = AuthService.shared
-    // SECURITY: this is a client-side sign-up gate, not real access control --
-    // it ships in the binary and can be bypassed. It was previously defaulted to
-    // a hardcoded "adminpass" literal. Real authorization belongs server-side
-    // (Supabase RLS + an Edge Function), which is the phase-2 target.
-    private let adminPasswordKey = ProcessInfo.processInfo.environment["ADMIN_PASSWORD"] ?? ""
-    
+
     // Email validation
     var isEmailValid: Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -44,9 +38,20 @@ class AuthViewModel: ObservableObject {
         password == confirmPassword
     }
     
+    /// Whether the form can be submitted.
+    ///
+    /// Sign-up used to require a sixth condition, comparing an "Admin Password"
+    /// field against `ProcessInfo.processInfo.environment["ADMIN_PASSWORD"]`.
+    /// That variable is never set on a device -- only a debugger launch can set
+    /// it -- so the comparison was always against the empty string. The effect
+    /// was to require the field be left *blank*, which is the opposite of what
+    /// its label said, and the app was unregisterable for anyone who filled it
+    /// in. It also protected nothing: a check compiled into the binary is
+    /// bypassable by whoever wants to bypass it. Real control over who may sign
+    /// up belongs in the Supabase Auth settings and server-side RLS, not here.
     var canSubmit: Bool {
         if isSignUpMode {
-            return isEmailValid && isPasswordValid && passwordsMatch && !fullName.isEmpty && adminPassword == adminPasswordKey && !isLoading
+            return isEmailValid && isPasswordValid && passwordsMatch && !fullName.isEmpty && !isLoading
         } else {
             return isEmailValid && !password.isEmpty && !isLoading
         }
@@ -136,7 +141,6 @@ class AuthViewModel: ObservableObject {
         password = ""
         confirmPassword = ""
         fullName = ""
-        adminPassword = ""
         isMale = true
     }
     

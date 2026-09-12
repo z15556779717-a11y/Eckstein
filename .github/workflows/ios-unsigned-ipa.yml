@@ -25,6 +25,13 @@ name: iOS Unsigned IPA
 # `develop/my-fitness-app` only. Tag pushes have no such requirement, so this
 # builds the exact commit it is pointed at and nothing else. An ordinary push to
 # `develop/**` does not produce an IPA.
+#
+# The `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` repository variables are
+# required, not optional. `Info.plist` holds them as `$(...)` references and the
+# build expands them; with the variables unset the references expand to empty
+# strings and the app ships pointed at a host that cannot resolve. That shipped
+# once, so this workflow now refuses to build without them and fails the build
+# if either key arrives empty or unexpanded.
 
 on:
   push:
@@ -58,11 +65,52 @@ jobs:
             -project "$PROJECT" \
             -scheme "$SCHEME"
 
+      - name: Resolve Supabase configuration
+        env:
+          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
+          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          # Mask before anything else can print it. This step exists separately
+          # from the build for that reason: a step's `env:` block is echoed into
+          # the log with its expressions expanded, so the build step below would
+          # print the key in its own header unless the mask is already
+          # registered by the time it starts.
+          if [ -n "$CONFIGURED_KEY" ]; then
+            echo "::add-mask::$CONFIGURED_KEY"
+          fi
+
+          # The publishable key is a public credential, but "public" is not
+          # "belongs in a build log", and neither value is ever echoed here.
+          #
+          # Unlike the Release check, an unconfigured build is not a supported
+          # outcome for this workflow: the whole point of the artifact is an app
+          # that can reach Supabase. An IPA that installs and then fails every
+          # request is worse than no IPA, so this fails now rather than after
+          # the download.
+          if [ -z "$CONFIGURED_URL" ] || [ -z "$CONFIGURED_KEY" ]; then
+            echo "::error::SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY repository variables must both be set for an IPA build"
+            exit 1
+          fi
+          echo "Supabase configuration found; the build will carry it."
+
       - name: Build for device in Release (no code signing)
+        env:
+          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
+          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
         run: |
           # `generic/platform=iOS` is the device destination. The project sets
           # SDKROOT = auto and lists macosx and xros among its supported
           # platforms, so the destination has to be stated rather than inferred.
+          #
+          # `Info.plist` carries `$(SUPABASE_URL)` and
+          # `$(SUPABASE_PUBLISHABLE_KEY)`; these two settings are what expand
+          # them. Without them the references expand to empty strings and the
+          # app ships pointing at `https://unconfigured.invalid`, which is a
+          # build that installs and then cannot sign anybody in.
+          #
+          # The values are referenced only as shell variables. A `run` block is
+          # echoed with its expressions expanded but its `$VAR` references left
+          # alone, so naming the secret directly here would print it.
           DERIVED_DATA="$RUNNER_TEMP/DerivedData"
           xcodebuild build \
             -project "$PROJECT" \
@@ -75,7 +123,46 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGN_STYLE=Manual \
             PROVISIONING_PROFILE_SPECIFIER="" \
-            DEVELOPMENT_TEAM=""
+            DEVELOPMENT_TEAM="" \
+            SUPABASE_URL="$CONFIGURED_URL" \
+            SUPABASE_PUBLISHABLE_KEY="$CONFIGURED_KEY"
+
+      - name: Confirm the Supabase configuration reached the built Info.plist
+        run: |
+          # Reports one of present / missing / placeholder per key, never a
+          # value. This is the check whose absence shipped an unconfigured IPA:
+          # the build succeeded, the bundle looked complete, and the two keys
+          # were empty strings.
+          DERIVED_DATA="$RUNNER_TEMP/DerivedData"
+          APP="$DERIVED_DATA/Build/Products/Release-iphoneos/Eckstein.app"
+
+          if [ ! -f "$APP/Info.plist" ]; then
+            echo "::error::no Info.plist at $APP"
+            ls -la "$DERIVED_DATA/Build/Products/Release-iphoneos" 2>/dev/null || true
+            exit 1
+          fi
+          echo "app bundle: $APP"
+
+          MISSING=0
+          for KEY in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY; do
+            VALUE=$(/usr/libexec/PlistBuddy -c "Print :$KEY" "$APP/Info.plist" 2>/dev/null || true)
+            case "$VALUE" in
+              '')
+                echo "::error::$KEY: missing"
+                MISSING=1
+                ;;
+              *'$('*)
+                # An unexpanded `$(...)` means the setting never reached the
+                # build, which is the same failure wearing a non-empty value.
+                echo "::error::$KEY: placeholder"
+                MISSING=1
+                ;;
+              *)
+                echo "$KEY: present"
+                ;;
+            esac
+          done
+          exit $MISSING
 
       - name: Package Payload into an IPA
         run: |
