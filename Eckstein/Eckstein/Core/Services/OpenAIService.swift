@@ -25,6 +25,16 @@ struct OpenAIMessage: Codable {
 struct AIBackendRequest: Encodable {
     let messages: [OpenAIMessage]
     let temperature: Double
+
+    /// The language to answer in, as the app's own code
+    /// (`LocalizationManager.currentLanguage`) — `"en"`, `"he"` or `"zh-Hans"`.
+    ///
+    /// A code, not a sentence: the Edge Function owns how a language is asked
+    /// for, and it only accepts the codes it knows, so nothing a client sends
+    /// here reaches the model as an instruction. Optional because the request is
+    /// still valid without it, and because a build older than this field is a
+    /// caller the function has to keep serving.
+    let locale: String?
 }
 
 struct AIBackendResponse: Decodable {
@@ -123,7 +133,14 @@ class OpenAIService: ObservableObject {
             response = try await client.functions.invoke(
                 Self.functionName,
                 options: FunctionInvokeOptions(
-                    body: AIBackendRequest(messages: messages, temperature: temperature)
+                    body: AIBackendRequest(
+                        messages: messages,
+                        temperature: temperature,
+                        // Read at send time, not cached: the user can switch
+                        // language between two messages, and the next reply
+                        // should follow.
+                        locale: LocalizationManager.shared.currentLanguage
+                    )
                 )
             )
         } catch {

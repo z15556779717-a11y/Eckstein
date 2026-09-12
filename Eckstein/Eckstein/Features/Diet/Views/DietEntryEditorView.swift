@@ -48,8 +48,18 @@ struct DietEntryEditorView: View {
 
     /// The name to show and to log. A legacy entry with no catalog row still has
     /// a name, and it must not be lost by opening the editor.
+    ///
+    /// This is the stored name and it stays English: it is what the entry is
+    /// filed under and what the sync payload keys on. `displayFoodName` is the
+    /// copy that reaches the screen.
     private var foodName: String {
         selectedFood?.name ?? entry?.foodName ?? ""
+    }
+
+    /// The name as shown. See `SeedFoodNames` for why the two differ.
+    private var displayFoodName: String {
+        if let selectedFood { return selectedFood.displayName }
+        return entry?.displayFoodName ?? ""
     }
 
     private var grams: Double? {
@@ -125,8 +135,8 @@ struct DietEntryEditorView: View {
                 showingFoodPicker = true
             } label: {
                 HStack {
-                    Text(foodName.isEmpty ? "diet_select_food".localized : foodName)
-                        .foregroundColor(foodName.isEmpty ? .secondary : .primary)
+                    Text(displayFoodName.isEmpty ? "diet_select_food".localized : displayFoodName)
+                        .foregroundColor(displayFoodName.isEmpty ? .secondary : .primary)
                         .multilineTextAlignment(.leading)
 
                     Spacer()
