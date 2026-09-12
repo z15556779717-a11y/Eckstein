@@ -19,11 +19,11 @@ struct IntroductionView: View {
                     .font(.system(size: 80))
                     .foregroundColor(themeManager.accentColor.color)
                 
-                Text("Welcome to Eckstein")
+                Text("introduction_welcome_title".localized)
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                
-                Text("Your Personal Fitness Companion")
+
+                Text("auth_tagline".localized)
                     .font(.headline)
                     .foregroundColor(.secondary)
             }
@@ -33,26 +33,26 @@ struct IntroductionView: View {
             VStack(spacing: 24) {
                 FeatureRow(
                     icon: "figure.run",
-                    title: "Track Workouts",
-                    description: "Log exercises, sets, and progress"
+                    title: "introduction_feature_workouts_title".localized,
+                    description: "introduction_feature_workouts_body".localized
                 )
-                
+
                 FeatureRow(
                     icon: "fork.knife",
-                    title: "Monitor Nutrition",
-                    description: "Count calories and track macros"
+                    title: "introduction_feature_nutrition_title".localized,
+                    description: "introduction_feature_nutrition_body".localized
                 )
-                
+
                 FeatureRow(
                     icon: "scalemass",
-                    title: "Weight Management",
-                    description: "Track weight changes over time"
+                    title: "introduction_feature_weight_title".localized,
+                    description: "introduction_feature_weight_body".localized
                 )
-                
+
                 FeatureRow(
                     icon: "sparkles",
-                    title: "AI Coach",
-                    description: "Get personalized fitness advice"
+                    title: "tab_ai_coach".localized,
+                    description: "introduction_feature_ai_body".localized
                 )
             }
             .padding(.vertical, 40)
@@ -66,7 +66,7 @@ struct IntroductionView: View {
                     showIntroduction = false
                 }
             }) {
-                Text("Get Started")
+                Text("get_started".localized)
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

@@ -20,6 +20,24 @@ struct DietRule {
         case carbs = "Carbs"
         case snack = "Snack"
         case carbLoad = "Carb Load"
+
+        /// The label shown to a user. The raw values stay as they are: they are
+        /// matched against the stored `category` on a custom food and against
+        /// the seeded rules, so they are keys, not display text.
+        var displayName: String {
+            switch self {
+            case .proteinFat:
+                return "protein_fat".localized
+            case .proteinNonFat:
+                return "protein_non_fat".localized
+            case .carbs:
+                return "carbs".localized
+            case .snack:
+                return "snack".localized
+            case .carbLoad:
+                return "carb_load".localized
+            }
+        }
     }
 }
 

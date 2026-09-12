@@ -38,23 +38,23 @@ struct CreateCustomExerciseView: View {
         NavigationView {
             Form {
                 // Exercise Name
-                Section("Exercise Details") {
-                    TextField("Exercise Name", text: $exerciseName)
+                Section("exercise_details".localized) {
+                    TextField("exercise_name".localized, text: $exerciseName)
                         .autocapitalization(.words)
-                    
-                    Picker("Muscle Group", selection: $selectedMuscleGroup) {
+
+                    Picker("muscle_group".localized, selection: $selectedMuscleGroup) {
                         ForEach(muscleGroups, id: \.self) { group in
                             Text(group).tag(group)
                         }
                     }
                     
-                    Picker("Category", selection: $selectedCategory) {
+                    Picker("category".localized, selection: $selectedCategory) {
                         ForEach(categories, id: \.self) { category in
                             Text(category).tag(category)
                         }
                     }
                     
-                    Picker("Equipment", selection: $selectedEquipment) {
+                    Picker("equipment".localized, selection: $selectedEquipment) {
                         ForEach(equipment, id: \.self) { equip in
                             Text(equip).tag(equip)
                         }
@@ -62,12 +62,12 @@ struct CreateCustomExerciseView: View {
                 }
                 
                 // Media Section
-                Section("Media (Optional)") {
+                Section("media_optional".localized) {
                     // YouTube Link
                     HStack {
                         Image(systemName: "play.rectangle.fill")
                             .foregroundColor(.red)
-                        TextField("YouTube Link", text: $youtubeLink)
+                        TextField("youtube_link".localized, text: $youtubeLink)
                             .keyboardType(.URL)
                             .autocapitalization(.none)
                     }
@@ -94,7 +94,7 @@ struct CreateCustomExerciseView: View {
                     }
                 }
             }
-            .navigationTitle(exerciseToEdit == nil ? "Create Exercise" : "Edit Exercise")
+            .navigationTitle(exerciseToEdit == nil ? "create_exercise_title".localized : "edit_exercise".localized)
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if let exercise = exerciseToEdit {
@@ -113,13 +113,13 @@ struct CreateCustomExerciseView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         presentationMode.wrappedValue.dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("save".localized) {
                         saveExercise()
                     }
                     .disabled(exerciseName.isEmpty)

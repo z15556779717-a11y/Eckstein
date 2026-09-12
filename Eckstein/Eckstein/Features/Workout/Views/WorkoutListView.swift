@@ -289,7 +289,7 @@ struct RecentWorkoutCard: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(workout.name ?? "Workout")
+                Text(workout.name ?? "workout".localized)
                     .font(.headline)
                     .foregroundColor(.primary)
                 
@@ -352,7 +352,7 @@ struct ActiveWorkoutCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(workout.name ?? "Workout")
+                    Text(workout.name ?? "workout".localized)
                         .font(.headline)
                         .foregroundColor(.primary)
                     
@@ -360,7 +360,7 @@ struct ActiveWorkoutCard: View {
                         // Exercise count
                         if let sets = workout.sets as? Set<CDWorkoutSet>, !sets.isEmpty {
                             let uniqueExercises = Set(sets.compactMap { $0.exercise })
-                            Label("\(uniqueExercises.count) exercises", systemImage: "figure.strengthtraining.traditional")
+                            Label("exercises_count".localized(uniqueExercises.count), systemImage: "figure.strengthtraining.traditional")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

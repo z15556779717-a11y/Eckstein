@@ -80,7 +80,7 @@ struct WeightHistoryView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
-                    Picker("Sort", selection: $sortOrder) {
+                    Picker("sort".localized, selection: $sortOrder) {
                         ForEach(SortOrder.allCases, id: \.self) { order in
                             Text(order.displayName).tag(order)
                         }

@@ -16,17 +16,17 @@ struct EmptyExerciseCard: View {
                 .font(.system(size: 50))
                 .foregroundColor(.secondary)
             
-            Text("No exercises added yet")
+            Text("empty_exercise_card_no_exercises".localized)
                 .font(.headline)
                 .foregroundColor(.secondary)
             
-            Text("Add exercises to start tracking your sets")
+            Text("empty_exercise_card_hint".localized)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
             
             Button(action: onAdd) {
-                Label("Add First Exercise", systemImage: "plus")
+                Label("empty_exercise_card_add_first".localized, systemImage: "plus")
                     .font(.subheadline)
                     .fontWeight(.medium)
             }

@@ -31,11 +31,11 @@ struct SyncHistoryView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Sync History")
+            .navigationTitle("sync_history_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }
@@ -66,7 +66,7 @@ struct SyncHistoryRow: View {
                     HStack(spacing: 4) {
                         Image(systemName: directionIcon)
                             .imageScale(.small)
-                        Text(entry.direction.rawValue)
+                        Text(entry.direction.displayName)
                             .font(.caption)
                     }
                     .foregroundColor(.secondary)
@@ -119,19 +119,19 @@ struct SyncHistoryRow: View {
                     // Detailed Stats
                     HStack(spacing: 20) {
                         SyncStatItem(
-                            label: "Successful",
+                            label: "sync_stat_successful".localized,
                             value: "\(entry.result.successful)",
                             color: .green
                         )
                         
                         SyncStatItem(
-                            label: "Failed",
+                            label: "sync_stat_failed".localized,
                             value: "\(entry.result.failed)",
                             color: .red
                         )
                         
                         SyncStatItem(
-                            label: "Conflicts",
+                            label: "sync_stat_conflicts".localized,
                             value: "\(entry.result.conflicts)",
                             color: .orange
                         )
@@ -139,7 +139,7 @@ struct SyncHistoryRow: View {
                         Spacer()
                         
                         SyncStatItem(
-                            label: "Duration",
+                            label: "duration".localized,
                             value: String(format: "%.1fs", entry.result.duration),
                             color: .blue
                         )
@@ -148,7 +148,7 @@ struct SyncHistoryRow: View {
                     // Errors if any
                     if !entry.result.errors.isEmpty {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Errors")
+                            Text("sync_errors".localized)
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -245,11 +245,11 @@ struct EmptyHistoryView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
             
-            Text("No Sync History")
+            Text("sync_history_empty_title".localized)
                 .font(.headline)
                 .foregroundColor(.primary)
-            
-            Text("Sync history will appear here after your first sync")
+
+            Text("sync_history_empty_message".localized)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

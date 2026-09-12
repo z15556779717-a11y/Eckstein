@@ -31,22 +31,22 @@ struct AddFoodView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Basic Information")) {
-                    TextField("Food Name", text: $name)
-                    TextField("Brand (Optional)", text: $brand)
-                    TextField("Barcode (Optional)", text: $barcode)
+                Section(header: Text("add_food_basic_info".localized)) {
+                    TextField("food_name".localized, text: $name)
+                    TextField("brand_optional".localized, text: $brand)
+                    TextField("add_food_barcode_optional".localized, text: $barcode)
                         .keyboardType(.numberPad)
-                    
-                    Picker("Category", selection: $category) {
+
+                    Picker("diet_food_category".localized, selection: $category) {
                         ForEach(categories, id: \.self) { category in
                             Text(category).tag(category)
                         }
                     }
                 }
                 
-                Section(header: Text("Nutrition per 100g")) {
+                Section(header: Text("add_food_nutrition_per_100g".localized)) {
                     HStack {
-                        Text("Calories")
+                        Text("calories".localized)
                         Spacer()
                         TextField("0", text: $caloriesPer100g)
                             .keyboardType(.numberPad)
@@ -57,7 +57,7 @@ struct AddFoodView: View {
                     }
                     
                     HStack {
-                        Text("Protein")
+                        Text("protein".localized)
                         Spacer()
                         TextField("0", text: $proteinPer100g)
                             .keyboardType(.decimalPad)
@@ -68,7 +68,7 @@ struct AddFoodView: View {
                     }
                     
                     HStack {
-                        Text("Carbohydrates")
+                        Text("add_food_carbohydrates".localized)
                         Spacer()
                         TextField("0", text: $carbsPer100g)
                             .keyboardType(.decimalPad)
@@ -79,7 +79,7 @@ struct AddFoodView: View {
                     }
                     
                     HStack {
-                        Text("Fat")
+                        Text("fat".localized)
                         Spacer()
                         TextField("0", text: $fatPer100g)
                             .keyboardType(.decimalPad)
@@ -90,7 +90,7 @@ struct AddFoodView: View {
                     }
                     
                     HStack {
-                        Text("Fiber (Optional)")
+                        Text("add_food_fiber_optional".localized)
                         Spacer()
                         TextField("0", text: $fiberPer100g)
                             .keyboardType(.decimalPad)
@@ -101,9 +101,9 @@ struct AddFoodView: View {
                     }
                 }
                 
-                Section(header: Text("Serving Information")) {
+                Section(header: Text("serving_info".localized)) {
                     HStack {
-                        Text("Serving Size")
+                        Text("serving_size".localized)
                         Spacer()
                         TextField("100", text: $servingSize)
                             .keyboardType(.decimalPad)
@@ -117,23 +117,23 @@ struct AddFoodView: View {
                 
                 if showValidationError {
                     Section {
-                        Text("Please fill in all required fields")
+                        Text("add_food_fill_required".localized)
                             .foregroundColor(.red)
                             .font(.caption)
                     }
                 }
             }
-            .navigationTitle("Add Custom Food")
+            .navigationTitle("add_custom_food_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("save".localized) {
                         saveFood()
                     }
                     .fontWeight(.semibold)

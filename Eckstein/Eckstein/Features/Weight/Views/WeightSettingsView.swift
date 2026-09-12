@@ -304,8 +304,8 @@ struct ExportOptionsView: View {
             Form {
                 Section {
                     Picker("export_format".localized, selection: $selectedFormat) {
-                        Text("CSV").tag("csv")
-                        Text("JSON").tag("json")
+                        Text("csv_format".localized).tag("csv")
+                        Text("json_format".localized).tag("json")
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 } header: {

@@ -65,7 +65,10 @@ struct ExerciseProgressionView: View {
                 recentSetsSection
             }
         }
-        .navigationTitle("Progress")
+        // Its own key, not the shared `progress` one: that resolves through
+        // Weight, where it means "trend". This title means progress, as in how
+        // the lift has advanced.
+        .navigationTitle("exercise_progression_title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.loadData()

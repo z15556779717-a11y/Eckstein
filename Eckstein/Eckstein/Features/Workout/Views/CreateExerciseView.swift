@@ -20,46 +20,46 @@ struct CreateExerciseView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Exercise Details") {
-                    TextField("Exercise Name", text: $viewModel.name)
-                    
-                    Picker("Muscle Group", selection: $viewModel.muscleGroup) {
+                Section("exercise_details".localized) {
+                    TextField("exercise_name".localized, text: $viewModel.name)
+
+                    Picker("muscle_group".localized, selection: $viewModel.muscleGroup) {
                         ForEach(ExerciseData.muscleGroups.filter { $0 != "All" }, id: \.self) { group in
                             Text(group).tag(group)
                         }
                     }
                     
-                    Picker("Category", selection: $viewModel.category) {
+                    Picker("category".localized, selection: $viewModel.category) {
                         ForEach(ExerciseData.categories.filter { $0 != "All" }, id: \.self) { category in
                             Text(category).tag(category)
                         }
                     }
                     
-                    Picker("Equipment", selection: $viewModel.equipment) {
+                    Picker("equipment".localized, selection: $viewModel.equipment) {
                         ForEach(ExerciseData.equipment.filter { $0 != "All" }, id: \.self) { equipment in
                             Text(equipment).tag(equipment)
                         }
                     }
                     
-                    Toggle("Compound Exercise", isOn: $viewModel.isCompound)
+                    Toggle("compound_exercise".localized, isOn: $viewModel.isCompound)
                 }
                 
                 Section {
-                    TextField("Notes (optional)", text: $viewModel.notes, axis: .vertical)
+                    TextField("create_exercise_notes_optional".localized, text: $viewModel.notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle("Create Exercise")
+            .navigationTitle("create_exercise_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("save".localized) {
                         if let exercise = viewModel.saveExercise() {
                             onSave(exercise)
                         }

@@ -52,10 +52,10 @@ struct QuickAddView: View {
             VStack(spacing: 20) {
                 // Meal Type Selector
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Meal Type")
+                    Text("quick_add_meal_type".localized)
                         .font(.headline)
-                    
-                    Picker("Meal Type", selection: $selectedMealType) {
+
+                    Picker("quick_add_meal_type".localized, selection: $selectedMealType) {
                         ForEach(mealTypes, id: \.self) { type in
                             Text(type.capitalized).tag(type)
                         }
@@ -90,7 +90,7 @@ struct QuickAddView: View {
                         // Selected Foods Summary
                         if !selectedFoods.isEmpty {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Selected Foods")
+                                Text("quick_add_selected_foods".localized)
                                     .font(.headline)
                                 
                                 ForEach(selectedFoods.indices, id: \.self) { index in
@@ -108,7 +108,7 @@ struct QuickAddView: View {
                                 
                                 // Total Nutrition
                                 HStack {
-                                    Text("Total:")
+                                    Text("quick_add_total_label".localized)
                                         .font(.headline)
                                     
                                     Spacer()
@@ -137,7 +137,7 @@ struct QuickAddView: View {
                 // Action Buttons
                 HStack(spacing: 16) {
                     Button(action: { showFoodSearch = true }) {
-                        Label("Search More", systemImage: "magnifyingglass")
+                        Label("quick_add_search_more".localized, systemImage: "magnifyingglass")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color(.systemGray6))
@@ -145,7 +145,7 @@ struct QuickAddView: View {
                     }
                     
                     Button(action: saveMeal) {
-                        Text("Save Meal")
+                        Text("save_meal".localized)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -157,11 +157,11 @@ struct QuickAddView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Quick Add")
+            .navigationTitle("quick_add".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
@@ -253,7 +253,7 @@ struct QuickAddFoodCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(food.name ?? "Unknown")
+                Text(food.name ?? "unknown".localized)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(2)
@@ -268,7 +268,7 @@ struct QuickAddFoodCard: View {
                 .buttonStyle(BorderlessButtonStyle())
             }
             
-            Text("\(food.caloriesPer100g) cal/100g")
+            Text("quick_add_calories_per_100g".localized(food.caloriesPer100g))
                 .font(.caption)
                 .foregroundColor(.secondary)
             
@@ -308,7 +308,7 @@ struct SelectedFoodRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(food.name ?? "Unknown")
+                Text(food.name ?? "unknown".localized)
                     .font(.body)
                 
                 if isEditing {
@@ -321,7 +321,7 @@ struct SelectedFoodRow: View {
                         Text("g")
                             .foregroundColor(.secondary)
                         
-                        Button("Done") {
+                        Button("done".localized) {
                             if let newQuantity = Double(quantityText), newQuantity > 0 {
                                 onUpdateQuantity(newQuantity)
                             }

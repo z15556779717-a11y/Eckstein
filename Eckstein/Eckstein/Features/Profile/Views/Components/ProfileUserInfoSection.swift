@@ -50,7 +50,7 @@ struct ProfileUserInfoSection: View {
                         .foregroundColor(.secondary)
                     
                     if let joinDate = joinDate {
-                        Text("Member since \(joinDate, formatter: dateFormatter)")
+                        Text("profile_user_info_member_since".localized(dateFormatter.string(from: joinDate)))
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }

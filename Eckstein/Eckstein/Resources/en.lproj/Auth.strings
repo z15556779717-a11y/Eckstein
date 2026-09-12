@@ -85,3 +85,26 @@
 "next" = "Next";
 "get_started" = "Get Started";
 "skip" = "Skip";
+
+// MARK: - Localization sweep (user-visible English)
+"auth_tagline" = "Your Personal Fitness Companion";
+"introduction_feature_ai_body" = "Get personalized fitness advice";
+"introduction_feature_nutrition_body" = "Count calories and track macros";
+"introduction_feature_nutrition_title" = "Monitor Nutrition";
+"introduction_feature_weight_body" = "Track weight changes over time";
+"introduction_feature_weight_title" = "Weight Management";
+"introduction_feature_workouts_body" = "Log exercises, sets, and progress";
+"introduction_feature_workouts_title" = "Track Workouts";
+"introduction_welcome_title" = "Welcome to Eckstein";
+"login_gender_label" = "Gender:";
+"login_invalid_email" = "Please enter a valid email";
+"login_or" = "OR";
+"login_password_strength" = "Password strength:";
+
+// MARK: - Localization sweep (user-visible English)
+"auth_error_email_not_confirmed" = "Please check your email to confirm your account";
+"auth_error_generic" = "An error occurred. Please try again.";
+"auth_error_password_min_length" = "Password must be at least 6 characters";
+"login_password_strength_medium" = "Medium";
+"login_password_strength_strong" = "Strong";
+"login_password_strength_weak" = "Weak";

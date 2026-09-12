@@ -62,7 +62,7 @@ struct MealDetailView: View {
                 // Meal Header
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text(meal.mealType?.capitalized ?? "Meal")
+                        Text(meal.mealType?.capitalized ?? "diet_entry_meal".localized)
                             .font(.title2)
                             .fontWeight(.bold)
                         
@@ -118,7 +118,7 @@ struct MealDetailView: View {
                         }
                 } else {
                     Button(action: { showPhotoOptions = true }) {
-                        Label("Add Photo", systemImage: "camera.fill")
+                        Label("meal_detail_add_photo".localized, systemImage: "camera.fill")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color(.systemGray6))
@@ -129,7 +129,7 @@ struct MealDetailView: View {
                 // Food Items
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("Foods")
+                        Text("meal_detail_foods".localized)
                             .font(.headline)
                         
                         Spacer()
@@ -141,7 +141,7 @@ struct MealDetailView: View {
                     }
                     
                     if mealItems.isEmpty {
-                        Text("No foods added yet")
+                        Text("meal_detail_no_foods_added".localized)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity)
@@ -166,7 +166,7 @@ struct MealDetailView: View {
                 
                 // Notes
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Notes")
+                    Text("notes".localized)
                         .font(.headline)
                     
                     TextEditor(text: $notes)
@@ -186,7 +186,7 @@ struct MealDetailView: View {
                 // Quick Actions
                 VStack(spacing: 12) {
                     Button(action: duplicateMeal) {
-                        Label("Duplicate Meal", systemImage: "doc.on.doc")
+                        Label("meal_detail_duplicate_meal".localized, systemImage: "doc.on.doc")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue.opacity(0.1))
@@ -195,7 +195,7 @@ struct MealDetailView: View {
                     }
                     
                     Button(action: deleteMeal) {
-                        Label("Delete Meal", systemImage: "trash")
+                        Label("delete_meal".localized, systemImage: "trash")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.red.opacity(0.1))
@@ -206,22 +206,22 @@ struct MealDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("Meal Details")
+        .navigationTitle("meal_details".localized)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAddFood) {
             FoodSearchView { food in
                 addFoodToMeal(food)
             }
         }
-        .confirmationDialog("Photo Options", isPresented: $showPhotoOptions) {
-            Button("Take Photo") {
+        .confirmationDialog("meal_detail_photo_options".localized, isPresented: $showPhotoOptions) {
+            Button("meal_detail_take_photo".localized) {
                 // Implement camera
             }
-            Button("Choose from Library") {
+            Button("meal_detail_choose_from_library".localized) {
                 // Implement photo picker
             }
             if mealPhoto != nil {
-                Button("Remove Photo", role: .destructive) {
+                Button("meal_detail_remove_photo".localized, role: .destructive) {
                     mealPhoto = nil
                 }
             }
@@ -297,7 +297,7 @@ struct MealDetailItemRow: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(item.food?.name ?? "Unknown")
+                    Text(item.food?.name ?? "unknown".localized)
                         .font(.body)
                         .fontWeight(.medium)
                     
@@ -314,7 +314,7 @@ struct MealDetailItemRow: View {
                             Text("g")
                                 .foregroundColor(.secondary)
                             
-                            Button("Done") {
+                            Button("done".localized) {
                                 updateQuantity()
                             }
                             .font(.caption)

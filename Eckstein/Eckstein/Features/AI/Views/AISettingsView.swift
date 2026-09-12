@@ -35,20 +35,20 @@ struct AISettingsView: View {
             Form {
                 Section {
                     HStack {
-                        Text("AI Service")
+                        Text("ai_settings_service_row".localized)
                         Spacer()
                         if isConfigured {
-                            Label("Configured", systemImage: "checkmark.circle.fill")
+                            Label("ai_settings_configured".localized, systemImage: "checkmark.circle.fill")
                                 .foregroundColor(.green)
                                 .font(.caption)
                         } else {
-                            Label("Not Available", systemImage: "xmark.circle.fill")
+                            Label("ai_settings_not_available".localized, systemImage: "xmark.circle.fill")
                                 .foregroundColor(.red)
                                 .font(.caption)
                         }
                     }
                 } header: {
-                    Text("Status")
+                    Text("ai_settings_status_header".localized)
                 } footer: {
                     if !isConfigured {
                         // The same two sentences the chat uses, so the reason
@@ -62,43 +62,43 @@ struct AISettingsView: View {
 
                 Section {
                     HStack {
-                        Text("Provider")
+                        Text("ai_settings_provider".localized)
                         Spacer()
                         Text("Qwen")
                             .foregroundColor(.secondary)
                     }
 
                     HStack {
-                        Text("Backend")
+                        Text("ai_settings_backend".localized)
                         Spacer()
                         Text("Supabase Edge Function")
                             .foregroundColor(.secondary)
                     }
                 } header: {
-                    Text("Service")
+                    Text("ai_settings_service_header".localized)
                 } footer: {
-                    Text("The provider key is held by the Supabase Edge Function. It is never sent to this device, stored on it, or configurable from it.")
+                    Text("ai_settings_key_footer".localized)
                         .font(.caption)
                 }
 
                 if openAIService.totalTokensUsed > 0 {
                     Section {
                         HStack {
-                            Text("Total Tokens Used")
+                            Text("ai_settings_total_tokens".localized)
                             Spacer()
                             Text("\(openAIService.totalTokensUsed)")
                                 .foregroundColor(.secondary)
                         }
                     } header: {
-                        Text("Usage")
+                        Text("ai_settings_usage_header".localized)
                     }
                 }
             }
-            .navigationTitle("AI Settings")
+            .navigationTitle("ai_settings_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }

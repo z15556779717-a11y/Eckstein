@@ -63,11 +63,11 @@ struct GoalSettingsView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Goal Settings")
+            .navigationTitle("goal_settings_title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("cancel".localized) {
                         dismiss()
                     }
                 }
@@ -81,12 +81,12 @@ struct GoalSettingsView: View {
     @ViewBuilder
     private var personalInfoSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Personal Information")
+            Text("personal_info".localized)
                 .font(.headline)
-            
+
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text("Weight (kg)")
+                    Text("weight_kg".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                     TextField("70", text: $weight)
@@ -95,7 +95,7 @@ struct GoalSettingsView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Height (cm)")
+                    Text("goal_settings_height_cm".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                     TextField("175", text: $height)
@@ -104,7 +104,7 @@ struct GoalSettingsView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Age")
+                    Text("goal_settings_age".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                     TextField("25", text: $age)
@@ -115,13 +115,13 @@ struct GoalSettingsView: View {
             
             // Gender Picker
             VStack(alignment: .leading, spacing: 8) {
-                Text("Gender")
+                Text("gender".localized)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
-                Picker("Gender", selection: $gender) {
-                    Text("Male").tag(Gender.male)
-                    Text("Female").tag(Gender.female)
+
+                Picker("gender".localized, selection: $gender) {
+                    Text("male".localized).tag(Gender.male)
+                    Text("female".localized).tag(Gender.female)
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
@@ -134,7 +134,7 @@ struct GoalSettingsView: View {
     @ViewBuilder
     private var activityLevelSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-                        Text("Activity Level")
+                        Text("activity_level".localized)
                             .font(.headline)
                         
                         ForEach([
@@ -161,7 +161,7 @@ struct GoalSettingsView: View {
     @ViewBuilder
     private var nutritionGoalSection: some View {
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Nutrition Goal")
+                        Text("goal_settings_nutrition_goal".localized)
                             .font(.headline)
                         
                         ForEach([
@@ -195,7 +195,7 @@ struct GoalSettingsView: View {
     private var calculateButtonSection: some View {
                     if !useCustomGoals {
                         Button(action: { showCalculation = true }) {
-                            Label("Calculate Targets", systemImage: "function")
+                            Label("goal_settings_calculate_targets".localized, systemImage: "function")
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -212,12 +212,12 @@ struct GoalSettingsView: View {
                     if showCalculation || useCustomGoals {
                         VStack(alignment: .leading, spacing: 16) {
                             HStack {
-                                Text(useCustomGoals ? "Custom Targets" : "Calculated Targets")
+                                Text(useCustomGoals ? "goal_settings_custom_targets".localized : "goal_settings_calculated_targets".localized)
                                     .font(.headline)
                                 
                                 Spacer()
                                 
-                                Toggle("Custom", isOn: $useCustomGoals)
+                                Toggle("custom".localized, isOn: $useCustomGoals)
                                     .labelsHidden()
                             }
                             
@@ -294,7 +294,7 @@ struct GoalSettingsView: View {
     @ViewBuilder
     private var saveButtonSection: some View {
                     Button(action: saveGoals) {
-                        Text("Save Goals")
+                        Text("goal_settings_save_goals".localized)
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                             .padding()

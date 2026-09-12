@@ -28,11 +28,11 @@ struct BarcodeScannerContainerView: View {
                 ) { code in
                     handleScannedCode(code)
                 }
-                .navigationTitle("Scan Barcode")
+                .navigationTitle("scan_barcode".localized)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button("cancel".localized) {
                             dismiss()
                         }
                     }
@@ -54,8 +54,8 @@ struct BarcodeScannerContainerView: View {
                     }
                 )
             } else {
-                ProgressView("Searching for product...")
-                    .navigationTitle("Loading")
+                ProgressView("barcode_scanner_searching".localized)
+                    .navigationTitle("loading".localized)
                     .navigationBarTitleDisplayMode(.inline)
             }
         }
@@ -155,7 +155,7 @@ struct ScannedFoodDetailView: View {
             VStack(spacing: 20) {
                 // Food Info
                 VStack(alignment: .leading, spacing: 12) {
-                    Text(food.name ?? "Unknown Food")
+                    Text(food.name ?? "diet_unknown_food_title".localized)
                         .font(.title2)
                         .fontWeight(.bold)
                     
@@ -175,7 +175,7 @@ struct ScannedFoodDetailView: View {
                 
                 // Serving Size
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Serving Size")
+                    Text("serving_size".localized)
                         .font(.headline)
                     
                     HStack {
@@ -204,7 +204,7 @@ struct ScannedFoodDetailView: View {
                 
                 // Nutrition Info
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Nutrition Facts")
+                    Text("nutrition_facts".localized)
                         .font(.headline)
                     
                     VStack(spacing: 12) {
@@ -254,7 +254,7 @@ struct ScannedFoodDetailView: View {
                 
                 // Add to Meal Button
                 Button(action: addToMeal) {
-                    Label("Add to Meal", systemImage: "plus.circle.fill")
+                    Label("add_to_meal".localized, systemImage: "plus.circle.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -266,11 +266,11 @@ struct ScannedFoodDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("Food Details")
+        .navigationTitle("food_details".localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Cancel") {
+                Button("cancel".localized) {
                     onDismiss()
                 }
             }
@@ -280,14 +280,14 @@ struct ScannedFoodDetailView: View {
         }
         .actionSheet(isPresented: $showMealPicker) {
             ActionSheet(
-                title: Text("Select Meal"),
+                title: Text("barcode_scanner_select_meal".localized),
                 buttons: viewModel.todayMeals.map { meal in
-                    .default(Text(meal.mealType?.capitalized ?? "Meal")) {
+                    .default(Text(meal.mealType?.capitalized ?? "diet_entry_meal".localized)) {
                         selectedMeal = meal
                         addFoodToSelectedMeal()
                     }
                 } + [
-                    .default(Text("Create New Meal")) {
+                    .default(Text("barcode_scanner_create_new_meal".localized)) {
                         createNewMealAndAdd()
                     },
                     .cancel()

@@ -277,7 +277,7 @@ struct FoodOptionRow: View {
                         
                         // Fat/Lean indicator for proteins
                         if food.category == .proteinFat || food.category == .proteinNonFat {
-                            Text(isFat ? "FAT" : "LEAN")
+                            Text(isFat ? "food_picker_fat_label".localized : "food_picker_lean_label".localized)
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .foregroundColor(isFat ? .orange : .green)
@@ -290,27 +290,27 @@ struct FoodOptionRow: View {
                     
                     HStack(spacing: 12) {
                         if isCarboLoad {
-                            Text("Suggested: \(food.dailyGrams)g")
+                            Text("food_picker_suggested_grams".localized(food.dailyGrams))
                                 .font(.caption)
                                 .foregroundColor(.orange)
                             
-                            Text("• No limits!")
+                            Text("food_picker_no_limits".localized)
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .foregroundColor(.orange)
                         } else {
-                            Text("Daily: \(food.dailyGrams)g")
+                            Text("food_picker_daily_grams".localized(food.dailyGrams))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
                             if remainingGrams < food.dailyGrams {
-                                Text("Available: \(remainingGrams)g")
+                                Text("food_picker_available_grams".localized(remainingGrams))
                                     .font(.caption)
                                     .foregroundColor(.orange)
                             }
                             
                             if isFat && !canSelect {
-                                Text("• Fat meal limit reached")
+                                Text("food_picker_fat_meal_limit_reached".localized)
                                     .font(.caption)
                                     .foregroundColor(.red)
                             }
@@ -346,10 +346,10 @@ struct SnackConfirmationView: View {
                 .font(.largeTitle)
                 .foregroundColor(.green)
             
-            Text("Ready to add \(selectedFood.foodName)")
+            Text("food_picker_ready_to_add".localized(selectedFood.foodName))
                 .font(.headline)
-            
-            Text("Tap below to confirm")
+
+            Text("food_picker_tap_below_to_confirm".localized)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -368,11 +368,11 @@ struct FoodAmountInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Amount for \(selectedFood.foodName)")
+            Text("food_picker_amount_for".localized(selectedFood.foodName))
                 .font(.headline)
-            
+
             HStack {
-                TextField("Grams", text: $gramsInput)
+                TextField("food_picker_grams".localized, text: $gramsInput)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.numberPad)
                     .frame(width: 100)
@@ -408,13 +408,13 @@ struct FoodAmountInputView: View {
                             Image(systemName: "flame.circle.fill")
                                 .font(.caption)
                                 .foregroundColor(.orange)
-                            Text("Carb load day - enjoy without limits!")
+                            Text("food_picker_carb_load_day_enjoy".localized)
                                 .font(.caption)
                                 .foregroundColor(.orange)
                         }
-                        
+
                         if grams > selectedFood.dailyGrams {
-                            Text("Going big! That's \(Int(Double(grams) / Double(selectedFood.dailyGrams) * 100))% of suggested portion")
+                            Text("food_picker_going_big".localized(Int(Double(grams) / Double(selectedFood.dailyGrams) * 100)))
                                 .font(.caption)
                                 .foregroundColor(.orange)
                         }
@@ -424,16 +424,16 @@ struct FoodAmountInputView: View {
                     let percentage = Double(grams) / Double(selectedFood.dailyGrams) * 100
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\(Int(percentage))% of daily allowance")
+                        Text("food_picker_percent_of_daily_allowance".localized(Int(percentage)))
                             .font(.caption)
                             .foregroundColor(themeManager.accentColor.color)
-                        
+
                         if remaining < 0 {
-                            Text("Exceeds daily allowance by \(abs(remaining))g")
+                            Text("food_picker_exceeds_allowance_by".localized(abs(remaining)))
                                 .font(.caption)
                                 .foregroundColor(.red)
                         } else {
-                            Text("\(remaining)g remaining for other meals")
+                            Text("food_picker_remaining_for_other_meals".localized(remaining))
                                 .font(.caption)
                                 .foregroundColor(themeManager.accentColor.color)
                         }

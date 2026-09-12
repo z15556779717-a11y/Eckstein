@@ -53,7 +53,7 @@ struct AchievementDetailView: View {
                     Divider()
                     
                     VStack(spacing: 12) {
-                        Label("How to earn", systemImage: "target")
+                        Label("achievement_detail_how_to_earn".localized, systemImage: "target")
                             .font(.headline)
                             .foregroundColor(achievement.displayColor)
                         
@@ -68,7 +68,13 @@ struct AchievementDetailView: View {
                         Divider()
                         
                         VStack(spacing: 8) {
-                            Text("Progress")
+                            // Not the shared `progress` key: that one is defined
+                            // in both Weight ("trend") and Profile ("progress"),
+                            // and the lookup order puts Weight first, so the
+                            // Profile text is unreachable. This header is
+                            // progress toward the achievement, so it gets its
+                            // own key rather than resolving to "trend".
+                            Text("achievement_detail_progress".localized)
                                 .font(.headline)
                             
                             HStack {
@@ -96,7 +102,7 @@ struct AchievementDetailView: View {
                                 .font(.title)
                                 .foregroundColor(.green)
                             
-                            Text("Earned on")
+                            Text("achievement_detail_earned_on".localized)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -114,7 +120,7 @@ struct AchievementDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }

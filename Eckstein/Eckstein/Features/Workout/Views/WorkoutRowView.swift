@@ -12,7 +12,7 @@ struct WorkoutRowView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(workout.name ?? "Unnamed Workout")
+            Text(workout.name ?? "unnamed_workout".localized)
                 .font(.headline)
             
             if let date = workout.date {
@@ -22,14 +22,14 @@ struct WorkoutRowView: View {
             }
             
             HStack {
-                Label("\(workout.setsArray.count) sets", systemImage: "list.number")
+                Label("sets_count".localized(workout.setsArray.count), systemImage: "list.number")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
                 Spacer()
                 
                 if workout.completed {
-                    Label("Completed", systemImage: "checkmark.circle.fill")
+                    Label("completed".localized, systemImage: "checkmark.circle.fill")
                         .font(.caption)
                         .foregroundColor(.green)
                 }

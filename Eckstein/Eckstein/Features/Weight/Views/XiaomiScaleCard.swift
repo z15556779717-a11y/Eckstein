@@ -17,10 +17,10 @@ struct XiaomiScaleCard: View {
                 .foregroundColor(isConnected ? .green : .gray)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("Xiaomi Scale")
+                Text("xiaomi_scale".localized)
                     .font(.headline)
                 
-                Text(isConnected ? "Connected" : "Not Connected")
+                Text(isConnected ? "connected".localized : "xiaomi_scale_not_connected".localized)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -28,7 +28,7 @@ struct XiaomiScaleCard: View {
             Spacer()
             
             Button(action: {}) {
-                Text(isConnected ? "Settings" : "Connect")
+                Text(isConnected ? "settings".localized : "xiaomi_scale_connect".localized)
                     .font(.subheadline)
                     .fontWeight(.medium)
             }

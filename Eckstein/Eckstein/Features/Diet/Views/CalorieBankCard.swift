@@ -166,7 +166,7 @@ struct CalorieBankCard: View {
                             
                             Spacer()
                             
-                            Text("-\(transaction.amount) cal")
+                            Text("calorie_bank_card_transaction_amount".localized(transaction.amount))
                                 .font(.caption)
                                 .foregroundColor(.red)
                             

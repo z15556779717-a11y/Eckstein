@@ -310,7 +310,7 @@ struct WeightPickerView: View {
                     .font(.headline)
                     .padding()
                 
-                Picker("Weight", selection: $selectedWeight) {
+                Picker("weight".localized, selection: $selectedWeight) {
                     ForEach(weightOptions, id: \.self) { weight in
                         Text(weight == 0 ? "0 " + "kg".localized : String(format: "%.1f ", weight) + "kg".localized)
                             .tag(weight)
@@ -351,7 +351,7 @@ struct RepsPickerView: View {
                     .font(.headline)
                     .padding()
                 
-                Picker("Reps", selection: $selectedReps) {
+                Picker("reps".localized, selection: $selectedReps) {
                     ForEach(repsOptions, id: \.self) { reps in
                         Text(reps == 0 ? "-" : "\(reps)")
                             .tag(reps)

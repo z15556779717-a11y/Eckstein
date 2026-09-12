@@ -132,7 +132,7 @@ struct EcksteinDietView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
             } else {
-                Picker("Meal", selection: $selectedMeal) {
+                Picker("diet_entry_meal".localized, selection: $selectedMeal) {
                     Text("meal_1".localized).tag(1)
                     if viewModel.isCarbLoadDay && viewModel.carbLoadMealNumber == 2 {
                         Text("carb_load".localized).tag(2)

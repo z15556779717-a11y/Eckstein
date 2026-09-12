@@ -59,7 +59,7 @@ struct MealHistoryView: View {
                     }
                     
                     if Calendar.current.isDateInToday(selectedDate) {
-                        Text("Today")
+                        Text("today".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -81,7 +81,7 @@ struct MealHistoryView: View {
             }
             .padding()
         }
-        .navigationTitle("Meal History")
+        .navigationTitle("meal_history_title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showDatePicker) {
             DatePickerSheet(
@@ -181,11 +181,11 @@ struct EmptyHistoryCard: View {
                 .font(.system(size: 40))
                 .foregroundColor(.secondary)
             
-            Text("No meals logged")
+            Text("meal_history_no_meals".localized)
                 .font(.headline)
                 .foregroundColor(.secondary)
-            
-            Text("You didn't log any meals on this date")
+
+            Text("meal_history_no_meals_message".localized)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -209,7 +209,7 @@ struct HistoryMealCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(meal.mealType?.capitalized ?? "Meal")
+                    Text(meal.mealType?.capitalized ?? "diet_entry_meal".localized)
                         .font(.headline)
                     
                     if let date = meal.date {
@@ -231,7 +231,7 @@ struct HistoryMealCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach(Array(items).sorted(by: { $0.food?.name ?? "" < $1.food?.name ?? "" })) { item in
                         HStack {
-                            Text(item.food?.name ?? "Unknown Food")
+                            Text(item.food?.name ?? "diet_unknown_food_title".localized)
                                 .font(.subheadline)
                             
                             Spacer()
@@ -268,18 +268,18 @@ struct DatePickerSheet: View {
     var body: some View {
         NavigationView {
             DatePicker(
-                "Select Date",
+                "meal_history_select_date".localized,
                 selection: $selectedDate,
                 in: dateRange,
                 displayedComponents: .date
             )
             .datePickerStyle(GraphicalDatePickerStyle())
             .padding()
-            .navigationTitle("Select Date")
+            .navigationTitle("meal_history_select_date".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("done".localized) {
                         dismiss()
                     }
                 }

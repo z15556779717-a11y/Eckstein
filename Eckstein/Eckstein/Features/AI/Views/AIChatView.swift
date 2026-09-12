@@ -63,7 +63,7 @@ struct AIChatView: View {
             
             // Input Bar
             HStack(spacing: 12) {
-                TextField("Ask your AI coach...", text: $messageText)
+                TextField("ai_chat_input_placeholder".localized, text: $messageText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($isTextFieldFocused)
                     .onSubmit {
@@ -89,7 +89,7 @@ struct AIChatView: View {
                     Button {
                         viewModel.clearChat()
                     } label: {
-                        Label("Clear Chat", systemImage: "trash")
+                        Label("ai_chat_clear".localized, systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
