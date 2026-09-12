@@ -1,0 +1,144 @@
+name: iOS Unsigned IPA
+
+# Produces an unsigned device build packaged as an `.ipa`, for re-signing on a
+# machine that has no Apple Developer certificate.
+#
+# Why this is a separate workflow: `ios.yml` builds and tests, and
+# `ios-release-check.yml` compiles Release for a simulator to prove it builds.
+# Neither produces something a sideloading tool can consume, and neither should
+# change to. This one does nothing else.
+#
+# What "unsigned" means here: `CODE_SIGNING_ALLOWED=NO` skips the packaging and
+# signing steps entirely, so the `.app` ships with no `_CodeSignature` and no
+# `embedded.mobileprovision`. Entitlements are not applied either -- the
+# `CODE_SIGN_ENTITLEMENTS` build setting is only ever read by `codesign`, which
+# never runs. That is what lets a project with HealthKit and CloudKit
+# entitlements build without any provisioning profile at all.
+#
+# Run it from the Actions tab, or:
+#   gh workflow run ios-unsigned-ipa.yml --ref <branch>
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-unsigned-ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unsigned-ipa:
+    name: Unsigned device IPA
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    env:
+      PROJECT: Eckstein/Eckstein.xcodeproj
+      SCHEME: Eckstein
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: xcodebuild -version
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$SCHEME"
+
+      - name: Build for device in Release (no code signing)
+        run: |
+          # `generic/platform=iOS` is the device destination. The project sets
+          # SDKROOT = auto and lists macosx and xros among its supported
+          # platforms, so the destination has to be stated rather than inferred.
+          DERIVED_DATA="$RUNNER_TEMP/DerivedData"
+          xcodebuild build \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$DERIVED_DATA" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            DEVELOPMENT_TEAM=""
+
+      - name: Package Payload into an IPA
+        run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedData"
+          APP="$DERIVED_DATA/Build/Products/Release-iphoneos/Eckstein.app"
+
+          if [ ! -d "$APP" ]; then
+            echo "::error::no device app at $APP"
+            find "$DERIVED_DATA/Build/Products" -maxdepth 2 || true
+            exit 1
+          fi
+          echo "app: $APP"
+
+          STAGE="$RUNNER_TEMP/stage"
+          rm -rf "$STAGE"
+          mkdir -p "$STAGE/Payload"
+          cp -R "$APP" "$STAGE/Payload/"
+
+          # An IPA is a zip whose root contains Payload/.
+          ( cd "$STAGE" && zip -qry "$RUNNER_TEMP/Eckstein.ipa" Payload )
+
+          # The manifest an unsigned build may not have written; its absence is
+          # the signature check below, so it is reported rather than required.
+          if [ -e "$APP/_CodeSignature" ]; then
+            echo "::warning::the app carries a _CodeSignature; this was not an unsigned build"
+          else
+            echo "unsigned: no _CodeSignature in the app bundle"
+          fi
+          if [ -e "$APP/embedded.mobileprovision" ]; then
+            echo "::warning::the app carries a provisioning profile"
+          else
+            echo "unsigned: no embedded.mobileprovision"
+          fi
+
+      - name: Verify it is a device build, not a simulator build
+        run: |
+          # The failure this catches is silent: a simulator binary produces an
+          # IPA that looks fine and cannot be installed. `lipo` is the check.
+          STAGE="$RUNNER_TEMP/stage"
+          BIN="$STAGE/Payload/Eckstein.app/Eckstein"
+
+          if [ ! -f "$BIN" ]; then
+            echo "::error::no executable in the packaged app"
+            ls -la "$STAGE/Payload/Eckstein.app" || true
+            exit 1
+          fi
+
+          ARCHS=$(lipo -archs "$BIN")
+          echo "architectures: $ARCHS"
+          echo "bundle id: $(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$STAGE/Payload/Eckstein.app/Info.plist")"
+          echo "executable size: $(stat -f%z "$BIN") bytes"
+          echo "ipa size: $(stat -f%z "$RUNNER_TEMP/Eckstein.ipa") bytes"
+
+          case "$ARCHS" in
+            *x86_64*|*arm64_simulator*|*i386*)
+              echo "::error::the binary has a simulator slice ($ARCHS)"
+              exit 1
+              ;;
+          esac
+          case "$ARCHS" in
+            *arm64*) echo "device arm64 confirmed" ;;
+            *) echo "::error::no arm64 slice ($ARCHS)"; exit 1 ;;
+          esac
+
+          # vtool states the platform outright, which `lipo` does not.
+          if command -v vtool >/dev/null; then
+            vtool -show-build "$BIN" | grep -E "platform|minos|sdk" || true
+          fi
+
+      - name: Upload the IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Eckstein-unsigned-ipa
+          path: ${{ runner.temp }}/Eckstein.ipa
+          if-no-files-found: error
+          retention-days: 30
