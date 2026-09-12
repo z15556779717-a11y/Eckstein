@@ -26,12 +26,17 @@ name: iOS Unsigned IPA
 # builds the exact commit it is pointed at and nothing else. An ordinary push to
 # `develop/**` does not produce an IPA.
 #
-# The `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` repository variables are
+# The `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` repository *secrets* are
 # required, not optional. `Info.plist` holds them as `$(...)` references and the
-# build expands them; with the variables unset the references expand to empty
-# strings and the app ships pointed at a host that cannot resolve. That shipped
-# once, so this workflow now refuses to build without them and fails the build
-# if either key arrives empty or unexpanded.
+# build expands them; with them unset the references expand to empty strings and
+# the app ships pointed at a host that cannot resolve. That shipped once, so this
+# workflow now refuses to build without them and fails the build if either key
+# arrives empty or unexpanded.
+#
+# They are secrets rather than variables so the runner masks them everywhere,
+# including the `env:` block it prints when a step starts. See the note on the
+# build step: with variables, that header line leaks the value and no amount of
+# `::add-mask::` prevents it.
 
 on:
   push:
@@ -65,39 +70,31 @@ jobs:
             -project "$PROJECT" \
             -scheme "$SCHEME"
 
-      - name: Resolve Supabase configuration
+      - name: Build for device in Release (no code signing)
         env:
-          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
-          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+          # SECURITY: `secrets.`, not `vars.` -- and the two are not
+          # interchangeable here. The runner masks a secret in every line it
+          # writes, including the `env:` block it prints at the top of a step.
+          # A repository *variable* gets no such treatment, and `::add-mask::`
+          # cannot close the gap: that env block is printed before any command
+          # in the step runs, so the step that registers the mask has already
+          # leaked the value in its own header. That is measured, not
+          # theoretical -- an earlier revision of this file read these from
+          # `vars.` and put the publishable key in the log exactly that way.
+          CONFIGURED_URL: ${{ secrets.SUPABASE_URL }}
+          CONFIGURED_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          # Mask before anything else can print it. This step exists separately
-          # from the build for that reason: a step's `env:` block is echoed into
-          # the log with its expressions expanded, so the build step below would
-          # print the key in its own header unless the mask is already
-          # registered by the time it starts.
-          if [ -n "$CONFIGURED_KEY" ]; then
-            echo "::add-mask::$CONFIGURED_KEY"
-          fi
-
-          # The publishable key is a public credential, but "public" is not
-          # "belongs in a build log", and neither value is ever echoed here.
-          #
           # Unlike the Release check, an unconfigured build is not a supported
           # outcome for this workflow: the whole point of the artifact is an app
           # that can reach Supabase. An IPA that installs and then fails every
           # request is worse than no IPA, so this fails now rather than after
           # the download.
           if [ -z "$CONFIGURED_URL" ] || [ -z "$CONFIGURED_KEY" ]; then
-            echo "::error::SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY repository variables must both be set for an IPA build"
+            echo "::error::the SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY repository secrets must both be set for an IPA build"
             exit 1
           fi
           echo "Supabase configuration found; the build will carry it."
 
-      - name: Build for device in Release (no code signing)
-        env:
-          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
-          CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
-        run: |
           # `generic/platform=iOS` is the device destination. The project sets
           # SDKROOT = auto and lists macosx and xros among its supported
           # platforms, so the destination has to be stated rather than inferred.
