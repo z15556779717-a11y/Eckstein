@@ -40,6 +40,9 @@ jobs:
     env:
       PROJECT: Eckstein/Eckstein.xcodeproj
       SCHEME: Eckstein
+      # Explicit so the verification step below can name the product instead of
+      # searching for it.
+      DERIVED_DATA: ${{ runner.temp }}/DerivedData
 
     steps:
       - name: Checkout
@@ -84,40 +87,65 @@ jobs:
           CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
           CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          # `INFOPLIST_KEY_*` is how a value reaches the built Info.plist, which
-          # is the only configuration source that exists on a real device. When
-          # the variables are unset these become empty strings, which
+          # `Info.plist` carries `$(SUPABASE_URL)` and `$(SUPABASE_PUBLISHABLE_KEY)`
+          # and the build expands them from these settings. That indirection is
+          # what keeps the real values out of the repository. When the variables
+          # are unset they expand to empty strings, which
           # `EnvironmentLoader.infoPlistValues` discards -- so an unset variable
           # leaves the build unconfigured rather than half-configured.
+          #
+          # `-derivedDataPath` is explicit so the check below knows exactly where
+          # the product is instead of searching for it.
           xcodebuild build \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
             -destination 'generic/platform=iOS Simulator' \
             -configuration Release \
+            -derivedDataPath "$DERIVED_DATA" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            INFOPLIST_KEY_SUPABASE_URL="$CONFIGURED_URL" \
-            INFOPLIST_KEY_SUPABASE_PUBLISHABLE_KEY="$CONFIGURED_KEY"
+            SUPABASE_URL="$CONFIGURED_URL" \
+            SUPABASE_PUBLISHABLE_KEY="$CONFIGURED_KEY"
 
       - name: Confirm the configuration reached the built Info.plist
         env:
+          CONFIGURED_URL: ${{ vars.SUPABASE_URL }}
           CONFIGURED_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          # Reports whether the key is present, never what it is. A build that
+          # Reports whether a key is present, never what it is. A build that
           # silently drops the setting is the failure this step exists to catch.
-          PLIST=$(find "$HOME/Library/Developer/Xcode/DerivedData" \
-                    -name "Info.plist" -path "*Eckstein.app*" 2>/dev/null | head -1)
-          if [ -z "$PLIST" ]; then
-            echo "::error::no built Info.plist found"
+          APP=$(find "$DERIVED_DATA/Build/Products" -type d -name "Eckstein.app" 2>/dev/null | head -1)
+          echo "searching $DERIVED_DATA/Build/Products"
+
+          if [ -z "$APP" ]; then
+            echo "::error::no Eckstein.app found; build products are:"
+            find "$DERIVED_DATA/Build/Products" -maxdepth 3 2>/dev/null || true
             exit 1
           fi
+          echo "app bundle: $APP"
 
+          PLIST="$APP/Info.plist"
+          if [ ! -f "$PLIST" ]; then
+            echo "::error::the built bundle has no Info.plist"
+            ls -la "$APP" || true
+            exit 1
+          fi
+          echo "Info.plist: present"
+
+          # Repository variables are optional, and the build is expected to stay
+          # unconfigured without them. It is only a failure for a key to be
+          # missing from a build that was actually given both values.
+          MISSING=0
           for KEY in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY; do
             VALUE=$(/usr/libexec/PlistBuddy -c "Print :$KEY" "$PLIST" 2>/dev/null || true)
             if [ -n "$VALUE" ]; then
               echo "$KEY: present"
+            elif [ -n "$CONFIGURED_URL" ] && [ -n "$CONFIGURED_KEY" ]; then
+              echo "::error::$KEY: absent, but the repository variables are set"
+              MISSING=1
             else
-              echo "$KEY: absent (repository variable not set)"
+              echo "$KEY: absent (repository variables not set; unconfigured build)"
             fi
           done
+          exit $MISSING
