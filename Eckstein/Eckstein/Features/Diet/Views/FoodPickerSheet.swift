@@ -144,7 +144,7 @@ struct FoodPickerSheet: View {
     private func row(for food: CDEcksteinFood) -> some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(food.name ?? "")
+                Text(food.displayName)
                     .font(.body)
                     .foregroundColor(.primary)
 
@@ -176,8 +176,12 @@ struct FoodPickerSheet: View {
 
     /// Brand and category, either of which may be absent — a shipped diet rule
     /// has a category and no brand, a scanned product usually has both.
+    ///
+    /// The category goes through `displayCategory` for the same reason the name
+    /// goes through `displayName`: a shipped food's "Protein" is a label, and a
+    /// scanned product's is whatever its own database said.
     private func subtitle(for food: CDEcksteinFood) -> String? {
-        let parts = [food.brand, food.foodCategory]
+        let parts = [food.brand, food.displayCategory]
             .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")

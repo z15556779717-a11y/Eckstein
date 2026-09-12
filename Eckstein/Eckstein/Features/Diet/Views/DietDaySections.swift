@@ -53,7 +53,10 @@ struct DietEntryRow: View {
     let entry: CDEcksteinMealEntry
 
     private var foodName: String {
-        let name = entry.foodName ?? ""
+        // `displayFoodName` rather than `foodName`: the stored name is the
+        // English one the row was logged under, and is what the entry is
+        // identified by. See `SeedFoodNames`.
+        let name = entry.displayFoodName
         return name.isEmpty ? "diet_unknown_food".localized : name
     }
 

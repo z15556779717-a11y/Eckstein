@@ -131,6 +131,53 @@ function parseMessages(value: unknown): { messages: ChatMessage[] } | { error: s
   return { messages };
 }
 
+/**
+ * The languages the app may ask to be answered in, and what each one means.
+ *
+ * An allowlist rather than free text, because this value arrives in the request
+ * body and ends up inside the prompt: passing it through would let any caller
+ * holding a token write its own system instruction. A code that is not on the
+ * list is dropped rather than refused — the conversation is still answerable,
+ * and a build newer than this deployment should get an answer, not an error.
+ */
+const LANGUAGE_INSTRUCTIONS: Record<string, string> = {
+  en: "Answer in English.",
+  he: "Answer in Hebrew (עברית).",
+  "zh-Hans": "Answer in Simplified Chinese (简体中文).",
+};
+
+/** Longer than any language tag the app sends; anything longer is not one. */
+const MAX_LOCALE_CHARS = 35;
+
+function parseLocale(value: unknown): string | undefined {
+  if (typeof value !== "string" || value.length > MAX_LOCALE_CHARS) return undefined;
+  // `hasOwnProperty.call`, not `LANGUAGE_INSTRUCTIONS[value]`: a caller sending
+  // "__proto__" or "constructor" would otherwise reach the prototype and get a
+  // function where the prompt expects a sentence.
+  return Object.prototype.hasOwnProperty.call(LANGUAGE_INSTRUCTIONS, value) ? value : undefined;
+}
+
+/**
+ * The conversation to send, with the language directive attached.
+ *
+ * Appended to the system message the app already sends rather than added as a
+ * second one: the app's prompt is where "how to answer" already lives, and a
+ * second system turn would have the provider weighing two voices. Appended, not
+ * prepended, so the app's description of the coach is read first and this reads
+ * as a rider on it. A conversation with no system message gets one, so the
+ * directive is never silently dropped.
+ */
+function withLanguage(messages: ChatMessage[], locale: string | undefined): ChatMessage[] {
+  const instruction = locale ? LANGUAGE_INSTRUCTIONS[locale] : undefined;
+  if (!instruction) return messages;
+
+  const [first, ...rest] = messages;
+  if (first.role === "system") {
+    return [{ role: "system", content: `${first.content}\n\n${instruction}` }, ...rest];
+  }
+  return [{ role: "system", content: instruction }, ...messages];
+}
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -179,6 +226,10 @@ export function createHandler(deps: ProviderDeps): (request: Request) => Promise
       ? payload.temperature
       : 0.7;
 
+    // Absent from every build that predates the language field, which is why it
+    // is optional here and why an unknown value is ignored instead of rejected.
+    const locale = parseLocale(payload.locale);
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
 
@@ -191,7 +242,7 @@ export function createHandler(deps: ProviderDeps): (request: Request) => Promise
         },
         body: JSON.stringify({
           model,
-          messages: parsed.messages,
+          messages: withLanguage(parsed.messages, locale),
           temperature,
           max_tokens: MAX_OUTPUT_TOKENS,
           stream: false,

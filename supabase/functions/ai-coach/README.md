@@ -74,6 +74,12 @@ Every value in them is invented: a fake key, a fake endpoint, a fake provider.
   endpoint would be an open proxy onto the provider account.
 - **Validates the request.** At most 40 messages, 4,000 characters each, 16,000
   in total. The client is trusted to be the app, not to be correct.
+- **Answers in the app's language.** The body may carry a `locale` — one of the
+  codes in `LANGUAGE_INSTRUCTIONS`, currently `en`, `he` and `zh-Hans`. The
+  matching instruction is appended to the system message the app already sent,
+  rather than added as a second system turn. The list is closed: an absent or
+  unrecognised value adds nothing, so a caller cannot write an instruction of
+  its own through this field.
 - **Never returns provider or key material.** A provider error is logged as a
   status code and answered with a generic failure; the body is not echoed.
 - **Times out at 25 seconds** so a stuck upstream cannot hold the request open
