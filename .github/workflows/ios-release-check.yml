@@ -40,9 +40,6 @@ jobs:
     env:
       PROJECT: Eckstein/Eckstein.xcodeproj
       SCHEME: Eckstein
-      # Explicit so the verification step below can name the product instead of
-      # searching for it.
-      DERIVED_DATA: ${{ runner.temp }}/DerivedData
 
     steps:
       - name: Checkout
@@ -96,6 +93,7 @@ jobs:
           #
           # `-derivedDataPath` is explicit so the check below knows exactly where
           # the product is instead of searching for it.
+          DERIVED_DATA="${RUNNER_TEMP:-/tmp}/DerivedData"
           xcodebuild build \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
@@ -115,6 +113,7 @@ jobs:
         run: |
           # Reports whether a key is present, never what it is. A build that
           # silently drops the setting is the failure this step exists to catch.
+          DERIVED_DATA="${RUNNER_TEMP:-/tmp}/DerivedData"
           APP=$(find "$DERIVED_DATA/Build/Products" -type d -name "Eckstein.app" 2>/dev/null | head -1)
           echo "searching $DERIVED_DATA/Build/Products"
 
