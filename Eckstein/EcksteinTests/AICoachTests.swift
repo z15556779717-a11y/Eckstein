@@ -19,8 +19,9 @@ import CoreData
 /// and used `AIContext` property names that do not exist (`activitySummary`).
 /// The class is now `@MainActor` and asserts against the real surface.
 ///
-/// Tests that would require a live OpenAI call are skipped when no API key is
-/// configured, so the suite stays hermetic on CI.
+/// Tests that would require a live call to the AI backend — a deployed Edge
+/// Function and a signed-in session — are skipped, so the suite stays hermetic
+/// on CI. There is no client API key to gate on: the app stores none.
 @MainActor
 class AICoachTests: XCTestCase {
     var viewModel: AICoachViewModel!
@@ -30,9 +31,9 @@ class AICoachTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Give the chat view model a clean slate so persistence assertions are
-        // deterministic regardless of what earlier tests stored.
-        UserDefaults.standard.removeObject(forKey: "openai_api_key")
+        // The chat view model gets a clean slate so persistence assertions are
+        // deterministic regardless of what earlier tests stored. (There is no
+        // longer an API key to clear: the client stores none.)
         controller = PersistenceController(inMemory: true)
         context = controller.container.viewContext
         viewModel = AICoachViewModel(persistenceController: controller)
@@ -100,15 +101,13 @@ class AICoachTests: XCTestCase {
         XCTAssertGreaterThan(openAIService.minRequestInterval, 0)
     }
 
-    func testHasAPIKeyReflectsConfiguration() {
-        openAIService.removeAPIKey()
-        XCTAssertFalse(openAIService.hasAPIKey)
-
-        openAIService.saveAPIKey("test-key-not-a-real-credential")
-        XCTAssertTrue(openAIService.hasAPIKey)
-
-        openAIService.removeAPIKey()
-        XCTAssertFalse(openAIService.hasAPIKey)
+    /// There used to be a test here asserting that a key saved by
+    /// `saveAPIKey` came back from `hasAPIKey`. Both are gone, and their
+    /// absence is the point: the app has no local credential to save, and the
+    /// screen that asked for one is gone with it. What replaces it is a
+    /// read-only status view, which is at least constructible.
+    func testAISettingsViewCanBeConstructed() {
+        _ = AISettingsView()
     }
 
     // MARK: - Suggested Actions Tests
@@ -144,14 +143,20 @@ class AICoachTests: XCTestCase {
 
     // MARK: - Specialized Service Tests
     //
-    // These services call OpenAI during their work, so they are skipped unless a
-    // key is present. The skip is explicit rather than a silent pass.
+    // These call the live AI backend, which needs a deployed Edge Function and a
+    // signed-in session. Neither exists in CI, so they are skipped. The skip is
+    // explicit rather than a silent pass, and the condition is the real
+    // precondition — there is no client key to gate on any more.
+
+    private func skipUnlessLiveBackendIsReachable() throws {
+        try XCTSkipUnless(
+            AppEnvironment.isSupabaseConfigured && AuthService.shared.isAuthenticated,
+            "No configured project and signed-in session — skipping live AI backend test."
+        )
+    }
 
     func testWorkoutPlanGeneratorRequiresAPIKey() async throws {
-        try XCTSkipUnless(
-            openAIService.hasAPIKey,
-            "No OpenAI API key configured — skipping live generation test."
-        )
+        try skipUnlessLiveBackendIsReachable()
 
         let generator = WorkoutPlanGenerator()
         let plan = try await generator.generateWorkoutPlan(
@@ -163,10 +168,7 @@ class AICoachTests: XCTestCase {
     }
 
     func testDietAdvisorRequiresAPIKey() async throws {
-        try XCTSkipUnless(
-            openAIService.hasAPIKey,
-            "No OpenAI API key configured — skipping live generation test."
-        )
+        try skipUnlessLiveBackendIsReachable()
 
         let advisor = DietAdvisor()
         let suggestions = try await advisor.getMealSuggestions(
@@ -179,10 +181,8 @@ class AICoachTests: XCTestCase {
 
     // MARK: - Error Handling Tests
 
-    func testSendMessageWithoutAPIKeyDoesNotCrash() async {
-        openAIService.removeAPIKey()
-
-        viewModel.sendMessage("Test without API key")
+    func testSendMessageWithoutBackendDoesNotCrash() async {
+        viewModel.sendMessage("Test without a reachable backend")
 
         // Allow the reply Task to attempt (and fail) the request.
         for _ in 0..<5 {
@@ -190,7 +190,7 @@ class AICoachTests: XCTestCase {
         }
 
         XCTAssertFalse(viewModel.messages.isEmpty)
-        XCTAssertTrue(viewModel.messages.contains { $0.content == "Test without API key" })
+        XCTAssertTrue(viewModel.messages.contains { $0.content == "Test without a reachable backend" })
     }
 
     // MARK: - Cost Tracking Tests

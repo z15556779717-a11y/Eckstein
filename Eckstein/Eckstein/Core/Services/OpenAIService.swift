@@ -48,12 +48,14 @@ struct AIBackendResponse: Decodable {
 
 /// The app's client for the AI coach backend.
 ///
-/// **There is no provider key in this app.** The coach runs behind a Supabase
-/// Edge Function (`supabase/functions/ai-coach`) which holds the OpenAI key as a
-/// server-side secret. This type sends the trimmed conversation and the user's
-/// Supabase session token to that function and returns its answer. A key shipped
-/// in an IPA is a key anyone with the IPA has, so the only place it can live is
-/// the server.
+/// **There is no provider key in this app, and no way to enter one.** The coach
+/// runs behind a Supabase Edge Function (`supabase/functions/ai-coach`) which
+/// holds the provider key as a server-side secret; the provider itself is
+/// deployment configuration there, currently Alibaba Bailian (Qwen) in its
+/// OpenAI-compatible mode. This type sends the trimmed conversation and the
+/// user's Supabase session token to that function and returns its answer. A key
+/// shipped in an IPA is a key anyone with the IPA has, so the only place it can
+/// live is the server.
 ///
 /// The consequence worth stating: a signed-in user is required. The function
 /// authenticates the caller, which is also what stops the endpoint from being an
@@ -64,13 +66,6 @@ class OpenAIService: ObservableObject {
 
     /// The name of the deployed function.
     private static let functionName = "ai-coach"
-
-    /// Storage key for the local "coach enabled" marker. Retained under its
-    /// original name so an existing install keeps working.
-    ///
-    /// SECURITY: this is **not** a credential and is never transmitted. It is a
-    /// local on/off switch, and the value is never sent anywhere.
-    private static let configurationKey = "openai_api_key"
 
     // Internal (not private) so the unit-test target can assert on the model and
     // rate-limit configuration via `@testable import`. See AICoachTests.
@@ -88,25 +83,6 @@ class OpenAIService: ObservableObject {
     @Published var estimatedCost: Double = 0.0
 
     private init() {}
-
-    // MARK: - Configuration
-
-    /// Whether the coach is switched on for this device.
-    ///
-    /// Note what this is not: it is not "a key is present", because there is no
-    /// key to be present. It is read by the phase-4 test suite as the local
-    /// availability marker it has become.
-    var hasAPIKey: Bool {
-        !(UserDefaults.standard.string(forKey: Self.configurationKey) ?? "").isEmpty
-    }
-
-    func saveAPIKey(_ key: String) {
-        UserDefaults.standard.set(key, forKey: Self.configurationKey)
-    }
-
-    func removeAPIKey() {
-        UserDefaults.standard.removeObject(forKey: Self.configurationKey)
-    }
 
     // MARK: - Sending
 

@@ -7,12 +7,24 @@
 
 import SwiftUI
 
+/// The AI Coach tab.
+///
+/// What decides whether this screen is usable is the question "could a request
+/// succeed", not "has a key been entered". There is no key on this device to
+/// enter: the provider credential lives in the Supabase Edge Function. So the
+/// gate is the two preconditions that function actually needs — a build with a
+/// usable Supabase project, and somebody signed in — and everything else is the
+/// answer to a real message.
+///
+/// The gate used to read a locally stored `openai_api_key` string, which nothing
+/// ever set on a device, so the tab was permanently replaced by an "API Key
+/// Required" screen pointing at `platform.openai.com`. That screen is gone.
 struct AICoachTabView: View {
     @StateObject private var viewModel = AICoachViewModel()
-    @StateObject private var openAIService = OpenAIService.shared
-    @State private var showingAPIKeySettings = false
+    @ObservedObject private var authService = AuthService.shared
+    @State private var showingSettings = false
     @ObservedObject private var themeManager = ThemeManager.shared
-    
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -22,42 +34,32 @@ struct AICoachTabView: View {
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
-                
+
                 Group {
-                    if openAIService.hasAPIKey {
-                        AIChatView(viewModel: viewModel)
+                    if !AppEnvironment.isSupabaseConfigured {
+                        // This build has no project URL or key, so there is
+                        // nothing to call. Reported before a request is made
+                        // rather than as a failed one.
+                        unavailable(
+                            icon: "antenna.radiowaves.left.and.right.slash",
+                            message: "ai_error_unavailable".localized
+                        )
+                    } else if !authService.isAuthenticated {
+                        // The session is the credential the Edge Function
+                        // authenticates. Without one the call would be rejected,
+                        // so say why here instead.
+                        unavailable(
+                            icon: "person.crop.circle.badge.exclamationmark",
+                            message: "ai_error_sign_in".localized
+                        )
                     } else {
-                        VStack(spacing: 20) {
-                            Image(systemName: "key.fill")
-                                .font(.system(size: 60))
-                                .foregroundColor(.secondary)
-                            
-                            Text("API Key Required")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                            
-                            Text("To use the AI Coach feature, you need to configure your OpenAI API key.")
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(.secondary)
-                                .padding(.horizontal)
-                            
-                            Button(action: { showingAPIKeySettings = true }) {
-                                Label("Configure API Key", systemImage: "key")
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .padding(.horizontal)
-                        }
-                        .padding()
-                        .navigationTitle("AI Coach")
+                        AIChatView(viewModel: viewModel)
                     }
                 }
                 .toolbar {
-                    if openAIService.hasAPIKey {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: { showingAPIKeySettings = true }) {
-                                Image(systemName: "gearshape")
-                            }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { showingSettings = true }) {
+                            Image(systemName: "gearshape")
                         }
                     }
                 }
@@ -65,8 +67,26 @@ struct AICoachTabView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .checkAIDisclaimer()
-        .sheet(isPresented: $showingAPIKeySettings) {
-            APIKeySettingsView()
+        .sheet(isPresented: $showingSettings) {
+            AISettingsView()
         }
+    }
+
+    /// Shown when the coach cannot be reached for a reason the app can see
+    /// before sending anything. Failures that only the backend can report are
+    /// left to the chat, where they arrive as an answer.
+    private func unavailable(icon: String, message: String) -> some View {
+        VStack(spacing: 20) {
+            Image(systemName: icon)
+                .font(.system(size: 60))
+                .foregroundColor(.secondary)
+
+            Text(message)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
+        }
+        .padding()
+        .navigationTitle("AI Coach")
     }
 }
