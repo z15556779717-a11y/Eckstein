@@ -41,8 +41,6 @@ BEGIN;
 -- Date: 2025-01-17
 -- Updated: Added carb load support and milk consumptions tracking
 
--- Enable required extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ==========================================
 -- USERS AND AUTHENTICATION
@@ -50,7 +48,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Users table (mirrors auth.users but with app-specific data)
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT NOT NULL UNIQUE,
     display_name TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
@@ -63,7 +61,7 @@ CREATE TABLE users (
 
 -- User preferences table
 CREATE TABLE user_preferences (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     daily_calorie_goal INTEGER DEFAULT 2000 NOT NULL,
     daily_protein_goal INTEGER DEFAULT 150 NOT NULL,
@@ -84,7 +82,7 @@ CREATE TABLE user_preferences (
 
 -- Exercises reference table
 CREATE TABLE exercises (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     category TEXT NOT NULL,
     muscle_group TEXT,
@@ -98,7 +96,7 @@ CREATE TABLE exercises (
 
 -- Workout types table (for templates)
 CREATE TABLE workout_types (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
@@ -109,7 +107,7 @@ CREATE TABLE workout_types (
 
 -- Workout type exercises (exercises in a workout template)
 CREATE TABLE workout_type_exercises (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workout_type_id UUID NOT NULL REFERENCES workout_types(id) ON DELETE CASCADE,
     exercise_id UUID NOT NULL REFERENCES exercises(id),
     order_index INTEGER DEFAULT 0 NOT NULL,
@@ -121,7 +119,7 @@ CREATE TABLE workout_type_exercises (
 
 -- Workouts table
 CREATE TABLE workouts (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     workout_type_id UUID REFERENCES workout_types(id),
     name TEXT NOT NULL,
@@ -137,7 +135,7 @@ CREATE TABLE workouts (
 
 -- Workout sets table
 CREATE TABLE workout_sets (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workout_id UUID NOT NULL REFERENCES workouts(id) ON DELETE CASCADE,
     exercise_id UUID NOT NULL REFERENCES exercises(id),
     set_number INTEGER NOT NULL,
@@ -157,7 +155,7 @@ CREATE TABLE workout_sets (
 
 -- Foods table
 CREATE TABLE foods (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     brand TEXT,
     barcode TEXT,
@@ -181,7 +179,7 @@ CREATE TABLE foods (
 
 -- Meals table
 CREATE TABLE meals (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     meal_type TEXT NOT NULL CHECK (meal_type IN ('breakfast', 'lunch', 'dinner', 'snack')),
@@ -192,7 +190,7 @@ CREATE TABLE meals (
 
 -- Meal items table
 CREATE TABLE meal_items (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     meal_id UUID NOT NULL REFERENCES meals(id) ON DELETE CASCADE,
     food_id UUID NOT NULL REFERENCES foods(id),
     quantity_grams DECIMAL(7,2) NOT NULL,
@@ -207,7 +205,7 @@ CREATE TABLE meal_items (
 
 -- Eckstein foods table
 CREATE TABLE eckstein_foods (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     category TEXT NOT NULL,
     daily_grams INTEGER DEFAULT 0 NOT NULL,
@@ -220,7 +218,7 @@ CREATE TABLE eckstein_foods (
 
 -- Eckstein meals table
 CREATE TABLE eckstein_meals (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     meal_number INTEGER DEFAULT 1 NOT NULL CHECK (meal_number >= 1),
@@ -238,7 +236,7 @@ CREATE TABLE eckstein_meals (
 
 -- Eckstein meal entries table
 CREATE TABLE eckstein_meal_entries (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     meal_id UUID NOT NULL REFERENCES eckstein_meals(id) ON DELETE CASCADE,
     food_name TEXT NOT NULL,
     category TEXT NOT NULL,
@@ -258,7 +256,7 @@ CREATE TABLE eckstein_meal_entries (
 
 -- Weight entries table
 CREATE TABLE weight_entries (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     weight_kg DECIMAL(5,2) NOT NULL,
     date DATE NOT NULL,
@@ -279,7 +277,7 @@ CREATE TABLE weight_entries (
 
 -- Calorie bank table
 CREATE TABLE calorie_bank (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     calories_saved INTEGER DEFAULT 0 NOT NULL,
@@ -296,7 +294,7 @@ CREATE TABLE calorie_bank (
 
 -- Fat meal tracker table
 CREATE TABLE fat_meal_tracker (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     week_start_date DATE NOT NULL,
     fat_meals_consumed INTEGER DEFAULT 0 NOT NULL CHECK (fat_meals_consumed >= 0),
@@ -313,7 +311,7 @@ CREATE TABLE fat_meal_tracker (
 
 -- Carb load tracker table
 CREATE TABLE carb_load_tracker (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     week_start_date DATE NOT NULL,
     carb_load_date DATE,
@@ -330,7 +328,7 @@ CREATE TABLE carb_load_tracker (
 
 -- Milk consumptions table
 CREATE TABLE milk_consumptions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     ml_consumed INTEGER DEFAULT 0 NOT NULL CHECK (ml_consumed >= 0),
@@ -347,7 +345,7 @@ CREATE TABLE milk_consumptions (
 
 -- Chat messages table
 CREATE TABLE chat_messages (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     is_user BOOLEAN NOT NULL,
