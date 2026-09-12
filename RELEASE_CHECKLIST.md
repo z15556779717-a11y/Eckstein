@@ -14,7 +14,7 @@ machine.
 | --- | --- |
 | App name | `Eckstein` (`PRODUCT_NAME = $(TARGET_NAME)`, target `Eckstein`) |
 | Version / build | `MARKETING_VERSION = 1.0.0`, `CURRENT_PROJECT_VERSION = 1` |
-| Bundle ID | `com.eliosdigital.Eckstein` — **still the upstream author's**; see §2 |
+| Bundle ID | `com.z15556779717.eckstein` — no longer the upstream author's; see §2 |
 | Signing team | `DEVELOPMENT_TEAM` is empty; see §2 |
 | Deployment target | iOS 18.4 |
 | Device families | `1,2,7` (iPhone, iPad, and the vision platform the project also declares) |
@@ -34,11 +34,12 @@ machine.
 Blocking, in order:
 
 1. **Apple Developer Program membership.** Nothing below works without it.
-2. **Decide the final bundle ID.** The project currently ships
-   `com.eliosdigital.Eckstein`, which is the upstream author's reverse-DNS
-   namespace, not yours. Pick your own (for example `com.<yourteam>.Eckstein`)
-   and change it in the target's build settings. Keep it stable afterwards:
-   the bundle ID is the App Store identity and cannot be changed after release.
+2. **The bundle ID is now `com.z15556779717.eckstein`.** It used to be
+   `com.eliosdigital.Eckstein`, the upstream author's reverse-DNS namespace.
+   Keep it stable from here: the bundle ID is the App Store identity and cannot
+   be changed after release. If you change it again, note that
+   `EcksteinTests` and `EcksteinUITests` still carry the old prefix — they are
+   separate targets and do not affect the app's identity.
 3. **Set `DEVELOPMENT_TEAM`** to your Team ID. It is deliberately blank rather
    than set to the upstream author's team, which your account cannot sign with.
 4. **Create the App ID** for the chosen bundle ID and enable the **HealthKit**
