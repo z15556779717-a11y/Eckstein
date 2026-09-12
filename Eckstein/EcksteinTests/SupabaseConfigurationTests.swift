@@ -15,6 +15,7 @@
 //
 
 import XCTest
+@testable import Eckstein
 
 final class SupabaseConfigurationTests: XCTestCase {
 
@@ -53,12 +54,12 @@ final class SupabaseConfigurationTests: XCTestCase {
 
     func testNoConfigurationYieldsNoKey() {
         XCTAssertNil(EnvironmentLoader.publishableKey(in: [:]))
-        XCTAssertNil(EnvironmentLoader.supabaseURL(in: [:]))
+        XCTAssertNil(EnvironmentLoader.resolvedURL(in: [:]))
     }
 
     func testAnEmptyURLIsTreatedAsAbsent() {
-        XCTAssertNil(EnvironmentLoader.supabaseURL(in: [urlKey: ""]))
-        XCTAssertEqual(EnvironmentLoader.supabaseURL(in: [urlKey: "https://example.supabase.co"]),
+        XCTAssertNil(EnvironmentLoader.resolvedURL(in: [urlKey: ""]))
+        XCTAssertEqual(EnvironmentLoader.resolvedURL(in: [urlKey: "https://example.supabase.co"]),
                        "https://example.supabase.co")
     }
 

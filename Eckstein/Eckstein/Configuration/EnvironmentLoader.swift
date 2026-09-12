@@ -182,7 +182,7 @@ class EnvironmentLoader {
         return nil
     }
 
-    static func supabaseURL(in config: [String: String]) -> String? {
+    static func resolvedURL(in config: [String: String]) -> String? {
         guard let value = config[supabaseURLKey], !value.isEmpty else { return nil }
         return value
     }
@@ -205,7 +205,7 @@ class EnvironmentLoader {
     // MARK: - Convenience properties
 
     var supabaseURL: String? {
-        Self.supabaseURL(in: config)
+        Self.resolvedURL(in: config)
     }
 
     /// The client key, current name first.
