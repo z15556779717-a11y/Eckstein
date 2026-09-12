@@ -15,7 +15,7 @@ struct LoginView: View {
     @ObservedObject private var themeManager = ThemeManager.shared
     
     enum Field {
-        case email, password, confirmPassword, fullName, adminPassword
+        case email, password, confirmPassword, fullName
     }
     
     var body: some View {
@@ -155,9 +155,15 @@ struct LoginView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .focused($focusedField, equals: .fullName)
                                 .onSubmit {
-                                    focusedField = .adminPassword
+                                    // The last field in the form, so Return
+                                    // submits. `signUp` is guarded by
+                                    // `canSubmit`, so this is the same action
+                                    // as the button and no weaker.
+                                    Task {
+                                        await viewModel.signUp()
+                                    }
                                 }
-                            
+
                             // Gender toggle
                             HStack {
                                 Text("Gender:")
@@ -169,22 +175,6 @@ struct LoginView: View {
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
                                 .frame(width: 150)
-                            }
-                            
-                            // Admin Password field
-                            VStack(alignment: .leading, spacing: 8) {
-                                SecureField("Admin Password", text: $viewModel.adminPassword)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .focused($focusedField, equals: .adminPassword)
-                                    .onSubmit {
-                                        Task {
-                                            await viewModel.signUp()
-                                        }
-                                    }
-                                
-                                Text("Required for registration")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
                             }
                         }
                         
