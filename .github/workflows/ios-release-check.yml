@@ -62,8 +62,9 @@ jobs:
         run: |
           # The publishable key is a public credential, but it still does not
           # belong in a build log. Mask it before anything can print it, and
-          # refer to it below only through shell variables -- `run` blocks are
-          # echoed with `${{ }}` expanded but `$VAR` left alone.
+          # refer to it below only through shell variables: a `run` block is
+          # echoed with its expressions expanded but its `$VAR` references
+          # left alone.
           if [ -n "$CONFIGURED_KEY" ]; then
             echo "::add-mask::$CONFIGURED_KEY"
           fi
